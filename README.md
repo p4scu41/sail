@@ -1,4 +1,4 @@
-lepra
+Sistema Automatizado de Información en Lepra (SAIL)
 =====
 
-Sistema Automatizado de InformaciÃ³n en Lepra (SAIL) - Chiapas
+Programa de Prevención y Control de la Lepra
