@@ -17,7 +17,7 @@
 	$estudioBac = new EstudioBac();
 	$estudioBac->obtenerBD($idEstudioBac);
 	$arrResBac = $help->getArrayCatBaciloscopia();
-	var_dump($estudioBac);
+	//var_dump($estudioBac);
 	echo is_null($estudioBac->idContacto);
 	echo $estudioBac->idDiagnostico == 0;
 

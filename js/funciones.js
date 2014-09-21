@@ -424,7 +424,7 @@ function setValidacion(formulario) {
 			alert('ERROR revise sus datos... Datos Incompletos');
         }
     }, "onFailure": function() {
-        console.log(this);
+        alert('ERROR revise sus datos... Datos Incompletos');//console.log(this);
     }});
 }
 

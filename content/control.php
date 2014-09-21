@@ -103,9 +103,7 @@
 			idControl = campo[1];
 			valores[campo[0]] = $(this).val();
 		});
-        
-        console.log(valores);
-		
+        		
 		if(!$('#reingreso_'+idControl).is(':checked'))
 			valores['reingreso'] = 0;
 		

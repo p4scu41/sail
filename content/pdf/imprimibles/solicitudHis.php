@@ -188,7 +188,7 @@ class MYPDF extends TCPDF {
 		$diagnostico = new Diagnostico();
 		$diagnostico->obtenerBD($estudioHis->idDiagnostico);
 
-		var_dump($contacto);
+		//var_dump($contacto);
 		$nombre = $contacto->nombre;
 		$expediente = "*" . $help->getClavePaciente($diagnostico->idPaciente);
 		$edad = $contacto->edad;

@@ -30,30 +30,6 @@
         $control->seed = (int)$_POST['seed'];
     
         $control->insertarBD();
-
-        /*$query = 'INSERT INTO [control]
-					([idDiagnostico]
-					,[fecha]
-					,[reingreso]
-					,[idCatEstadoPaciente]
-					,[idCatTratamientoPreescrito]
-					,[vigilanciaPostratamiento]
-					,[observaciones]
-                    ,[idCatEvolucionClinica]
-                    ,[idCatBaja]
-                    ,[seed])
-			  VALUES
-					('.$_POST['diagnostico'].'
-					,\''.formatFechaObj($_POST['fecha']).'\'
-					,'.(int)$_POST['reingreso'].'
-					,'.(int)$_POST['estado_paciente'].'
-					,'.(int)$_POST['tratamiento'].'
-					,'.(int)$_POST['vigilancia'].'
-					,\''.utf8_decode($_POST['observaciones']).'\'
-                    ,'.(int)$_POST['evolucion'].'
-                    ,'.(int)$_POST['baja'].'
-                    ,'.(int)$_POST['seed'].')';
-		$result = ejecutaQuery($query);*/
 		
 		if($control->error)
 			echo json_encode(array('result'=>false));

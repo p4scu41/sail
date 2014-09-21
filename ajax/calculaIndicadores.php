@@ -71,7 +71,11 @@ $objHelp = new Helpers();
 $currentYear = $_POST['anio'];
 $pastYear = $currentYear-1;
 
-$rootPath = "C:\\wamp\\www\\lepra.chiapas\\docs\\"; 
+$agrega_diagonal = "";
+/* Compatibilidad con Linux */
+if(stripos($_SERVER['DOCUMENT_ROOT'],":/") === FALSE) $agrega_diagonal = "/";
+
+$rootPath = $_SERVER['DOCUMENT_ROOT'].$agrega_diagonal.CARPETA_RAIZ."/docs/";
 
 $xlsFile = $rootPath.'LEPRA_MACRO.xlsm';  
          
