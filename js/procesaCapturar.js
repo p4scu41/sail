@@ -32,14 +32,18 @@ function verFotos(id)
 				hide: "fadeOut",
 				open: function()
 				{
-					var foo = $("#idLesion").val();
+					var foo = id.split('_')//$("#idLesion").val();
 					//alert(foo);
 					$(this).parent().css("overflow", "visible");
-					$('#my-slideshow_'+foo).bjqs({
-						'height' : 320,
-						'width' : 620,
-						'responsive' : true
-					});
+
+                    // Solo mostrar si se han registrado fotos
+                    if($('#my-slideshow_'+foo[1]+' .bjqs li').length > 0) {
+                        $('#my-slideshow_'+foo[1]).bjqs({
+                            'height' : 320,
+                            'width' : 620,
+                            'responsive' : true
+                        });
+                    }
 				}
 			});
 			
@@ -48,7 +52,7 @@ function verFotos(id)
 			$("#uploadPhoto").submit(function(){
 				$("#upload_target").load(function(e) {
 					$("#dialog_form").dialog("close");
-					verFotos(id);
+					verFotos(id); // Revisar es recursivo??
 				});
 				//return false;
 			});

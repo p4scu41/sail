@@ -1,4 +1,4 @@
-<h2 align="center">SOLICITUD DE ESTUDIO AL LABORATORIO</h2>
+<h2 align="center">ESTUDIOS DE LABORATORIO</h2>
 
 <link rel="stylesheet" href="include/jquery-ui-1.8.14.custom/development-bundle/themes/base/jquery.ui.all.css">
 
@@ -432,30 +432,32 @@ echo '<div class="datagrid">
 echo '</tbdy></table></div>';
 $objHTML->endFieldset();
 
+// El usuario NACIONAL no debe registrar solicitudes de estudio de laboratorio
+if($_SESSION[EDO_USR_SESSION] != 0) {
+    echo '<br /><div align="center">';
+    $objHTML->inputButton('agregaHisto', 'Agregar solicitud de estudio Histopatol&oacute;gico', array('onClick'=>'agregarEstudio(\'histo\')'));
+    $objHTML->inputButton('agregaBacilos', 'Agregar solicitud de estudio Bacilosc&oacute;pico', array('onClick'=>'agregarEstudio(\'bacilos\')'));
+    echo '</div><br /><br />';
 
-echo '<br /><div align="center">';
-$objHTML->inputButton('agregaHisto', 'Agregar solicitud de estudio Histopatol&oacute;gico', array('onClick'=>'agregarEstudio(\'histo\')'));
-$objHTML->inputButton('agregaBacilos', 'Agregar solicitud de estudio Bacilosc&oacute;pico', array('onClick'=>'agregarEstudio(\'bacilos\')'));
-echo '</div><br /><br />';
 
+    $objHTML->startForm('frmSolicitudEstudio', '?mod=lab&id='.$_GET['id'], 'POST');
 
-$objHTML->startForm('frmSolicitudEstudio', '?mod=lab&id='.$_GET['id'], 'POST');
+    echo '<h2 align="center" id="titulo_solicitud"></h2>';
+    echo '<div id="datos_solicitud">';
+        include_once 'content/solicitudEstudio.php';
+    echo '</div>';
 
-echo '<h2 align="center" id="titulo_solicitud"></h2>';
-echo '<div id="datos_solicitud">';
-	include_once 'content/solicitudEstudio.php';
-echo '</div>';
+    $objHTML->inputHidden('baciloscopico', 0);
+    $objHTML->inputHidden('histopatologico', 0);
+    $objHTML->inputHidden('diagnostico', $diagnostico->idDiagnostico);
+    $objHTML->inputHidden('paciente', $paciente->idPaciente);
 
-$objHTML->inputHidden('baciloscopico', 0);
-$objHTML->inputHidden('histopatologico', 0);
-$objHTML->inputHidden('diagnostico', $diagnostico->idDiagnostico);
-$objHTML->inputHidden('paciente', $paciente->idPaciente);
+    echo '<div align="center">';
+    $objHTML->inputSubmit('guardaSolicitud', 'Guardar Solicitud', array('style'=>'display:none'));
+    echo '</div><br />';
 
-echo '<div align="center">';
-$objHTML->inputSubmit('guardaSolicitud', 'Guardar Solicitud', array('style'=>'display:none'));
-echo '</div><br />';
-
-$objHTML->endFormOnly();
+    $objHTML->endFormOnly();
+}
 
 echo '<div id="datosResultadoLaboratorio" title="Resultado del Laboratorio"></div>';
 ?>

@@ -23,7 +23,7 @@ if($SEGURO == TRUE)
 	// Otra opcion para inicializarlo ini_set('error_reporting', E_ALL);
 	ini_set("display_errors","On"); // Imprimir a pantalla los mensajes
 	ini_set("error_append_string","<br /><div class='error' align='center'><h2>OCURRIO UN ERROR, CONTACTE CON EL ADMINISTRADOR DEL SISTEMA</h2></div>"); // Mensaje a mostrar despues de un error
-	ini_set("error_log",$_SERVER['DOCUMENT_ROOT'].CARPETA_RAIZ."log/php_log_sistema.log"); // Archivo donde se guarda los mensajes de error, NOTA: el archivo dene tener permisos de escritura y lectura
+	ini_set("error_log",$_SERVER['DOCUMENT_ROOT'].CARPETA_RAIZ."/log/php_log_sistema.log"); // Archivo donde se guarda los mensajes de error, NOTA: el archivo dene tener permisos de escritura y lectura
 	
 	// Conecta a la Base de Datos
 	$connectionBD = conectaBD();

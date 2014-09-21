@@ -36,6 +36,8 @@
 
 			echo '<table width="100%" align="center"><tr><td align="center">';
 			
+            $imagenes = array_filter($imagenes);
+
 			if(count($imagenes) > 0 && $imagenes[0] != NULL && $imagenes[0] != "")
 			{
 				echo '<div id="my-slideshow_'.$idLesion[1].'"><ul class="bjqs">';
@@ -51,17 +53,20 @@
 				echo '</ul></div>';
 			}else
 			{
-				echo "No se encontro ninguna imagen";
+				echo "No se encontraron imagenes asociadas con la lesión seleccionada";
 			}
 			echo '</td></tr>';
 			
 			echo '<tr><td align="center"><br /><br />';
-			echo '<iframe id="upload_target" name="upload_target" src="" style="width:0;height:0;border:0px solid #fff;"></iframe>';
-			$objHTML->startForm("uploadPhoto", "ajax/uploadPhoto.php", "POST", array("target"=>"upload_target", "enctype" => "multipart/form-data"));
-			echo '<input type="file" name="nuevaFoto" id="nuevaFoto" />';
-			$objHTML->inputHidden('idLesion',$idLesion[1]);
-			$objHTML->inputSubmit("cargaFoto","Cargar Foto");
-			$objHTML->endFormOnly();
+            // El usuario NACIONAL no tiene permitido subir imagenes
+            if($_SESSION[EDO_USR_SESSION] != 0) {
+                echo '<iframe id="upload_target" name="upload_target" src="" style="width:0;height:0;border:0px solid #fff;"></iframe>';
+                $objHTML->startForm("uploadPhoto", "ajax/uploadPhoto.php", "POST", array("target"=>"upload_target", "enctype" => "multipart/form-data"));
+                echo '<input type="file" name="nuevaFoto" id="nuevaFoto" />';
+                $objHTML->inputHidden('idLesion',$idLesion[1]);
+                $objHTML->inputSubmit("cargaFoto","Cargar Foto");
+                $objHTML->endFormOnly();
+            }
 			echo "</td></tr></table>";
 		}
 	}

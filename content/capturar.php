@@ -414,13 +414,15 @@ require_once('content/procesaCapturar.php');
             $objHTML->inputText('Nombre del coordinador que supervisó/validó la cédula', 'medicoValido', $paciente->medicoValido, array('size'=>'40', 'maxlength'=>'40', 'class'=>'validate[required]'));
 		$objHTML->endFieldset();
 		
-		
-	if (!empty($_GET['id'])){
-		$objHTML->inputHidden('actualizar', 1);
-		$objHTML->endForm('actualizarSbmt', 'Actualizar', 'limpiar', 'Limpiar');
-	}
-	else {
-		$objHTML->inputHidden('guardar', 1);
-		$objHTML->endForm('guardarSbmt', 'Guardar', 'limpiar', 'Limpiar');
-	}
+    // El usuario NACIONAL no debe registrar o actualizar registros de pacientes
+    if($_SESSION[EDO_USR_SESSION] != 0) {
+        if (!empty($_GET['id'])){
+            $objHTML->inputHidden('actualizar', 1);
+            $objHTML->endForm('actualizarSbmt', 'Actualizar', 'limpiar', 'Limpiar');
+        }
+        else {
+            $objHTML->inputHidden('guardar', 1);
+            $objHTML->endForm('guardarSbmt', 'Guardar', 'limpiar', 'Limpiar');
+        }
+    }
 ?>

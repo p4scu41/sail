@@ -358,11 +358,15 @@ else {
 		echo msj_error('No se encontraron datos del paciente');
 	else {
 		$paciente->cargarArreglosPaciente();
-		$diagnostico = $paciente->arrDiagnosticos[0];
-		$diagnostico->cargarArreglosDiagnosticoEstudiosBac();
-		$diagnostico->cargarArreglosDiagnosticoEstudiosHis();
-		$diagnostico->cargarArreglosDiagnosticoContactos();
-		$diagnostico->cargarArreglosDiagnosticoControl();
+        // Si el paciente tiene mas de un diagnostico, procedemos a obtenerlos
+        // de lo contrario esto quiere decir que el pacientes es sospechoso o descartado
+        if(count($paciente->arrDiagnosticos) > 0) {
+            $diagnostico = $paciente->arrDiagnosticos[0];
+            $diagnostico->cargarArreglosDiagnosticoEstudiosBac();
+            $diagnostico->cargarArreglosDiagnosticoEstudiosHis();
+            $diagnostico->cargarArreglosDiagnosticoContactos();
+            $diagnostico->cargarArreglosDiagnosticoControl();
+        }
 	}
 }
 $objHTML->startFieldset();
@@ -404,335 +408,337 @@ $objHTML->startFieldset('Datos de identificación');
 	
 $objHTML->endFieldset();
 
+if(count($paciente->arrDiagnosticos) == 0) {
+    echo msj_error('El paciente no tienen controles registrados, esto significa que el paciente es sospechoso o descartado.');
+}
+else {
+    $objHTML->startFieldset('Datos del diagnóstico');
 
-$objHTML->startFieldset('Datos del diagnóstico');
-	
-	$objHTML->inputText('Fecha de diagnóstico', 'fecha_diagnostico',formatFechaObj($paciente->fechaDiagnostico));
-	$objSelects->SelectCatalogo('Forma de Lepra: ', 'forma_lepra', 'catClasificacionLepra', $diagnostico->idCatClasificacionLepra);
-	echo '<br />';
-	//print_r($diagnostico->arrEstudiosHis);
-	$key1 = 0;
-	foreach($diagnostico->arrEstudiosHis as $key => $resDiagnostico)
-	{
-		if($resDiagnostico->idCatTipoEstudio == 1)
-		{
-			$key1 = $key;
-			break;
-		}
-	}
-	
-	
-	$objHTML->inputText('Resultado Histopatológico:', 'result_histo', $diagnostico->arrEstudiosHis[$key1]->hisResultado, array('size'=>50));
-	echo '<br />';
-	
-	$objHTML->label('Resultado Bacteriológico ');
-	$objSelects->SelectCatalogo('IB:', 'ib', 'catBaciloscopia', $diagnostico->arrEstudiosBac[0]->idCatBac,NULL,false);
-	$objHTML->inputText('IM:', 'im', $diagnostico->arrEstudiosBac[0]->bacIM, array('size'=>'10'));
-	echo '<br />';
-	
-	$gradoDiscapacidad = array('0'=>'0', '1'=>'1', '2'=>'2');
-	$discapacidadGeneral = array(
-					$diagnostico->discOjoIzq,
-					$diagnostico->discManoIzq,
-					$diagnostico->discPieIzq,
-					$diagnostico->discOjoDer,
-					$diagnostico->discManoDer,
-					$diagnostico->discPieDer);
-	rsort($discapacidadGeneral);
-	
-	$objHTML->inputSelect('Grado de discapacidad:', 'discGeneral', $gradoDiscapacidad, array_shift($discapacidadGeneral));
-	$objSelects->SelectCatalogo('Detección:', 'deteccion', 'catFormaDeteccion', $paciente->idCatFormaDeteccion, array('class'=>'validate[required]'));
-	
-$objHTML->endFieldset();
-
-$objHTML->inputHidden('idDiagnostico', $diagnostico->idDiagnostico);
-
-$objHTML->inputTextarea('', 'tmpl_control', 
-        '<tr id="registro_control_{0}" align="center">
-            <td align="center">'.$objHTML->inputText('', 'fecha_{0}', '', array('size'=>8, 'class'=>'fecha'), true).'</td>
-            <td align="center">'.$objHTML->inputCheckbox('Si', 'reingreso_{0}', 1, '', NULL, true).'</td>
-            <td>'.$objSelects->SelectCatalogo('', 'estadopaciente_{0}', 'catEstadoPaciente', NULL, NULL, TRUE, TRUE).'</td>
-            <td>'.$objSelects->SelectCatalogo('', 'evolucion_{0}', 'catEvolucionClinica', NULL, NULL, TRUE, TRUE).'</td>
-            <td>'.$objSelects->SelectCatalogo('', 'tratamiento_{0}', 'catTratamientoPreescrito', NULL, NULL, TRUE, TRUE).'</td>
-            <td align="center">'.$objHTML->inputCheckbox('Si', 'vigilancia_{0}', 1, '', NULL, true).'</td>
-            <td>'.$objSelects->SelectCatalogo('', 'baja_{0}', 'catBaja', NULL, NULL, TRUE, TRUE).'</td>
-            <td align="center">'.$objHTML->inputText('', 'observaciones_{0}', '', array('size'=>40), true).'</td>
-			<td align="center">'.$objHTML->inputButton('btnGuardaControl_{0}', 'Guardar', null, true).'</td>
-        </tr>', array('style'=>'display:none;'), false, true );
-
-//$objHTML->startForm('frmResultadoEstudio', '?'.$_SERVER['QUERY_STRING'], 'POST');
-
-    $objHTML->startFieldset('Control');
-	
-    echo '<div class="datagrid">
-            <table id="tarjeta_control">
-            <thead>
-            <tr align="center">
-                <th>Fecha</th>
-                <th>Reingreso</th>
-                <th>Estado Paciente</th>
-                <th>Evoluci&oacute;n<br />Cl&iacute;nica</th>
-                <th>Tratamiento<br />Preescrito</th>
-                <th>Vigilancia<br />Postratamiento</th>
-                <th>Baja</th>
-                <th>Observaciones</th>
-				<th></th>
-            </tr>
-            </thead>
-            <tbody>';
-	
-    //$i = 0;
-	foreach($diagnostico->arrControles as $control){
-		//$i++;
-		echo '<tr id="registro_control_'.$control->idControl.'" align="center">
-            <td align="center">'.$objHTML->inputText('', 'fecha_'.$control->idControl, formatFechaObj($control->fecha), array('size'=>8, 'class'=>'fecha'), true).'</td>
-            <td align="center">'.$objHTML->inputCheckbox('Si', 'reingreso_'.$control->idControl, 1, $control->reingreso, NULL, true).'</td>
-            <td>'.$objSelects->SelectCatalogo('', 'estadopaciente_'.$control->idControl, 'catEstadoPaciente', $control->idCatEstadoPaciente, NULL, TRUE, TRUE).'</td>            
-            <td>'.$objSelects->SelectCatalogo('', 'evolucion_'.$control->idControl, 'catEvolucionClinica', $control->idCatEvolucionClinica, NULL, TRUE, TRUE).'</td>
-            <td>'.$objSelects->SelectCatalogo('', 'tratamiento_'.$control->idControl, 'catTratamientoPreescrito', $control->idCatTratamientoPreescrito, NULL, TRUE, TRUE).'</td>
-            <td align="center">'.$objHTML->inputCheckbox('Si', 'vigilancia_'.$control->idControl, 1, $control->vigilanciaPostratamiento, NULL, true).'</td>
-            <td>'.$objSelects->SelectCatalogo('', 'baja_'.$control->idControl, 'catBaja', $control->idCatBaja, NULL, TRUE, TRUE);
-        if($control->seed) {
-            echo '<input type="text" name="seed_'.$control->idControl.'" id="seed_'.$control->idControl.'" size="12" maxlength="9" placeholder="Folio Cer. Defuncion" value="'.$control->seed.'"><br>
-                <input type="button" name="buscarSEED" id="buscarSEED" value="Buscar">';
+        $objHTML->inputText('Fecha de diagnóstico', 'fecha_diagnostico',formatFechaObj($paciente->fechaDiagnostico));
+        $objSelects->SelectCatalogo('Forma de Lepra: ', 'forma_lepra', 'catClasificacionLepra', $diagnostico->idCatClasificacionLepra);
+        echo '<br />';
+        //print_r($diagnostico->arrEstudiosHis);
+        $key1 = 0;
+        foreach($diagnostico->arrEstudiosHis as $key => $resDiagnostico)
+        {
+            if($resDiagnostico->idCatTipoEstudio == 1)
+            {
+                $key1 = $key;
+                break;
+            }
         }
-            echo '</td><td align="center">'.$objHTML->inputText('', 'observaciones_'.$control->idControl, $control->observaciones, array('size'=>40), true).'</td>';
-            echo '<td align="center">'.$objHTML->inputButton('btnActualizaControl_'.$control->idControl, 'Actualizar', null, true).'</td>';
-			//<td align="center"><img src="images/ok.gif" border="0"></td>
-        echo '</tr>';
-	}
-	
-    echo '</tbody></table></div>';
 
-    echo '<br /><div align="center">';
-    $objHTML->inputButton('agregar', 'Agregar Nuevo Registro', array('onClick'=>'agregaRegistroControl()'));
-    echo '</div><br />';
-    
-    $objHTML->endFieldset();
-    
-    
-    $objHTML->startFieldset('Control de Contactos');
-    
-    echo '<div class="datagrid">
-            <table>
-            <thead>
-            <tr align="center">
-                <th>No.</th>
-                <th>Nombre</th>
-                <th>Edad</th>
-                <th>Sexo</th>
-                <th>Revisi&oacuten Cl&iacute;nica</th>
-            </tr>
-            </thead>
-            <tbody>';
-			$i = 1;
-			foreach($diagnostico->arrContactos as $contacto) {
-            echo '<tr id="'.$contacto->idContacto.'">
-                <td align="center">'.($i++).'</td>
-                <td>'.$contacto->nombre.'</td>
-                <td align="center">'.$contacto->edad.' a&ntilde;os</td>
-                <td align="center">'.$help->getDescripcionSexo($contacto->sexo).'</td>
-                <td align="center"><a href="javascript:revisionContacto('.$contacto->idContacto.',\''.$contacto->nombre.'\')"><img src="images/revision_contacto.png" border="0"/></a></td>
-            </tr>';
-        }
-    echo '</tbody></table></div><br /><br />';
-    
 
-    echo '<div id="winRevisionContacto" title="Revisi&oacute;n de Contacto">';
+        $objHTML->inputText('Resultado Histopatológico:', 'result_histo', $diagnostico->arrEstudiosHis[$key1]->hisResultado, array('size'=>50));
+        echo '<br />';
 
-        $objHTML->startForm('formRevisionContacto', '#', 'POST');
+        $objHTML->label('Resultado Bacteriológico ');
+        $objSelects->SelectCatalogo('IB:', 'ib', 'catBaciloscopia', $diagnostico->arrEstudiosBac[0]->idCatBac,NULL,false);
+        $objHTML->inputText('IM:', 'im', $diagnostico->arrEstudiosBac[0]->bacIM, array('size'=>'10'));
+        echo '<br />';
 
-            $objHTML->inputHidden('idContactoRev');
-            echo '<label><strong>Contacto: <u> &nbsp; <span id="nombre_contacto"></span> &nbsp; </u></strong></label><br>';
-            $objHTML->inputText('Fecha: ', 'fecha_revision');
-            echo '<br><label>Diagn&oacute;stico Cl&iacute;nico: </label><br>';
-            $objSelects->SelectCatalogo('', 'revision_clinica', 'catRevisionContacto');
-            echo '<br><label>Observaciones:</label><br>';
-            $objHTML->inputTextarea('', 'observaciones_revContacto', '', array('rows'=>8, 'cols'=>35));
-            echo '<br><br><div align="center">';
-            $objHTML->inputButton('btnProcesarRevisionContacto', 'Guardar', array('onClick'=>'procesarRevisionContacto()'));
-            echo '</div>';
+        $gradoDiscapacidad = array('0'=>'0', '1'=>'1', '2'=>'2');
+        $discapacidadGeneral = array(
+                        $diagnostico->discOjoIzq,
+                        $diagnostico->discManoIzq,
+                        $diagnostico->discPieIzq,
+                        $diagnostico->discOjoDer,
+                        $diagnostico->discManoDer,
+                        $diagnostico->discPieDer);
+        rsort($discapacidadGeneral);
 
-        $objHTML->endFormOnly();
+        $objHTML->inputSelect('Grado de discapacidad:', 'discGeneral', $gradoDiscapacidad, array_shift($discapacidadGeneral));
+        $objSelects->SelectCatalogo('Detección:', 'deteccion', 'catFormaDeteccion', $paciente->idCatFormaDeteccion, array('class'=>'validate[required]'));
 
-    echo '</div>';
-    
-    /***************************************************************************/
-    
-    echo '<h3>Revisi&oacute;n Cl&iacute;nica</h3>';
-    
-    $maxRevision = 0;
-	$arrRevisionContactos = NULL;
-	$i = 1;
-    
-    $objCatalogo = new Catalogo('catRevisionContacto');
-    $catRevisionContacto = $objCatalogo->getValores();
-    
-    foreach($catRevisionContacto as $key => $val) {
-        $catRevisionContacto[$key] = str_replace('lesiones','lesiones<br>', htmlentities($val));
-        
-    }
-    
-    foreach($diagnostico->arrContactos as $contacto) {
-        $objControlContacto = new ControlContacto();
-        $objControlContacto->obtenerBD($contacto->idContacto);
-        
-        $arrRevisiones = null;
-		
-		$maxRevContacto = count($objControlContacto->arrRevisionContacto);
-		$maxRevision = max($maxRevision, $maxRevContacto);
-		
-        for($i=0; $i<$maxRevContacto; $i++) {
-				$arrRevisiones[$i] = array( 'id'            => $objControlContacto->arrRevisionContacto[$i]->idControlContacto,
-                                            'fecha'         => $objControlContacto->arrRevisionContacto[$i]->fecha,
-                                            'resultado'     => $catRevisionContacto[$objControlContacto->arrRevisionContacto[$i]->idCatRevisionContacto],
-                                            'observaciones' => htmlentities($objControlContacto->arrRevisionContacto[$i]->observaciones));
-		}
-		$arrRevisionContactos[$contacto->idContacto] = $arrRevisiones;
-    }
-    
-    $encabezadoRevision = '';
-	$encabezadoFechaResultadoObserv = '';
-	
-	// construye los encabezados de la tabla
-	for($i=0; $i<$maxRevision; $i++) {
-		$encabezadoRevision .= '<th colspan="2">Revisi&oacute;n '.($i+1).'</th>';//'<th colspan="3">Revisi&oacute;n '.($i+1).'</th>';
-		$encabezadoFechaResultadoObserv .= '<th>Fecha</th><th>Resultado</th>';//'<th>Fecha</th><th>Resultado</th><th>Observaciones</th>';
-	}
-	
-	// construye las filas de la tabla
-	$filasRevisionesContactos = '';
-	$j=0;
-	
-	foreach ($arrRevisionContactos as $keyContacto => $valueRevision) {
-		$filasRevisionesContactos .= '<tr id="'.$keyContacto.'"><td align="center">'.($j+1).'</td>';
-		
-		for($i=0; $i<$maxRevision; $i++) {	
-			$filasRevisionesContactos .= '<td align="center"><span class="showRevision" data-idrev="'.$valueRevision[$i]['id'].'">'.$valueRevision[$i]['fecha'].'</span></td>
-									   <td align="center"><span class="showRevision" data-idrev="'.$valueRevision[$i]['id'].'">'.$valueRevision[$i]['resultado'].'</span></td>';
-									   //<td align="center">'.$valueRevision[$i]['observaciones'].'</td>';
-		}
-		
-		$filasRevisionesContactos .= '</tr>';
-		$j++;
-	}
-    
-    $arrRevisionContactos = array_filter($arrRevisionContactos);
-    
-    if(!empty($arrRevisionContactos))
-    {
-        echo '<div class="datagrid">
-                <table>
-                    <thead>
-                        <tr align="center"><th rowspan="2">No.</th>'.$encabezadoRevision.'</tr>';
-
-        if(!empty($encabezadoFechaResultadoObserv))
-                        echo '<tr align="center">'.$encabezadoFechaResultadoObserv.'</tr>';
-
-                    echo '</thead>
-                    <tbody>'.$filasRevisionesContactos.'</tbody>
-                </table>
-            </div>';
-    } else
-        echo 'No se encontraron revisiones clinicas de los contactos';
-    
-    echo '<br />';
-    
-    /***************************************************************************/
-    
-    echo '<br><br><h3>Estudios de laboratorio</h3>';
-    $maxExamen = 0;
-	$arrEstudiosContactos = NULL;
-	$i = 1;
-	
-	foreach($diagnostico->arrContactos as $contacto) {
-		$contacto->cargarEstudiosBac();
-		$contacto->cargarEstudiosHis();
-		$arrEstudios = null;
-		
-		// obtiene el numero maximo de estudios del contacto actual
-		$maxEstudios = max(count($contacto->arrEstudiosBac), count($contacto->arrEstudiosHis));
-		// obtiene el numero maximo de estudios de todos los contactos
-		$maxExamen = max($maxExamen, $maxEstudios);
-		
-		for($i=0; $i<$maxEstudios; $i++) {
-			
-			if ( !empty($contacto->arrEstudiosBac[$i]->fechaResultado) ) {
-				$arrEstudios[$i]['bacilo'] = array( 'fecha'    => formatFechaObj($contacto->arrEstudiosBac[$i]->fechaResultado), 
-													'resultado'=> $help->getDescripBaciloscopia($contacto->arrEstudiosBac[$i]->idCatBac).' IM: '.$contacto->arrEstudiosBac[$i]->bacIM );
-			}
-			else {
-				$arrEstudios[$i]['bacilo'] = array( 'fecha'    => '', 
-													'resultado'=> '');
-			}
-			
-			if( !empty($contacto->arrEstudiosHis[$i]->fechaResultado) ) {
-				$arrEstudios[$i]['histo']  = array( 'fecha'    => formatFechaObj($contacto->arrEstudiosHis[$i]->fechaResultado), 
-													'resultado'=> $help->getDescripcionHistopatologia($contacto->arrEstudiosHis[$i]->idCatHisto) );
-			}
-			else{
-				$arrEstudios[$i]['histo']  = array( 'fecha'    => '', 
-													'resultado'=> '');
-			}
-		}
-		$arrEstudiosContactos[$contacto->idContacto] = $arrEstudios;
-	}
-	
-	$encabezadoExamen = '';
-	$encabezadoTipoEstudios = '';
-	$encabezadoFechaResultado = '';
-	
-	// construye los encabezados de la tabla
-	for($i=0; $i<$maxExamen; $i++) {
-		$encabezadoExamen .= '<th colspan="4">Examen '.($i+1).'</th>';
-		$encabezadoTipoEstudios .= '<th colspan="2">Baciloscop&iacute;a</th><th colspan="2">Histopatolog&iacute;a</th>';
-		$encabezadoFechaResultado .= '<th>Fecha</th><th>Resultado</th><th>Fecha</th><th>Resultado</th>';
-	}
-	
-	// construye las filas de la tabla
-	$filasEstudioContactos = '';
-	$j=0;
-	
-	foreach ($arrEstudiosContactos as $keyContacto => $valueEstudios) {
-		$filasEstudioContactos .= '<tr id="'.$keyContacto.'"><td align="center">'.($j+1).'</td>';
-		
-		for($i=0; $i<$maxExamen; $i++) {	
-			$filasEstudioContactos .= '<td align="center">'.$valueEstudios[$i]['bacilo']['fecha'].'</td>
-									   <td align="center">'.$valueEstudios[$i]['bacilo']['resultado'].'</td>
-									   <td align="center">'.$valueEstudios[$i]['histo']['fecha'].'</td>
-									   <td align="center"'.$valueEstudios[$i]['histo']['resultado'].'></td>';
-		}
-		
-		$filasEstudioContactos .= '</tr>';
-		$j++;
-	}
-    
-	$arrEstudiosContactos = array_filter($arrEstudiosContactos);
-    
-    if(!empty($arrEstudiosContactos))
-    {
-        echo '<div class="datagrid">
-                <table>
-                    <thead>
-                        <tr align="center"><th rowspan="3">No.</th>'.$encabezadoExamen.'</tr>';
-
-        if(!empty($encabezadoTipoEstudios))
-                        echo '<tr align="center">'.$encabezadoTipoEstudios.'</tr>';
-
-        if(!empty($encabezadoFechaResultado))
-                        echo'<tr align="center">'.$encabezadoFechaResultado.'</tr>';
-
-                    echo '</thead>
-                    <tbody>'.$filasEstudioContactos.'</tbody>
-                </table>
-            </div>';
-    } else
-        echo 'No se encontraron estudios de laboratorio de los contactos';
-    
-    echo '<br />';
-    
     $objHTML->endFieldset();
 
-//$objHTML->endFormOnly();
+    $objHTML->inputHidden('idDiagnostico', $diagnostico->idDiagnostico);
+
+    $objHTML->inputTextarea('', 'tmpl_control',
+            '<tr id="registro_control_{0}" align="center">
+                <td align="center">'.$objHTML->inputText('', 'fecha_{0}', '', array('size'=>8, 'class'=>'fecha'), true).'</td>
+                <td align="center">'.$objHTML->inputCheckbox('Si', 'reingreso_{0}', 1, '', NULL, true).'</td>
+                <td>'.$objSelects->SelectCatalogo('', 'estadopaciente_{0}', 'catEstadoPaciente', NULL, NULL, TRUE, TRUE).'</td>
+                <td>'.$objSelects->SelectCatalogo('', 'evolucion_{0}', 'catEvolucionClinica', NULL, NULL, TRUE, TRUE).'</td>
+                <td>'.$objSelects->SelectCatalogo('', 'tratamiento_{0}', 'catTratamientoPreescrito', NULL, NULL, TRUE, TRUE).'</td>
+                <td align="center">'.$objHTML->inputCheckbox('Si', 'vigilancia_{0}', 1, '', NULL, true).'</td>
+                <td>'.$objSelects->SelectCatalogo('', 'baja_{0}', 'catBaja', NULL, NULL, TRUE, TRUE).'</td>
+                <td align="center">'.$objHTML->inputText('', 'observaciones_{0}', '', array('size'=>40), true).'</td>
+                <td align="center">'.$objHTML->inputButton('btnGuardaControl_{0}', 'Guardar', null, true).'</td>
+            </tr>', array('style'=>'display:none;'), false, true );
+
+    //$objHTML->startForm('frmResultadoEstudio', '?'.$_SERVER['QUERY_STRING'], 'POST');
+
+        $objHTML->startFieldset('Control');
+
+        echo '<div class="datagrid">
+                <table id="tarjeta_control">
+                <thead>
+                <tr align="center">
+                    <th>Fecha</th>
+                    <th>Reingreso</th>
+                    <th>Estado Paciente</th>
+                    <th>Evoluci&oacute;n<br />Cl&iacute;nica</th>
+                    <th>Tratamiento<br />Preescrito</th>
+                    <th>Vigilancia<br />Postratamiento</th>
+                    <th>Baja</th>
+                    <th>Observaciones</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>';
+
+        //$i = 0;
+        foreach($diagnostico->arrControles as $control){
+            //$i++;
+            echo '<tr id="registro_control_'.$control->idControl.'" align="center">
+                <td align="center">'.$objHTML->inputText('', 'fecha_'.$control->idControl, formatFechaObj($control->fecha), array('size'=>8, 'class'=>'fecha'), true).'</td>
+                <td align="center">'.$objHTML->inputCheckbox('Si', 'reingreso_'.$control->idControl, 1, $control->reingreso, NULL, true).'</td>
+                <td>'.$objSelects->SelectCatalogo('', 'estadopaciente_'.$control->idControl, 'catEstadoPaciente', $control->idCatEstadoPaciente, NULL, TRUE, TRUE).'</td>
+                <td>'.$objSelects->SelectCatalogo('', 'evolucion_'.$control->idControl, 'catEvolucionClinica', $control->idCatEvolucionClinica, NULL, TRUE, TRUE).'</td>
+                <td>'.$objSelects->SelectCatalogo('', 'tratamiento_'.$control->idControl, 'catTratamientoPreescrito', $control->idCatTratamientoPreescrito, NULL, TRUE, TRUE).'</td>
+                <td align="center">'.$objHTML->inputCheckbox('Si', 'vigilancia_'.$control->idControl, 1, $control->vigilanciaPostratamiento, NULL, true).'</td>
+                <td>'.$objSelects->SelectCatalogo('', 'baja_'.$control->idControl, 'catBaja', $control->idCatBaja, NULL, TRUE, TRUE);
+            if($control->seed) {
+                echo '<input type="text" name="seed_'.$control->idControl.'" id="seed_'.$control->idControl.'" size="12" maxlength="9" placeholder="Folio Cer. Defuncion" value="'.$control->seed.'"><br>
+                    <input type="button" name="buscarSEED" id="buscarSEED" value="Buscar">';
+            }
+                echo '</td><td align="center">'.$objHTML->inputText('', 'observaciones_'.$control->idControl, $control->observaciones, array('size'=>40), true).'</td>';
+                echo '<td align="center">'.$objHTML->inputButton('btnActualizaControl_'.$control->idControl, 'Actualizar', null, true).'</td>';
+                //<td align="center"><img src="images/ok.gif" border="0"></td>
+            echo '</tr>';
+        }
+
+        echo '</tbody></table></div>';
+
+        echo '<br /><div align="center">';
+        $objHTML->inputButton('agregar', 'Agregar Nuevo Registro', array('onClick'=>'agregaRegistroControl()'));
+        echo '</div><br />';
+
+        $objHTML->endFieldset();
+
+
+        $objHTML->startFieldset('Control de Contactos');
+
+        echo '<div class="datagrid">
+                <table>
+                <thead>
+                <tr align="center">
+                    <th>No.</th>
+                    <th>Nombre</th>
+                    <th>Edad</th>
+                    <th>Sexo</th>
+                    <th>Revisi&oacuten Cl&iacute;nica</th>
+                </tr>
+                </thead>
+                <tbody>';
+                $i = 1;
+                foreach($diagnostico->arrContactos as $contacto) {
+                echo '<tr id="'.$contacto->idContacto.'">
+                    <td align="center">'.($i++).'</td>
+                    <td>'.$contacto->nombre.'</td>
+                    <td align="center">'.$contacto->edad.' a&ntilde;os</td>
+                    <td align="center">'.$help->getDescripcionSexo($contacto->sexo).'</td>
+                    <td align="center"><a href="javascript:revisionContacto('.$contacto->idContacto.',\''.$contacto->nombre.'\')"><img src="images/revision_contacto.png" border="0"/></a></td>
+                </tr>';
+            }
+        echo '</tbody></table></div><br /><br />';
+
+
+        echo '<div id="winRevisionContacto" title="Revisi&oacute;n de Contacto">';
+
+            $objHTML->startForm('formRevisionContacto', '#', 'POST');
+
+                $objHTML->inputHidden('idContactoRev');
+                echo '<label><strong>Contacto: <u> &nbsp; <span id="nombre_contacto"></span> &nbsp; </u></strong></label><br>';
+                $objHTML->inputText('Fecha: ', 'fecha_revision');
+                echo '<br><label>Diagn&oacute;stico Cl&iacute;nico: </label><br>';
+                $objSelects->SelectCatalogo('', 'revision_clinica', 'catRevisionContacto');
+                echo '<br><label>Observaciones:</label><br>';
+                $objHTML->inputTextarea('', 'observaciones_revContacto', '', array('rows'=>8, 'cols'=>35));
+                echo '<br><br><div align="center">';
+                $objHTML->inputButton('btnProcesarRevisionContacto', 'Guardar', array('onClick'=>'procesarRevisionContacto()'));
+                echo '</div>';
+
+            $objHTML->endFormOnly();
+
+        echo '</div>';
+
+        /***************************************************************************/
+
+        echo '<h3>Revisi&oacute;n Cl&iacute;nica</h3>';
+
+        $maxRevision = 0;
+        $arrRevisionContactos = NULL;
+        $i = 1;
+
+        $objCatalogo = new Catalogo('catRevisionContacto');
+        $catRevisionContacto = $objCatalogo->getValores();
+
+        foreach($catRevisionContacto as $key => $val) {
+            $catRevisionContacto[$key] = str_replace('lesiones','lesiones<br>', htmlentities($val));
+
+        }
+
+        foreach($diagnostico->arrContactos as $contacto) {
+            $objControlContacto = new ControlContacto();
+            $objControlContacto->obtenerBD($contacto->idContacto);
+
+            $arrRevisiones = null;
+
+            $maxRevContacto = count($objControlContacto->arrRevisionContacto);
+            $maxRevision = max($maxRevision, $maxRevContacto);
+
+            for($i=0; $i<$maxRevContacto; $i++) {
+                    $arrRevisiones[$i] = array( 'id'            => $objControlContacto->arrRevisionContacto[$i]->idControlContacto,
+                                                'fecha'         => $objControlContacto->arrRevisionContacto[$i]->fecha,
+                                                'resultado'     => $catRevisionContacto[$objControlContacto->arrRevisionContacto[$i]->idCatRevisionContacto],
+                                                'observaciones' => htmlentities($objControlContacto->arrRevisionContacto[$i]->observaciones));
+            }
+            $arrRevisionContactos[$contacto->idContacto] = $arrRevisiones;
+        }
+
+        $encabezadoRevision = '';
+        $encabezadoFechaResultadoObserv = '';
+
+        // construye los encabezados de la tabla
+        for($i=0; $i<$maxRevision; $i++) {
+            $encabezadoRevision .= '<th colspan="2">Revisi&oacute;n '.($i+1).'</th>';//'<th colspan="3">Revisi&oacute;n '.($i+1).'</th>';
+            $encabezadoFechaResultadoObserv .= '<th>Fecha</th><th>Resultado</th>';//'<th>Fecha</th><th>Resultado</th><th>Observaciones</th>';
+        }
+
+        // construye las filas de la tabla
+        $filasRevisionesContactos = '';
+        $j=0;
+
+        foreach ($arrRevisionContactos as $keyContacto => $valueRevision) {
+            $filasRevisionesContactos .= '<tr id="'.$keyContacto.'"><td align="center">'.($j+1).'</td>';
+
+            for($i=0; $i<$maxRevision; $i++) {
+                $filasRevisionesContactos .= '<td align="center"><span class="showRevision" data-idrev="'.$valueRevision[$i]['id'].'">'.$valueRevision[$i]['fecha'].'</span></td>
+                                           <td align="center"><span class="showRevision" data-idrev="'.$valueRevision[$i]['id'].'">'.$valueRevision[$i]['resultado'].'</span></td>';
+                                           //<td align="center">'.$valueRevision[$i]['observaciones'].'</td>';
+            }
+
+            $filasRevisionesContactos .= '</tr>';
+            $j++;
+        }
+
+        $arrRevisionContactos = array_filter($arrRevisionContactos);
+
+        if(!empty($arrRevisionContactos))
+        {
+            echo '<div class="datagrid">
+                    <table>
+                        <thead>
+                            <tr align="center"><th rowspan="2">No.</th>'.$encabezadoRevision.'</tr>';
+
+            if(!empty($encabezadoFechaResultadoObserv))
+                            echo '<tr align="center">'.$encabezadoFechaResultadoObserv.'</tr>';
+
+                        echo '</thead>
+                        <tbody>'.$filasRevisionesContactos.'</tbody>
+                    </table>
+                </div>';
+        } else
+            echo 'No se encontraron revisiones clinicas de los contactos';
+
+        echo '<br />';
+
+        /***************************************************************************/
+
+        echo '<br><br><h3>Estudios de laboratorio</h3>';
+        $maxExamen = 0;
+        $arrEstudiosContactos = NULL;
+        $i = 1;
+
+        foreach($diagnostico->arrContactos as $contacto) {
+            $contacto->cargarEstudiosBac();
+            $contacto->cargarEstudiosHis();
+            $arrEstudios = null;
+
+            // obtiene el numero maximo de estudios del contacto actual
+            $maxEstudios = max(count($contacto->arrEstudiosBac), count($contacto->arrEstudiosHis));
+            // obtiene el numero maximo de estudios de todos los contactos
+            $maxExamen = max($maxExamen, $maxEstudios);
+
+            for($i=0; $i<$maxEstudios; $i++) {
+
+                if ( !empty($contacto->arrEstudiosBac[$i]->fechaResultado) ) {
+                    $arrEstudios[$i]['bacilo'] = array( 'fecha'    => formatFechaObj($contacto->arrEstudiosBac[$i]->fechaResultado),
+                                                        'resultado'=> $help->getDescripBaciloscopia($contacto->arrEstudiosBac[$i]->idCatBac).' IM: '.$contacto->arrEstudiosBac[$i]->bacIM );
+                }
+                else {
+                    $arrEstudios[$i]['bacilo'] = array( 'fecha'    => '',
+                                                        'resultado'=> '');
+                }
+
+                if( !empty($contacto->arrEstudiosHis[$i]->fechaResultado) ) {
+                    $arrEstudios[$i]['histo']  = array( 'fecha'    => formatFechaObj($contacto->arrEstudiosHis[$i]->fechaResultado),
+                                                        'resultado'=> $help->getDescripcionHistopatologia($contacto->arrEstudiosHis[$i]->idCatHisto) );
+                }
+                else{
+                    $arrEstudios[$i]['histo']  = array( 'fecha'    => '',
+                                                        'resultado'=> '');
+                }
+            }
+            $arrEstudiosContactos[$contacto->idContacto] = $arrEstudios;
+        }
+
+        $encabezadoExamen = '';
+        $encabezadoTipoEstudios = '';
+        $encabezadoFechaResultado = '';
+
+        // construye los encabezados de la tabla
+        for($i=0; $i<$maxExamen; $i++) {
+            $encabezadoExamen .= '<th colspan="4">Examen '.($i+1).'</th>';
+            $encabezadoTipoEstudios .= '<th colspan="2">Baciloscop&iacute;a</th><th colspan="2">Histopatolog&iacute;a</th>';
+            $encabezadoFechaResultado .= '<th>Fecha</th><th>Resultado</th><th>Fecha</th><th>Resultado</th>';
+        }
+
+        // construye las filas de la tabla
+        $filasEstudioContactos = '';
+        $j=0;
+
+        foreach ($arrEstudiosContactos as $keyContacto => $valueEstudios) {
+            $filasEstudioContactos .= '<tr id="'.$keyContacto.'"><td align="center">'.($j+1).'</td>';
+
+            for($i=0; $i<$maxExamen; $i++) {
+                $filasEstudioContactos .= '<td align="center">'.$valueEstudios[$i]['bacilo']['fecha'].'</td>
+                                           <td align="center">'.$valueEstudios[$i]['bacilo']['resultado'].'</td>
+                                           <td align="center">'.$valueEstudios[$i]['histo']['fecha'].'</td>
+                                           <td align="center"'.$valueEstudios[$i]['histo']['resultado'].'></td>';
+            }
+
+            $filasEstudioContactos .= '</tr>';
+            $j++;
+        }
+
+        $arrEstudiosContactos = array_filter($arrEstudiosContactos);
+
+        if(!empty($arrEstudiosContactos))
+        {
+            echo '<div class="datagrid">
+                    <table>
+                        <thead>
+                            <tr align="center"><th rowspan="3">No.</th>'.$encabezadoExamen.'</tr>';
+
+            if(!empty($encabezadoTipoEstudios))
+                            echo '<tr align="center">'.$encabezadoTipoEstudios.'</tr>';
+
+            if(!empty($encabezadoFechaResultado))
+                            echo'<tr align="center">'.$encabezadoFechaResultado.'</tr>';
+
+                        echo '</thead>
+                        <tbody>'.$filasEstudioContactos.'</tbody>
+                    </table>
+                </div>';
+        } else
+            echo 'No se encontraron estudios de laboratorio de los contactos';
+
+        echo '<br />';
+
+    $objHTML->endFieldset();
+}
 
 ?>
