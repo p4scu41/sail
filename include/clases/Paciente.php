@@ -238,7 +238,7 @@ class Paciente {
 			
 			if($this->fechaDxBacil == "" || $this->fechaDxBacil == NULL)
 			{
-				$sql = "SELECT * FROM lepra.dbo.diagnostico WHERE idPaciente = ".$this->idPaciente;
+				$sql = "SELECT * FROM diagnostico WHERE idPaciente = ".$this->idPaciente;
 				$consulta = ejecutaQueryClases($sql);
 				
 				if (is_string($consulta)) {
@@ -275,7 +275,7 @@ class Paciente {
 			
 			if($this->fechaDxHisto == "" || $this->fechaDxHisto == NULL)
 			{
-				$sql = "SELECT * FROM lepra.dbo.diagnostico WHERE idPaciente = ".$this->idPaciente;
+				$sql = "SELECT * FROM diagnostico WHERE idPaciente = ".$this->idPaciente;
 				$consulta = ejecutaQueryClases($sql);
 				
 				if (is_string($consulta)) {

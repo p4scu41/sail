@@ -287,7 +287,7 @@ class Helpers
 
 	public function getEdadPaciente($idPaciente)
 	{
-		$sql = 'SELECT [diferenciaAnos] (p.fechaNacimiento , GETDATE()) AS edad FROM pacientes p WHERE p.idPaciente = ' . $idPaciente . ';';
+		$sql = 'SELECT [dbo].[diferenciaAnos] (p.fechaNacimiento , GETDATE()) AS edad FROM pacientes p WHERE p.idPaciente = ' . $idPaciente . ';';
 		$result = ejecutaQueryClases($sql);
 		if (is_string($result)) {
 			$this->error = true;

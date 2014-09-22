@@ -24,7 +24,7 @@ $query = 'SELECT [pacientes].[idPaciente]
     ,[pacientes].[apellidoPaterno]
     ,[pacientes].[apellidoMaterno]
     ,[pacientes].[nombre]
-    ,[diferenciaAnos]([pacientes].[fechaNacimiento], GETDATE()) AS edad
+    ,[dbo].[diferenciaAnos]([pacientes].[fechaNacimiento], GETDATE()) AS edad
     ,[catSexo].[sexo]
     ,[pacientes].[ocupacion]
     ,[catEstado].[nombre] AS EstadoNacimiento

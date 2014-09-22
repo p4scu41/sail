@@ -57,6 +57,9 @@ Class Diagnostico {
 	
 	
 	public function obtieneIdDiagnostico($idPaciente) {
+        if(empty($idPaciente))
+            return null;
+        
 		$query = 'SELECT [idDiagnostico] FROM [diagnostico] WHERE [idPaciente]='.(int)$idPaciente;
 		$result = ejecutaQueryClases($query);
 		
