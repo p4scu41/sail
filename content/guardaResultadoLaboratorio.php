@@ -94,7 +94,7 @@ if($_POST['guarda_resultado_histo'])
 			{
 				$infoVivienda = array();
 				
-				$sql = 'SELECT juris.nombre FROM [lepra].[dbo].[catJurisdiccion] as juris, [lepra].[dbo].[catMunicipio] as muni where juris.idCatJurisdiccion = muni.idCatJurisdiccion and juris.idCatEstado=muni.idCatEstado and muni.idCatEstado='.$pacienteLepra->idCatEstado.' and muni.idCatMunicipio='.$pacienteLepra->idCatMunicipio.'';
+				$sql = 'SELECT juris.nombre FROM [catJurisdiccion] as juris, [catMunicipio] as muni where juris.idCatJurisdiccion = muni.idCatJurisdiccion and juris.idCatEstado=muni.idCatEstado and muni.idCatEstado='.$pacienteLepra->idCatEstado.' and muni.idCatMunicipio='.$pacienteLepra->idCatMunicipio.'';
 				//$sql = 'SELECT nombre FROM catLocalidad WHERE idCatLocalidad = '.$pacienteLepra->idCatLocalidad.' AND idCatMunicipio = '.$pacienteLepra->idCatMunicipio.' AND idCatEstado = '.$pacienteLepra->idCatEstado;
 				$resv = ejecutaQuery($sql);
 				$infov = devuelveRowAssoc($resv);

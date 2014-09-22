@@ -287,7 +287,7 @@ class Helpers
 
 	public function getEdadPaciente($idPaciente)
 	{
-		$sql = 'SELECT [lepra].[dbo].[diferenciaAnos] (p.fechaNacimiento , GETDATE()) AS edad FROM pacientes p WHERE p.idPaciente = ' . $idPaciente . ';';
+		$sql = 'SELECT [diferenciaAnos] (p.fechaNacimiento , GETDATE()) AS edad FROM pacientes p WHERE p.idPaciente = ' . $idPaciente . ';';
 		$result = ejecutaQueryClases($sql);
 		if (is_string($result)) {
 			$this->error = true;
@@ -329,7 +329,7 @@ class Helpers
 	}
 	
 	public function getClavePaciente($idPaciente){
-		$sql = "SELECT [cveExpediente] FROM [lepra].[dbo].[pacientes] WHERE [idPaciente]=".(int)$idPaciente;		
+		$sql = "SELECT [cveExpediente] FROM [pacientes] WHERE [idPaciente]=".(int)$idPaciente;		
 		
 		$result = ejecutaQueryClases($sql);
 		if (is_string($result)) {
@@ -343,7 +343,7 @@ class Helpers
 	}
 	
 	public function getNamePaciente($idPaciente) {
-		$sql = "SELECT ([nombre]+' '+[apellidoPaterno]+' '+[apellidoMaterno]) AS nombre FROM [lepra].[dbo].[pacientes] WHERE [idPaciente]=".(int)$idPaciente;		
+		$sql = "SELECT ([nombre]+' '+[apellidoPaterno]+' '+[apellidoMaterno]) AS nombre FROM [pacientes] WHERE [idPaciente]=".(int)$idPaciente;		
 		
 		$result = ejecutaQueryClases($sql);
 		if (is_string($result)) {
@@ -470,7 +470,7 @@ class Helpers
 		if(empty($idCatHisto))
 			return '';
 		
-		$sql = 'SELECT [descripcion] FROM [lepra].[dbo].[catHistopatologia] WHERE [idCatHisto]='.(int)$idCatHisto;
+		$sql = 'SELECT [descripcion] FROM [catHistopatologia] WHERE [idCatHisto]='.(int)$idCatHisto;
 		
 		$result = ejecutaQueryClases($sql);
 		if (is_string($result)) {

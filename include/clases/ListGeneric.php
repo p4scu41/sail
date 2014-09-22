@@ -262,7 +262,7 @@ class ListGeneric {
                 ,[muestraRechazada]
                 ,[idCatMotivoRechazo]
                 ,[otroMotivoRechazo]
-          FROM [lepra].[dbo].[estudiosBac]
+          FROM [estudiosBac]
           WHERE [folioLaboratorio] IS NULL AND 
                [idCatSolicitante] IN 
                     (SELECT [idCatUnidad] FROM [catUnidad] WHERE 1=1 '; 
@@ -329,7 +329,7 @@ class ListGeneric {
                 ,[muestraRechazada]
                 ,[idCatMotivoRechazo]
                 ,[otroMotivoRechazo]
-          FROM [lepra].[dbo].[estudiosHis]
+          FROM [estudiosHis]
           WHERE [folioLaboratorio] IS NULL AND 
                [idCatSolicitante] IN 
                     (SELECT [idCatUnidad] FROM [catUnidad] WHERE 1=1 '; 

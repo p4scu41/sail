@@ -18,7 +18,7 @@ class ReporteListadoGeneral {
 			$this->error = true;
 			$this->msgError = "El reporte requiere del identificador de estado.";
 		} else {
-			$sql = "SELECT * FROM [lepra].[dbo].[catJurisdiccion] WHERE 1 = 1 AND idCatEstado = " . $this->idCatEstado . " ORDER BY idCatJurisdiccion ASC;";		
+			$sql = "SELECT * FROM [catJurisdiccion] WHERE 1 = 1 AND idCatEstado = " . $this->idCatEstado . " ORDER BY idCatJurisdiccion ASC;";		
 			$consulta = ejecutaQueryClases($sql);
 			//echo $sql;
 			if (is_string($consulta)) {
@@ -28,7 +28,7 @@ class ReporteListadoGeneral {
 				while ($tabla = devuelveRowAssoc($consulta)) $this->arrJurisdicciones[$tabla["idCatJurisdiccion"]] = $tabla["nombre"];
 				
 				$sql = "SELECT p.idPaciente, m.idCatJurisdiccion" .
-					" FROM [lepra].[dbo].[pacientes] p, [lepra].[dbo].[catMunicipio] m, [lepra].[dbo].[diagnostico] d " .
+					" FROM [pacientes] p, [catMunicipio] m, [diagnostico] d " .
 					" WHERE m.idCatMunicipio = p.idCatMunicipio" .
 					" AND d.idPaciente =  p.idPaciente " .
 					" AND m.idCatEstado = p.idCatEstado " .
@@ -173,7 +173,7 @@ class PacienteReporteListadoGeneral {
 	public function obtenerBD($idPaciente) {
 
 		$sql = "SELECT p.*, m.idCatJurisdiccion, d.idDiagnostico, d.fechaCaptura, ctp.descripcion as tipoPaciente, s.sexo as sexoP,  cfd.descripcion as formaDeteccion, ce.nombre as estado, cl.nombre as localidad" .
-			" FROM [lepra].[dbo].[pacientes] p, [lepra].[dbo].[catMunicipio] m, [lepra].[dbo].[diagnostico] d, [lepra].[dbo].[catTipoPaciente] ctp, [lepra].[dbo].[catSexo] s, [lepra].[dbo].[catFormaDeteccion] cfd, [lepra].[dbo].[catEstado] ce, [lepra].[dbo].[catLocalidad] cl" .
+			" FROM [pacientes] p, [catMunicipio] m, [diagnostico] d, [catTipoPaciente] ctp, [catSexo] s, [catFormaDeteccion] cfd, [catEstado] ce, [catLocalidad] cl" .
 			" WHERE p.idPaciente = " . $idPaciente . 
 			" AND d.idPaciente = p.idPaciente" .
 			" AND m.idCatMunicipio = p.idCatMunicipio" .
@@ -215,12 +215,12 @@ class PacienteReporteListadoGeneral {
 
 			
 			$sql = "SELECT " .
-				"(SELECT COUNT(idLesion) FROM [lepra].[dbo].[diagramaDermatologico] WHERE idDiagnostico = " . $this->idDiagnostico . " AND idCatTipoLesion = " . self::$idManchasHipocrom . " ) AS cMH, " .
-				"(SELECT COUNT(idLesion) FROM [lepra].[dbo].[diagramaDermatologico] WHERE idDiagnostico = " . $this->idDiagnostico . " AND idCatTipoLesion = " . self::$idManchasEritemat . " ) AS cME, " .
-				"(SELECT COUNT(idLesion) FROM [lepra].[dbo].[diagramaDermatologico] WHERE idDiagnostico = " . $this->idDiagnostico . " AND idCatTipoLesion = " . self::$idPlacasInfiltrad . " ) AS cPI, " .
-				"(SELECT COUNT(idLesion) FROM [lepra].[dbo].[diagramaDermatologico] WHERE idDiagnostico = " . $this->idDiagnostico . " AND (idCatTipoLesion = " . self::$idNodulosAislados . " OR idCatTipoLesion = " . self::$idNodulosAgrupados . ")) AS cNo, " .
-				"(SELECT COUNT(idLesion) FROM [lepra].[dbo].[diagramaDermatologico] WHERE idDiagnostico = " . $this->idDiagnostico . " AND idCatTipoLesion = " . self::$idOtrasLesiones . " ) AS cOL, " .
-				"(SELECT COUNT(idLesion) FROM [lepra].[dbo].[diagramaDermatologico] WHERE idDiagnostico = " . $this->idDiagnostico . " AND idCatTipoLesion = " . self::$idZonasAnestesia . " ) AS cZA;";
+				"(SELECT COUNT(idLesion) FROM [diagramaDermatologico] WHERE idDiagnostico = " . $this->idDiagnostico . " AND idCatTipoLesion = " . self::$idManchasHipocrom . " ) AS cMH, " .
+				"(SELECT COUNT(idLesion) FROM [diagramaDermatologico] WHERE idDiagnostico = " . $this->idDiagnostico . " AND idCatTipoLesion = " . self::$idManchasEritemat . " ) AS cME, " .
+				"(SELECT COUNT(idLesion) FROM [diagramaDermatologico] WHERE idDiagnostico = " . $this->idDiagnostico . " AND idCatTipoLesion = " . self::$idPlacasInfiltrad . " ) AS cPI, " .
+				"(SELECT COUNT(idLesion) FROM [diagramaDermatologico] WHERE idDiagnostico = " . $this->idDiagnostico . " AND (idCatTipoLesion = " . self::$idNodulosAislados . " OR idCatTipoLesion = " . self::$idNodulosAgrupados . ")) AS cNo, " .
+				"(SELECT COUNT(idLesion) FROM [diagramaDermatologico] WHERE idDiagnostico = " . $this->idDiagnostico . " AND idCatTipoLesion = " . self::$idOtrasLesiones . " ) AS cOL, " .
+				"(SELECT COUNT(idLesion) FROM [diagramaDermatologico] WHERE idDiagnostico = " . $this->idDiagnostico . " AND idCatTipoLesion = " . self::$idZonasAnestesia . " ) AS cZA;";
 
 			$consulta = ejecutaQueryClases($sql);
 			//echo "<BR><BR>" . $sql . "<BR><BR>";
@@ -238,7 +238,7 @@ class PacienteReporteListadoGeneral {
 			}			
 
 			$sql = "SELECT TOP 1 muestraRechazada, fechaSolicitud, fechaResultado, bacIM, idCatBac  
-				FROM [lepra].[dbo].[estudiosBac] 
+				FROM [estudiosBac] 
 				WHERE idDiagnostico = " . $this->idDiagnostico . " 
 				AND muestraRechazada = 0 
 				AND idCatTipoEstudio = " . self::$idCatTipoEstudioDia  . " 
@@ -271,7 +271,7 @@ class PacienteReporteListadoGeneral {
 			}
 
 			$sql = "SELECT muestraRechazada, fechaSolicitud, fechaResultado, hisResultado 
-				FROM [lepra].[dbo].[estudiosHis] 
+				FROM [estudiosHis] 
 				WHERE idDiagnostico = " . $this->idDiagnostico . " 
 				AND muestraRechazada = 0 
 				AND idCatTipoEstudio = " . self::$idCatTipoEstudioDia  . " 				

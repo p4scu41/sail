@@ -834,7 +834,7 @@ class BaciloscopiaReporteTrimestral {
 	public function getExamenDiagnostico($idDiagnostico) {
 
 		$sql = "SELECT fechaResultado, bacIM AS IM, cb.descripcion AS IB " .
-			"FROM [lepra].[dbo].[estudiosBac] eb, [lepra].[dbo].[catBaciloscopia] cb " .
+			"FROM [estudiosBac] eb, [catBaciloscopia] cb " .
 			"WHERE eb.idDiagnostico = " . $idDiagnostico . " " .
 			"AND eb.idCatTipoEstudio = " . self::$idCatTipoEstudioDia . " " .
 			"AND eb.muestraRechazada = 0 " .
@@ -861,7 +861,7 @@ class BaciloscopiaReporteTrimestral {
 
 	public function getExamen($idEstudioBac) {
 		$sql = "SELECT fechaResultado, bacIM AS IM, cb.descripcion AS IB " .
-			"FROM [lepra].[dbo].[estudiosBac] eb, [lepra].[dbo].[catBaciloscopia] cb " .
+			"FROM [estudiosBac] eb, [catBaciloscopia] cb " .
 			"WHERE eb.idEstudioBac = " . $idEstudioBac . " " .
 			"AND cb.idCatBaciloscopia = eb.idCatBac;";
 		
@@ -900,7 +900,7 @@ class HistopatologiaReporteTrimestral {
 	public function getExamenDiagnostico($idDiagnostico) {
 
 		$sql = "SELECT fechaResultado, ch.descripcion AS res " .
-			"FROM [lepra].[dbo].[estudiosHis] eh, [lepra].[dbo].[catHistopatologia] ch " .
+			"FROM [estudiosHis] eh, [catHistopatologia] ch " .
 			"WHERE eh.idDiagnostico = " . $idDiagnostico . " " .
 			"AND eh.idCatTipoEstudio = " . self::$idCatTipoEstudioDia . " " .
 			"AND eh.muestraRechazada = 0 " .
@@ -926,7 +926,7 @@ class HistopatologiaReporteTrimestral {
 	public function getExamen($idEstudioHis) {
 
 		$sql = "SELECT fechaResultado, ch.descripcion AS res " .
-			"FROM [lepra].[dbo].[estudiosHis] eh, [lepra].[dbo].[catHistopatologia] ch " .
+			"FROM [estudiosHis] eh, [catHistopatologia] ch " .
 			"WHERE eh.idEstudioHis = " . $idEstudioHis . " " .			
 			"AND ch.idCatHisto = eh.idCatHisto;";
 		
@@ -960,7 +960,7 @@ class ControlTxReporteTrimestral {
 	// NUNCA SE LLEGO A UTILIZAR **************************************************************************************
 	/*public function getControl($idControl) {
 		$sql = "SELECT fecha " .
-			"FROM [lepra].[dbo].[control] " .
+			"FROM [control] " .
 			"WHERE idControl = " . $idControl . " " .
 			"AND cb.idCatBaciloscopia = eb.idCatBac;";
 		$connectionBD = conectaBD();

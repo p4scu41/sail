@@ -11,7 +11,7 @@
 	{
 		$connectionBD = conectaBD();
 		
-        $rsInsti = ejecutaQuery('SELECT [institucion] FROM [lepra].[dbo].[catUnidad] WHERE [idCatUnidad]=\''.$_POST['uni'].'\'');
+        $rsInsti = ejecutaQuery('SELECT [institucion] FROM [catUnidad] WHERE [idCatUnidad]=\''.$_POST['uni'].'\'');
         
         if(!$rsInsti) {
             echo '11';
