@@ -1,6 +1,6 @@
 /.project
 /.buildpath
 /.settings
-/nbproject/*
-/_notes/*
-/pacienteImg
+/nbproject
+/_notes
+/pacienteImg/*
