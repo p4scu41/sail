@@ -8,12 +8,7 @@
 	// track_errors true  -> Obtiene el ultimo error en php (php.ini), guardar el mensaje en la variable $php_errormsg
 	function registra_log($archivo, $descripcion)
 	{
-		$agrega_diagonal = "";
-		
-		/* Compatibilidad con Linux */
-		if(stripos($_SERVER['DOCUMENT_ROOT'],":/") === FALSE) $agrega_diagonal = "/";
-		
-		$archivo_log = fopen($_SERVER['DOCUMENT_ROOT'].$agrega_diagonal.CARPETA_RAIZ."/log/log_sistema.log",'a');
+		$archivo_log = fopen("log/log_sistema.log",'a');
 		/*$codigo_errores = NULL;
 		$codigo_errores[1] = E_ERROR;
 		$codigo_errores[2] = "E_WARNING";

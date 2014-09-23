@@ -112,7 +112,7 @@ class HTML {
 		
 		foreach($elements as $key => $val) {
 			
-			if($default == $key)
+			if($default == $key && $default!==null)
 				$selected = 'selected="selected"';
 			else
 				$selected = '';

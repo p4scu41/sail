@@ -108,7 +108,7 @@ class ListGeneric {
            FROM estudiosBac
            WHERE 
                (idPaciente = '.$paciente.' OR 
-               idDiagnostico = (SELECT idDiagnostico FROM diagnostico WHERE idPaciente = '.$paciente.'))
+               idDiagnostico = (SELECT TOP 1 idDiagnostico FROM diagnostico WHERE idPaciente = '.$paciente.' ORDER BY idDiagnostico ASC))
                AND estudiosBac.fechaResultado IS NULL 
                AND estudiosBac.muestraRechazada = 0
                ORDER BY fechaSolicitudEstudio';
@@ -148,7 +148,7 @@ class ListGeneric {
            FROM estudiosHis
            WHERE 
                (idPaciente = '.$paciente.' OR 
-               idDiagnostico = (SELECT idDiagnostico FROM diagnostico WHERE idPaciente = '.$paciente.'))
+               idDiagnostico = (SELECT TOP 1 idDiagnostico FROM diagnostico WHERE idPaciente = '.$paciente.' ORDER BY idDiagnostico ASC))
                AND estudiosHis.fechaResultado IS NULL 
                AND estudiosHis.muestraRechazada = 0
                ORDER BY fechaSolicitudEstudio';
@@ -180,7 +180,7 @@ class ListGeneric {
            FROM estudiosBac
            WHERE 
                (idPaciente = '.$paciente.' OR 
-               idDiagnostico = (SELECT idDiagnostico FROM diagnostico WHERE idPaciente = '.$paciente.'))
+               idDiagnostico = (SELECT TOP 1 idDiagnostico FROM diagnostico WHERE idPaciente = '.$paciente.' ORDER BY idDiagnostico ASC))
                AND (estudiosBac.fechaResultado IS NOT NULL 
                OR estudiosBac.muestraRechazada = 1)
                ORDER BY fechaSolicitudEstudio';
@@ -225,7 +225,7 @@ class ListGeneric {
            FROM estudiosHis
            WHERE 
                (idPaciente = '.$paciente.' OR 
-               idDiagnostico = (SELECT idDiagnostico FROM diagnostico WHERE idPaciente = '.$paciente.'))
+               idDiagnostico = (SELECT TOP 1 idDiagnostico FROM diagnostico WHERE idPaciente = '.$paciente.' ORDER BY idDiagnostico ASC))
                AND (estudiosHis.fechaResultado IS NOT NULL 
                OR estudiosHis.muestraRechazada = 1)
                ORDER BY fechaSolicitudEstudio';

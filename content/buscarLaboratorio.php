@@ -167,7 +167,7 @@ $objHTML->startForm('form_busca', '?'.$_SERVER['QUERY_STRING'], 'POST');
 
 $objHTML->startFieldset();
 
-    $objSelects->selectEstado('edoCaso', isset($_POST['edoCaso']) ? $_POST['edoCaso'] : $_SESSION[EDO_USR_SESSION] );
+    $objSelects->selectEstado('edoCaso', isset($_POST['edoCaso']) ? $_POST['edoCaso'] : $_SESSION[EDO_USR_SESSION], $_SESSION[EDO_USR_SESSION]==0 ? array() : array('disabled'=>'disabled') );
 	echo $objHTML->makeInput('number', 'Folio Solicitud: ', 'folio_solicitud', $_POST['folio_solicitud'], array('size'=>10) );
 	$objHTML->inputText('Folio Laboratorio: ', 'folio_laboratorio', $_POST['folio_laboratorio'], array('size'=>10));
     echo '<br>';

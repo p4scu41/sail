@@ -85,7 +85,89 @@ if($_POST['guarda_resultado_histo'])
 		$resultadoGuardado = true;
 	}
 	else
-	{ 
+	{
+        $help = new Helpers();
+        
+        // Obtenemos los datos del sospechoso para que este sea insertado como datos del diagnostico
+        $sospechoso = new Sospechoso();
+
+        if($pacienteLepra->idPaciente)
+            $sospechoso->obtenerBD($pacienteLepra->idPaciente);
+
+        if($sospechoso->idPaciente) {
+            $diagnostico = new Diagnostico();
+
+            $diagnostico->idPaciente = $pacienteLepra->idPaciente;
+            $diagnostico->idUsuario = $_SESSION[ID_USR_SESSION];
+            $diagnostico->idCatTopografia = $sospechoso->idCatTopografia;
+            $diagnostico->descripcionTopografica = $sospechoso->descripcionTopografica;
+            $diagnostico->idCatNumeroLesiones = $sospechoso->idCatNumeroLesiones;
+            $diagnostico->segAfeCab = $sospechoso->segAfeCab;
+            $diagnostico->segAfeTro = $sospechoso->segAfeTro;
+            $diagnostico->segAfeMSD = $sospechoso->segAfeMSD;
+            $diagnostico->segAfeMSI = $sospechoso->segAfeMSI;
+            $diagnostico->segAfeMID = $sospechoso->segAfeMID;
+            $diagnostico->segAfeMII = $sospechoso->segAfeMII;
+
+            $diagnostico->insertarBD();
+
+            if($diagnostico->error){
+                $errorSql = true;
+                echo $diagnostico->msgError;
+            }
+
+            // Actualizamos todos los estudios para que pasen a ser de un diagnostico
+            $estudios = $help->getAllEstudiosBacFromPaciente($pacienteLepra->idPaciente);
+
+            foreach($estudios as $estudio){
+                if(!empty($estudio)) {
+                    $objEstudio = new EstudioBac();
+                    $objEstudio->idEstudioBac = $estudio;
+                    $objEstudio->setNullIdPacienteBD($diagnostico->idDiagnostico);
+
+                    if($objEstudio->error){
+                        $errorSql = true;
+                        echo $objEstudio->msgError;
+                    }
+                }
+            }
+
+            $estudios = $help->getAllEstudiosHisFromPaciente($pacienteLepra->idPaciente);
+
+            foreach($estudios as $estudio){
+                if(!empty($estudio)) {
+                    $objEstudio = new EstudioHis();
+                    $objEstudio->idEstudioHis = $estudio;
+                    $objEstudio->setNullIdPacienteBD($diagnostico->idDiagnostico);
+
+                    if($objEstudio->error){
+                        $errorSql = true;
+                        echo $objEstudio->msgError;
+                    }
+                }
+            }
+
+            // Insertar el control inical
+            $control = new Control();
+            $control->idDiagnostico = $diagnostico->idDiagnostico;
+            $control->fecha = $pacienteLepra->fechaDiagnostico;
+            $control->reingreso = 0;
+            //$control->idCatEstadoPaciente = 1; // Prevalente sin Tratamiento
+            //$control->idCatTratamientoPreescrito = 5; // Sin Tratamiento
+            $control->vigilanciaPostratamiento = 0;
+            $control->observaciones = 'Registro del paciente';
+
+            $control->insertarBD();
+
+            if($control->error){
+                $errorSql = true;
+                echo $control->msgError;
+            }
+
+            $sql = "DELETE FROM sospechoso WHERE idPaciente = ".$pacienteLepra->idPaciente;
+            $resv = ejecutaQuery($sql);
+        }
+
 		echo msj_ok('Datos Guardados Exitosamente!!!');
 		
 		if($_POST['tipo_resultado'] != 5 && $_POST['tipo_resultado'] != 6)
@@ -187,134 +269,6 @@ if($_POST['guarda_resultado_histo'])
 				sendSMS("5539214946", $smsMessage, date("Y-m-d"), date("H:i"), 'Notificacion Caso Confirmado');
 				sendSMS("5541932463", $smsMessage, date("Y-m-d"), date("H:i"), 'Notificacion Caso Confirmado');
 				*/
-                
-                /*$sospechoso = new Sospechoso();
-                
-                // Obtenemos los datos del sospechoso para que este sea insertado como datos del diagnostico
-                $sospechoso->obtenerBD($pacienteLepra->idPaciente);
-                
-                $sospechoso->idCatTopografia = $_POST['topografia'];
-                $sospechoso->descripcionTopografica = $_POST['topo_morfo_lesiones'];
-                $sospechoso->idCatNumeroLesiones = $_POST['noLesiones'];
-                $sospechoso->segAfeCab = $_POST['segAfeCab'];
-                $sospechoso->segAfeTro = $_POST['segAfeTro'];
-                $sospechoso->segAfeMSD = $_POST['segAfeMSD'];
-                $sospechoso->segAfeMSI = $_POST['segAfeMSI'];
-                $sospechoso->segAfeMID = $_POST['segAfeMID'];
-                $sospechoso->segAfeMII = $_POST['segAfeMII'];
-                
-                
-                $diagnostico = new Diagnostico();
-
-                $diagnostico->idDiagnostico = $diagnostico->obtieneIdDiagnostico($paciente->idPaciente);
-                $diagnostico->idPaciente = $paciente->idPaciente;
-                $diagnostico->discOjoIzq = $_POST['ojo_izq'];
-                $diagnostico->discOjoDer = $_POST['ojo_der'];
-                $diagnostico->discManoIzq = $_POST['mano_izq'];
-                $diagnostico->discManoDer = $_POST['mano_der'];
-                $diagnostico->discPieIzq = $_POST['pie_izq'];
-                $diagnostico->discPieDer = $_POST['pie_der'];
-                $diagnostico->idCatEstadoReaccionalAct = $_POST['reaccional_actual'];
-                if($_POST['reaccional_actual'] == 3) {
-                    $diagnostico->estReaActEriNud = $_POST['edoRecActTipo2Nud'];
-                    $diagnostico->estReaActEriPol = $_POST['edoRecActTipo2Poli'];
-                    $diagnostico->estReaActEriNec = $_POST['edoRecActTipo2Necro'];
-                } else {
-                    $diagnostico->estReaActEriNud = 0;
-                    $diagnostico->estReaActEriPol = 0;
-                    $diagnostico->estReaActEriNec = 0;
-                }
-                $diagnostico->idCatClasificacionLepra = $_POST['diagnostico'];
-                $diagnostico->idCatEstadoPaciente = $_POST['estado_paciente'];
-                $diagnostico->idUsuario = $_SESSION[ID_USR_SESSION];
-                $diagnostico->fechaCaptura = date('Y-m-d H:m:s');
-                $diagnostico->observaciones = $_POST['observaciones'];
-                $diagnostico->idCatTratamiento = $_POST['tratamiento'];
-
-                $diagnostico->idCatTopografia = $_POST['topografia'];
-                $diagnostico->descripcionTopografica = $_POST['topo_morfo_lesiones'];
-                $diagnostico->idCatNumeroLesiones = $_POST['noLesiones'];
-                $diagnostico->segAfeCab = $_POST['segAfeCab'];
-                $diagnostico->segAfeTro = $_POST['segAfeTro'];
-                $diagnostico->segAfeMSD = $_POST['segAfeMSD'];
-                $diagnostico->segAfeMSI = $_POST['segAfeMSI'];
-                $diagnostico->segAfeMID = $_POST['segAfeMID'];
-                $diagnostico->segAfeMII = $_POST['segAfeMII'];
-
-                $diagnostico->otrosPadecimientos = $_POST['otros_padecimientos'];
-                $diagnostico->idCatEstadoReaccionalAnt = $_POST['reaccional_anterior'];
-                if($_POST['reaccional_anterior']==3){
-                    $diagnostico->estReaAntEriNud = $_POST['edoRecAntTipo2Nud'];
-                    $diagnostico->estReaAntEriPol = $_POST['edoRecAntTipo2Poli'];
-                    $diagnostico->estReaAntEriNec = $_POST['edoRecAntTipo2Necro'];
-                } else {
-                    $diagnostico->estReaAntEriNud = 0;
-                    $diagnostico->estReaAntEriPol = 0;
-                    $diagnostico->estReaAntEriNec = 0;
-                }
-                $diagnostico->fechaReaccionAnteriorTipI = $_POST['tipo_uno'];
-                $diagnostico->fechaReaccionAnteriorTipII = $_POST['tipo_dos'];
-                $diagnostico->idCatLocalidadAdqEnf = $_POST['localiAquirioEnfermedad'];
-                $diagnostico->idCatMunicipioAdqEnf = $_POST['muniAquirioEnfermedad'];
-                $diagnostico->idCatEstadoAdqEnf = $_POST['edoAquirioEnfermedad'];
-                
-                $diagnostico->insertarBD();
-                
-                if($diagnostico->error){
-                    $errorSql = true;
-                    echo $diagnostico->msgError;
-                }
-                
-                // Actualizamos todos los estudios para que pasen a ser de un diagnostico
-                $estudios = $help->getAllEstudiosBacFromPaciente($paciente->idPaciente);
-
-                foreach($estudios as $estudio){
-                    if(!empty($estudio)) {
-                        $objEstudio = new EstudioBac();
-                        $objEstudio->idEstudioBac = $estudio;
-                        $objEstudio->setNullIdPacienteBD($diagnostico->idDiagnostico);
-
-                        if($objEstudio->error){
-                            $errorSql = true;
-                            echo $objEstudio->msgError;
-                        }
-                    }
-                }
-
-                $estudios = $help->getAllEstudiosHisFromPaciente($paciente->idPaciente);
-
-                foreach($estudios as $estudio){
-                    if(!empty($estudio)) {
-                        $objEstudio = new EstudioHis();
-                        $objEstudio->idEstudioHis = $estudio;
-                        $objEstudio->setNullIdPacienteBD($diagnostico->idDiagnostico);
-
-                        if($objEstudio->error){
-                            $errorSql = true;
-                            echo $objEstudio->msgError;
-                        }
-                    }
-                }
-        
-                // Insertar el control inical
-                $control = new Control();
-                $control->idDiagnostico = $diagnostico->idDiagnostico;
-                $control->fecha = $pacienteLepra->fechaDiagnostico;
-                $control->reingreso = 0;
-                $control->idCatEstadoPaciente = $diagnostico->idCatEstadoPaciente;
-                $control->idCatTratamientoPreescrito = $diagnostico->idCatTratamiento;
-                $control->vigilanciaPostratamiento = 0;
-                $control->observaciones = 'Registro del paciente';
-
-                $control->insertarBD();
-
-                if($control->error){
-                    $errorSql = true;
-                    echo $control->msgError;
-                }
-                
-                $sql = "DELETE FROM sospechoso WHERE idPaciente = ".$pacienteLepra->idPaciente;
-				$resv = ejecutaQuery($sql);*/
 			}
 		}
 		

@@ -5,7 +5,3 @@
 |  Fecha  |  ID_Usuario  |  Usuario  |  Modulo  |  IP  |  HOST  |  Descripcion  |
  --------------------------------------------------------------------------------
 
-[ 22-Sep-2014 14:40:14 ] | 3 | admin | /sail/index.php?mod=lab&id=106 | 189.236.180.191 | dsl-189-236-180-191-dyn.prod-infinitum.com.mx | SQLSTATE: 42000, code: 102, message: Sintaxis incorrecta cerca de ';'., Query: SELECT * FROM [diagnostico] WHERE idDiagnostico = ;
-[ 22-Sep-2014 14:43:26 ] | 3 | admin | /sail/index.php?mod=lab&id=106 | 127.0.0.1 | SERVER-DELL | SQLSTATE: 42000, code: 102, message: Sintaxis incorrecta cerca de ';'., Query: SELECT * FROM [diagnostico] WHERE idDiagnostico = ;
-[ 22-Sep-2014 14:45:40 ] | 3 | admin | /sail/index.php?mod=lab&id=106 | 127.0.0.1 | SERVER-DELL | SQLSTATE: 42000, code: 102, message: Sintaxis incorrecta cerca de ';'., Query: SELECT * FROM [diagnostico] WHERE idDiagnostico = ;
-[ 22-Sep-2014 14:46:28 ] | 3 | admin | /sail/index.php?mod=lab&id=106 | 127.0.0.1 | SERVER-DELL | SQLSTATE: 42000, code: 102, message: Sintaxis incorrecta cerca de ';'., Query: SELECT * FROM [diagnostico] WHERE idDiagnostico = ;

@@ -32,7 +32,7 @@ require_once('content/procesaCapturar.php');
     $objHTML = new HTML();
     
     // Deshabilitar todos los campos
-    if(($_SESSION[TIPO_USR_SESSION]!=1 || empty($_SESSION[EDO_USR_SESSION])) && isset($_GET['id'])) {
+    if(($_SESSION[TIPO_USR_SESSION]!=1 || empty($_SESSION[EDO_USR_SESSION])) && !empty($_GET['id'])) {
         echo '<script type="text/javascript">
             $(document).ready(function() {
                 deshabilitarCamposCaptura("capturaPaciente");

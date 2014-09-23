@@ -19,6 +19,7 @@ function deshabilitarCamposCaptura(formulario){
                     'radica_anos',
                     'radica_meses',
                     'telefono',
+                    'celularContacto',
                     'edoUnidad',
                     'jurisUnidad',
                     'muniUnidad',
@@ -50,7 +51,9 @@ function deshabilitarCamposCaptura(formulario){
                     'uniReferido',
                     'institucion_caso',
                     'otra_institutcion_caso',
-                    'edoReferido'
+                    'edoReferido',
+                    'medicoElaboro',
+                    'medicoValido'
                     );
                         
     camposCapturaFase2 = new Array(
@@ -105,8 +108,8 @@ function deshabilitarCamposCaptura(formulario){
                     'muniCaso',
                     'otros_padecimientos',
                     'observaciones',
-                    'actualizar',
-                    'guardar',
+                    'actualizarSbmt',
+                    'guardarSbmt',
                     'limpiar'); 
     
     for(campo in camposCapturaFase1) {
@@ -171,6 +174,7 @@ $(document).ready(function(){
 	$tagsBody = $('.body').photoTag({
 		requestTagsUrl: 'ajax/load-tag.php',
 		parametersForRequest: ['id'],
+        showAddNewLink: false,
 		parametersForNewTag: {
 			name: {
 				parameterKey: 'tipoLesion',

@@ -58,15 +58,15 @@
 			echo '</td></tr>';
 			
 			echo '<tr><td align="center"><br /><br />';
+            echo '<iframe id="upload_target" name="upload_target" src="" style="width:0;height:0;border:0px solid #fff;"></iframe>';
+            $objHTML->startForm("uploadPhoto", "ajax/uploadPhoto.php", "POST", array("target"=>"upload_target", "enctype" => "multipart/form-data"));
+            $objHTML->inputHidden('idLesion',$idLesion[1]);
             // El usuario NACIONAL no tiene permitido subir imagenes
             if($_SESSION[EDO_USR_SESSION] != 0) {
-                echo '<iframe id="upload_target" name="upload_target" src="" style="width:0;height:0;border:0px solid #fff;"></iframe>';
-                $objHTML->startForm("uploadPhoto", "ajax/uploadPhoto.php", "POST", array("target"=>"upload_target", "enctype" => "multipart/form-data"));
                 echo '<input type="file" name="nuevaFoto" id="nuevaFoto" />';
-                $objHTML->inputHidden('idLesion',$idLesion[1]);
                 $objHTML->inputSubmit("cargaFoto","Cargar Foto");
-                $objHTML->endFormOnly();
             }
+            $objHTML->endFormOnly();
 			echo "</td></tr></table>";
 		}
 	}

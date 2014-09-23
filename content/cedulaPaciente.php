@@ -29,13 +29,11 @@ require_once('content/procesaCapturar.php');
     $objHTML = new HTML();
     
     // Deshabilitar todos los campos
-    
-        echo '<script type="text/javascript">
-            $(document).ready(function() {
-                deshabilitarCamposCaptura("capturaPaciente");
-            });
-            </script>';
-        $objHTML->inputHidden("showAddNewLink", "false");
+    echo '<script type="text/javascript">
+        $(document).ready(function() {
+            deshabilitarCamposCaptura("capturaPaciente");
+        });
+        </script>';
     
 	echo '<h2 align="center">C&Eacute;DULA DE REGISTRO - ESTUDIO EPIDEMIOL&Oacute;GICO</h2>';
 	echo '<div id="dialog_form" style="display:none;"></div>';
@@ -159,7 +157,11 @@ require_once('content/procesaCapturar.php');
 				Nudosidades y Otras <span class="caja_etiqueta nudosidades_otras"></span>
 			</td><td>';
             
-			echo '<img src="images/body.png" class="body" data-id="'.($diagnostico->idDiagnostico ? $diagnostico->idDiagnostico : $paciente->idPaciente).'" data-image-id="1" data-album-id="1" align="middle" />';
+			$srcImg = "images/male_body_ok.png";
+			if($paciente->sexo == 2)
+				$srcImg = "images/female_body_ok.png";
+			echo '<img id="imagenCuerpo" src="'.$srcImg.'" class="body" data-id="'.$paciente->idPaciente.'" data-image-id="1" data-album-id="1" align="middle" />';
+			
 			echo '</td></tr></table>';
 			echo '<br />';
             $objHTML->label('Segmentos Afectados: ');

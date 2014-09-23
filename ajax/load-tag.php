@@ -46,7 +46,7 @@ if(isset($_SESSION[ID_USR_SESSION]))
 
         if(devuelveNumRows($result) == 0) {
             $query = 'SELECT [idLesion],[idCatTipoLesion],[x],[y],[w],[h] FROM [diagramaDermatologico] 
-                         WHERE [idDiagnostico] IN (SELECT idDiagnostico FROM diagnostico WHERE idPaciente = '.$_GET['id'].')';
+                         WHERE [idDiagnostico] IN (SELECT  TOP 1 idDiagnostico FROM diagnostico WHERE idPaciente = '.$_GET['id'].' ORDER BY idDiagnostico ASC)';
             $result = ejecutaQuery($query);
         }
 		

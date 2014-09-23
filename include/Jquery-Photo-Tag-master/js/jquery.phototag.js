@@ -536,11 +536,11 @@
 				var newInput = $('<input type="hidden" name="position-Tag-y_'+this.id+'" id="position-Tag-y_'+this.id+'" />');
 				$('#capturaPaciente').append(newInput);
 				
-				
+
 				$('#'+options.tag.idPrefix+this.id).click(function(e) {
 					//alert('#file_'+options.tag.idPrefix+this.id);
 					//$('#file_'+this.id).click();
-					verFotos(this.id);
+                        verFotos(this.id);
 				});
 			});
 		};

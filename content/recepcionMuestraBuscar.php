@@ -11,7 +11,7 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-
+    
 	$('#datos_solicitud').hide();
 	
 	$("#winRecepcionMuestra").dialog({
@@ -75,7 +75,7 @@ function getDatosMuestra(id, tipo){
                 $('#formProcesarMuestra #folio_laboratorio').val(respuesta.folioLaboratorio);
                 $('#fecha_recepcion').val(respuesta.fechaRecepcion);
                 
-                if(respuesta.muestraRechazada || respuesta.idCatMotivoRechazo != 0) {
+                if(respuesta.muestraRechazada && respuesta.idCatMotivoRechazo != 0) {
                     $('#rechazo_muestra').attr('checked', true);
                     $('#rechazo_muestra').parent().addClass('checked');
                 }
@@ -141,7 +141,7 @@ $objHTML->startForm('form_busca', '?mod=recepBus', 'POST');
 
 $objHTML->startFieldset();
 
-    $objSelects->selectEstado('edoCaso', isset($_POST['edoCaso']) ? $_POST['edoCaso'] : $_SESSION[EDO_USR_SESSION] );
+    $objSelects->selectEstado('edoCaso', isset($_POST['edoCaso']) ? $_POST['edoCaso'] : $_SESSION[EDO_USR_SESSION], $_SESSION[EDO_USR_SESSION]==0 ? array() : array('disabled'=>'disabled') );
 
 	$objHTML->inputText('Folio Solicitud: ', 'folio_solicitud');
 	$objHTML->inputText('Folio Laboratorio: ', 'folio_laboratorio');

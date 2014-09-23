@@ -178,129 +178,133 @@ class Paciente {
 			$this->msgError = $consulta . " SQL:" . $sql;
 		} else {
 			$tabla = devuelveRowAssoc($consulta);
-			$this->idPaciente =  $tabla["idPaciente"];
-			$this->nombre =  $tabla["nombre"];
-			$this->apellidoPaterno =  $tabla["apellidoPaterno"];
-			$this->apellidoMaterno =  $tabla["apellidoMaterno"];
-			$this->sexo =  $tabla["sexo"];
-			$this->fechaNacimiento =  $tabla["fechaNacimiento"];
-			$this->cveExpediente =  $tabla["cveExpediente"];
-			$this->idCatTipoPaciente =  $tabla["idCatTipoPaciente"];
-			$this->idCatMunicipioNacimiento =  $tabla["idCatMunicipioNacimiento"];
-			$this->idCatEstadoNacimiento =  $tabla["idCatEstadoNacimiento"];
-			$this->idCatLocalidad =  $tabla["idCatLocalidad"];
-			$this->idCatMunicipio =  $tabla["idCatMunicipio"];
-			$this->idCatEstado =  $tabla["idCatEstado"];
-			$this->idCatUnidadNotificante =  $tabla["idCatUnidadNotificante"];
-			$this->idCatFormaDeteccion =  $tabla["idCatFormaDeteccion"];
-			$this->fechaInicioPadecimiento =  $tabla["fechaInicioPadecimiento"];
-			$this->fechaDiagnostico =  $tabla["fechaDiagnostico"];			
-			$this->folioRegistro =  $tabla["folioRegistro"];			
-			////////////Posibles nulos
-			if (!is_null($tabla["fechaNotificacion"])) { $this->fechaNotificacion =  $tabla["fechaNotificacion"]; }
-			if (!is_null($tabla["semanaEpidemiologica"])) { $this->semanaEpidemiologica =  $tabla["semanaEpidemiologica"]; }
-			if (!is_null($tabla["ocupacion"])) { $this->ocupacion =  $tabla["ocupacion"]; }
-			if (!is_null($tabla["calle"])) { $this->calle =  $tabla["calle"]; }
-			if (!is_null($tabla["noExterior"])) { $this->noExterior =  $tabla["noExterior"]; }
-			if (!is_null($tabla["noInterior"])) { $this->noInterior =  $tabla["noInterior"]; }
-			if (!is_null($tabla["colonia"])) { $this->colonia =  $tabla["colonia"]; }
-			if (!is_null($tabla["telefono"])) { $this->telefono =  $tabla["telefono"]; }
-			if (!is_null($tabla["celularContacto"])) { $this->celularContacto =  $tabla["celularContacto"]; }
-			if (!is_null($tabla["anosRadicando"])) { $this->anosRadicando =  $tabla["anosRadicando"]; }
-			if (!is_null($tabla["mesesRadicando"])) { $this->mesesRadicando =  $tabla["mesesRadicando"]; }
-			if (!is_null($tabla["idCatInstitucionUnidadNotificante"])) { $this->idCatInstitucionUnidadNotificante =  $tabla["idCatInstitucionUnidadNotificante"]; }
-			if (!is_null($tabla["otraInstitucionUnidadNotificante"])) { $this->otraInstitucionUnidadNotificante =  $tabla["otraInstitucionUnidadNotificante"]; }
-			if (!is_null($tabla["idCatInstitucionDerechohabiencia"])) { $this->idCatInstitucionDerechohabiencia =  $tabla["idCatInstitucionDerechohabiencia"]; }
-			if (!is_null($tabla["otraDerechohabiencia"])) { $this->otraDerechohabiencia =  $tabla["otraDerechohabiencia"]; }
-			if (!is_null($tabla["fechaInicioPQT"])) { $this->fechaInicioPQT =  $tabla["fechaInicioPQT"]; }
-			if (!is_null($tabla["idCatUnidadReferido"])) { $this->idCatUnidadReferido =  $tabla["idCatUnidadReferido"]; }
-			if (!is_null($tabla["idCatUnidadTratante"])) { $this->idCatUnidadTratante =  $tabla["idCatUnidadTratante"]; }
-			if (!is_null($tabla["idCatInstitucionTratante"])) { $this->idCatInstitucionTratante =  $tabla["idCatInstitucionTratante"]; }
-			if (!is_null($tabla["otraInstitucionTratante"])) { $this->otraInstitucionTratante =  $tabla["otraInstitucionTratante"]; }
-            if (!is_null($tabla["idCatEstadoReferido"])) { $this->idCatEstadoReferido =  $tabla["idCatEstadoReferido"]; }
-			if (!is_null($tabla["campoExtrangero"])) { $this->campoExtrangero =  $tabla["campoExtrangero"]; }
-            if (!is_null($tabla["medicoElaboro"])) { $this->medicoElaboro = $tabla["medicoElaboro"]; }
-			if (!is_null($tabla["medicoValido"])) { $this->medicoValido = $tabla["medicoValido"]; }
-		}
-		
-		if($this->idCatTipoPaciente != 5)
-		{
-			$sql = "SELECT * FROM [estudiosBac] WHERE idPaciente = " . $this->idPaciente . " AND idCatTipoEstudio = 1 ORDER BY fechaResultado;";
-			$consulta = ejecutaQueryClases($sql);
-			
-			if (is_string($consulta)) {
-				$this->error = true;
-				$this->msgError = $consulta . " SQL:" . $sql;
-			} else {
-				$infoEstudio = devuelveRowAssoc($consulta);
-				$this->fechaDxBacil = $infoEstudio['fechaResultado'];
-			}
-			
-			if($this->fechaDxBacil == "" || $this->fechaDxBacil == NULL)
-			{
-				$sql = "SELECT * FROM diagnostico WHERE idPaciente = ".$this->idPaciente;
-				$consulta = ejecutaQueryClases($sql);
-				
-				if (is_string($consulta)) {
-					$this->error = true;
-					$this->msgError = $consulta . " SQL:" . $sql;
-				} else {
-					$infoEstudio = devuelveRowAssoc($consulta);
-					$idDiagnostico = $infoEstudio['idDiagnostico'];
-				}
-				
-				
-				$sql = "SELECT * FROM [estudiosBac] WHERE idDiagnostico = " . $idDiagnostico . " AND idCatTipoEstudio = 1 ORDER BY fechaResultado;";
-				$consulta = ejecutaQueryClases($sql);
-				
-				if (is_string($consulta)) {
-					$this->error = true;
-					$this->msgError = $consulta . " SQL:" . $sql;
-				} else {
-					$infoEstudio = devuelveRowAssoc($consulta);
-					$this->fechaDxBacil = $infoEstudio['fechaResultado'];
-				}
-			}
-			
-			$sql = "SELECT * FROM [estudiosHis] WHERE idPaciente = " . $this->idPaciente . " AND idCatTipoEstudio = 1 ORDER BY fechaResultado;";
-			$consulta = ejecutaQueryClases($sql);
-			
-			if (is_string($consulta)) {
-				$this->error = true;
-				$this->msgError = $consulta . " SQL:" . $sql;
-			} else {
-				$infoEstudio = devuelveRowAssoc($consulta);
-				$this->fechaDxHisto = $infoEstudio['fechaResultado'];
-			}
-			
-			if($this->fechaDxHisto == "" || $this->fechaDxHisto == NULL)
-			{
-				$sql = "SELECT * FROM diagnostico WHERE idPaciente = ".$this->idPaciente;
-				$consulta = ejecutaQueryClases($sql);
-				
-				if (is_string($consulta)) {
-					$this->error = true;
-					$this->msgError = $consulta . " SQL:" . $sql;
-				} else {
-					$infoEstudio = devuelveRowAssoc($consulta);
-					$idDiagnostico = $infoEstudio['idDiagnostico'];
-				}
-				
-				if($idDiagnostico != NULL && $idDiagnostico != "")
-				{
-					$sql = "SELECT * FROM [estudiosHis] WHERE idDiagnostico = " . $idDiagnostico . " AND idCatTipoEstudio = 1 ORDER BY fechaResultado;";
-					$consulta = ejecutaQueryClases($sql);
-					
-					if (is_string($consulta)) {
-						$this->error = true;
-						$this->msgError = $consulta . " SQL:" . $sql;
-					} else {
-						$infoEstudio = devuelveRowAssoc($consulta);
-						$this->fechaDxHisto = $infoEstudio['fechaResultado'];
-					}
-				}
-			}
-		}
+
+            if(!empty($tabla["idPaciente"]))
+            {
+                $this->idPaciente =  $tabla["idPaciente"];
+                $this->nombre =  $tabla["nombre"];
+                $this->apellidoPaterno =  $tabla["apellidoPaterno"];
+                $this->apellidoMaterno =  $tabla["apellidoMaterno"];
+                $this->sexo =  $tabla["sexo"];
+                $this->fechaNacimiento =  $tabla["fechaNacimiento"];
+                $this->cveExpediente =  $tabla["cveExpediente"];
+                $this->idCatTipoPaciente =  $tabla["idCatTipoPaciente"];
+                $this->idCatMunicipioNacimiento =  $tabla["idCatMunicipioNacimiento"];
+                $this->idCatEstadoNacimiento =  $tabla["idCatEstadoNacimiento"];
+                $this->idCatLocalidad =  $tabla["idCatLocalidad"];
+                $this->idCatMunicipio =  $tabla["idCatMunicipio"];
+                $this->idCatEstado =  $tabla["idCatEstado"];
+                $this->idCatUnidadNotificante =  $tabla["idCatUnidadNotificante"];
+                $this->idCatFormaDeteccion =  $tabla["idCatFormaDeteccion"];
+                $this->fechaInicioPadecimiento =  $tabla["fechaInicioPadecimiento"];
+                $this->fechaDiagnostico =  $tabla["fechaDiagnostico"];
+                $this->folioRegistro =  $tabla["folioRegistro"];
+                ////////////Posibles nulos
+                if (!is_null($tabla["fechaNotificacion"])) { $this->fechaNotificacion =  $tabla["fechaNotificacion"]; }
+                if (!is_null($tabla["semanaEpidemiologica"])) { $this->semanaEpidemiologica =  $tabla["semanaEpidemiologica"]; }
+                if (!is_null($tabla["ocupacion"])) { $this->ocupacion =  $tabla["ocupacion"]; }
+                if (!is_null($tabla["calle"])) { $this->calle =  $tabla["calle"]; }
+                if (!is_null($tabla["noExterior"])) { $this->noExterior =  $tabla["noExterior"]; }
+                if (!is_null($tabla["noInterior"])) { $this->noInterior =  $tabla["noInterior"]; }
+                if (!is_null($tabla["colonia"])) { $this->colonia =  $tabla["colonia"]; }
+                if (!is_null($tabla["telefono"])) { $this->telefono =  $tabla["telefono"]; }
+                if (!is_null($tabla["celularContacto"])) { $this->celularContacto =  $tabla["celularContacto"]; }
+                if (!is_null($tabla["anosRadicando"])) { $this->anosRadicando =  $tabla["anosRadicando"]; }
+                if (!is_null($tabla["mesesRadicando"])) { $this->mesesRadicando =  $tabla["mesesRadicando"]; }
+                if (!is_null($tabla["idCatInstitucionUnidadNotificante"])) { $this->idCatInstitucionUnidadNotificante =  $tabla["idCatInstitucionUnidadNotificante"]; }
+                if (!is_null($tabla["otraInstitucionUnidadNotificante"])) { $this->otraInstitucionUnidadNotificante =  $tabla["otraInstitucionUnidadNotificante"]; }
+                if (!is_null($tabla["idCatInstitucionDerechohabiencia"])) { $this->idCatInstitucionDerechohabiencia =  $tabla["idCatInstitucionDerechohabiencia"]; }
+                if (!is_null($tabla["otraDerechohabiencia"])) { $this->otraDerechohabiencia =  $tabla["otraDerechohabiencia"]; }
+                if (!is_null($tabla["fechaInicioPQT"])) { $this->fechaInicioPQT =  $tabla["fechaInicioPQT"]; }
+                if (!is_null($tabla["idCatUnidadReferido"])) { $this->idCatUnidadReferido =  $tabla["idCatUnidadReferido"]; }
+                if (!is_null($tabla["idCatUnidadTratante"])) { $this->idCatUnidadTratante =  $tabla["idCatUnidadTratante"]; }
+                if (!is_null($tabla["idCatInstitucionTratante"])) { $this->idCatInstitucionTratante =  $tabla["idCatInstitucionTratante"]; }
+                if (!is_null($tabla["otraInstitucionTratante"])) { $this->otraInstitucionTratante =  $tabla["otraInstitucionTratante"]; }
+                if (!is_null($tabla["idCatEstadoReferido"])) { $this->idCatEstadoReferido =  $tabla["idCatEstadoReferido"]; }
+                if (!is_null($tabla["campoExtrangero"])) { $this->campoExtrangero =  $tabla["campoExtrangero"]; }
+                if (!is_null($tabla["medicoElaboro"])) { $this->medicoElaboro = $tabla["medicoElaboro"]; }
+                if (!is_null($tabla["medicoValido"])) { $this->medicoValido = $tabla["medicoValido"]; }
+
+                if($this->idCatTipoPaciente != 5)
+                {
+                    $sql = "SELECT * FROM [estudiosBac] WHERE idPaciente = " . $this->idPaciente . " AND idCatTipoEstudio = 1 ORDER BY fechaResultado;";
+                    $consulta = ejecutaQueryClases($sql);
+
+                    if (is_string($consulta)) {
+                        $this->error = true;
+                        $this->msgError = $consulta . " SQL:" . $sql;
+                    } else {
+                        $infoEstudio = devuelveRowAssoc($consulta);
+                        $this->fechaDxBacil = $infoEstudio['fechaResultado'];
+                    }
+
+                    if($this->fechaDxBacil == "" || $this->fechaDxBacil == NULL)
+                    {
+                        $sql = "SELECT * FROM diagnostico WHERE idPaciente = ".$this->idPaciente;
+                        $consulta = ejecutaQueryClases($sql);
+
+                        if (is_string($consulta)) {
+                            $this->error = true;
+                            $this->msgError = $consulta . " SQL:" . $sql;
+                        } else {
+                            $infoEstudio = devuelveRowAssoc($consulta);
+                            $idDiagnostico = $infoEstudio['idDiagnostico'];
+                        }
+
+
+                        $sql = "SELECT * FROM [estudiosBac] WHERE idDiagnostico = " . $idDiagnostico . " AND idCatTipoEstudio = 1 ORDER BY fechaResultado;";
+                        $consulta = ejecutaQueryClases($sql);
+
+                        if (is_string($consulta)) {
+                            $this->error = true;
+                            $this->msgError = $consulta . " SQL:" . $sql;
+                        } else {
+                            $infoEstudio = devuelveRowAssoc($consulta);
+                            $this->fechaDxBacil = $infoEstudio['fechaResultado'];
+                        }
+                    }
+
+                    $sql = "SELECT * FROM [estudiosHis] WHERE idPaciente = " . $this->idPaciente . " AND idCatTipoEstudio = 1 ORDER BY fechaResultado;";
+                    $consulta = ejecutaQueryClases($sql);
+
+                    if (is_string($consulta)) {
+                        $this->error = true;
+                        $this->msgError = $consulta . " SQL:" . $sql;
+                    } else {
+                        $infoEstudio = devuelveRowAssoc($consulta);
+                        $this->fechaDxHisto = $infoEstudio['fechaResultado'];
+                    }
+
+                    if($this->fechaDxHisto == "" || $this->fechaDxHisto == NULL)
+                    {
+                        $sql = "SELECT * FROM diagnostico WHERE idPaciente = ".$this->idPaciente;
+                        $consulta = ejecutaQueryClases($sql);
+
+                        if (is_string($consulta)) {
+                            $this->error = true;
+                            $this->msgError = $consulta . " SQL:" . $sql;
+                        } else {
+                            $infoEstudio = devuelveRowAssoc($consulta);
+                            $idDiagnostico = $infoEstudio['idDiagnostico'];
+                        }
+
+                        if($idDiagnostico != NULL && $idDiagnostico != "")
+                        {
+                            $sql = "SELECT * FROM [estudiosHis] WHERE idDiagnostico = " . $idDiagnostico . " AND idCatTipoEstudio = 1 ORDER BY fechaResultado;";
+                            $consulta = ejecutaQueryClases($sql);
+
+                            if (is_string($consulta)) {
+                                $this->error = true;
+                                $this->msgError = $consulta . " SQL:" . $sql;
+                            } else {
+                                $infoEstudio = devuelveRowAssoc($consulta);
+                                $this->fechaDxHisto = $infoEstudio['fechaResultado'];
+                            }
+                        }
+                    }
+                }
+            }
+        }
 	}
 
 	public function cargarArreglosPaciente() {

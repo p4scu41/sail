@@ -25,20 +25,20 @@ class EstudioBac {
 	public $idCatMotivoRechazo;				// int
 	public $otroMotivoRechazo;				// varchar(200)
 	public $fechaResultado;					// date
-	public $idCatBacFrotis1;				// int
-	public $idCatBacFrotis2;				// int
-	public $idCatBacFrotis3;				// int
-	public $bacPorcViaFrotis1;				// float
-	public $bacPorcViaFrotis2;				// float
-	public $bacPorcViaFrotis3;				// float
-	public $bacCalidadAdecFrotis1;			// bit					// OJO!!!! PEGAR COMO 1 o 0 EL VALOR.  1 para TRUE, 0 para FALSE
-	public $bacCalidadAdecFrotis2;			// bit					// OJO!!!! PEGAR COMO 1 o 0 EL VALOR.  1 para TRUE, 0 para FALSE
-	public $bacCalidadAdecFrotis3;			// bit					// OJO!!!! PEGAR COMO 1 o 0 EL VALOR.  1 para TRUE, 0 para FALSE
-	public $bacIdCatTiposBacilosFrotis1;	// int
-	public $bacIdCatTiposBacilosFrotis2;	// int
-	public $bacIdCatTiposBacilosFrotis3;	// int	
-	public $idCatBac;						// int	
-	public $bacIM;							// float
+	public $idCatBacFrotis1 = null;				// int
+	public $idCatBacFrotis2 = null;				// int
+	public $idCatBacFrotis3 = null;				// int
+	public $bacPorcViaFrotis1 = null;				// float
+	public $bacPorcViaFrotis2 = null;				// float
+	public $bacPorcViaFrotis3 = null;				// float
+	public $bacCalidadAdecFrotis1 = null;			// bit					// OJO!!!! PEGAR COMO 1 o 0 EL VALOR.  1 para TRUE, 0 para FALSE
+	public $bacCalidadAdecFrotis2 = null;			// bit					// OJO!!!! PEGAR COMO 1 o 0 EL VALOR.  1 para TRUE, 0 para FALSE
+	public $bacCalidadAdecFrotis3 = null;			// bit					// OJO!!!! PEGAR COMO 1 o 0 EL VALOR.  1 para TRUE, 0 para FALSE
+	public $bacIdCatTiposBacilosFrotis1 = null;	// int
+	public $bacIdCatTiposBacilosFrotis2 = null;	// int
+	public $bacIdCatTiposBacilosFrotis3 = null;	// int
+	public $idCatBac = null;						// int
+	public $bacIM = null;							// float
 	public $bacObservaciones;				// varchar(300)	
 	public $idCatEstadoLaboratorio;			// int
 	public $idCatJurisdiccionLaboratorio;	// int

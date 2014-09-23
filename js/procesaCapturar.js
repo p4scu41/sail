@@ -20,39 +20,16 @@ function verFotos(id)
 	  	url: "ajax/verFotos.php",
 	  	data: "lesionId="+id,
 	  	success: function(response) {
-			//var splitResp = response.split("[#]");
-						
 			$("#dialog_form").html(response);
-			
-			$("#dialog_form").dialog({
-				autoOpen: false,
-				resizable: false,
-				modal: true,
-				width: 600,
-				hide: "fadeOut",
-				open: function()
-				{
-					var foo = id.split('_')//$("#idLesion").val();
-					//alert(foo);
-					$(this).parent().css("overflow", "visible");
-
-                    // Solo mostrar si se han registrado fotos
-                    if($('#my-slideshow_'+foo[1]+' .bjqs li').length > 0) {
-                        $('#my-slideshow_'+foo[1]).bjqs({
-                            'height' : 320,
-                            'width' : 620,
-                            'responsive' : true
-                        });
-                    }
-				}
-			});
 			
 			$("#dialog_form").dialog("option", "title", "Fotos");				
 			$("#dialog_form").dialog("open");
-			$("#uploadPhoto").submit(function(){
+
+            $("#uploadPhoto").submit(function(){
 				$("#upload_target").load(function(e) {
 					$("#dialog_form").dialog("close");
-					verFotos(id); // Revisar es recursivo??
+                    jAlert('<img src="images/ok.gif" > <strong>Imagen Registrada</strong>', 'Imagen registrada exitosamente');
+					//verFotos(id); // Revisar es recursivo??
 				});
 				//return false;
 			});
@@ -192,6 +169,7 @@ function deshabilitarCamposCaptura(formulario){
                     'radica_anos',
                     'radica_meses',
                     'telefono',
+                    'celularContacto',
                     'edoUnidad',
                     'jurisUnidad',
                     'muniUnidad',
@@ -222,7 +200,10 @@ function deshabilitarCamposCaptura(formulario){
                     'uniTratado',
                     'uniReferido',
                     'institucion_caso',
-                    'otra_institutcion_caso'
+                    'otra_institutcion_caso',
+                    'edoReferido',
+                    'medicoElaboro',
+                    'medicoValido'
                     );
                         
     camposCapturaFase2 = new Array(
@@ -277,8 +258,8 @@ function deshabilitarCamposCaptura(formulario){
                     'muniCaso',
                     'otros_padecimientos',
                     'observaciones',
-                    'actualizar',
-                    'guardar',
+                    'actualizarSbmt',
+                    'guardarSbmt',
                     'limpiar'); 
     
     for(campo in camposCapturaFase1) {
@@ -516,7 +497,7 @@ $(document).ready(function(){
     
     // en caso de ser una primera captura o el caso es sospechoso|descartado 
     // solo se debe mostrar la primera fase del proceso
-    if(!getQuerystring('id')) {
+    if(!getQuerystring('id') || getQuerystring('id')=='') {
         $('#fs_grado_discapacidad').hide();
         $('#fs_aquirio_enfermedad').hide();
         $('#fs_casos_relacionados').hide();
@@ -676,6 +657,34 @@ $(document).ready(function(){
             alert('ERROR: La fecha de inicio de la PQT debe ser mayor a la fecha de notificacion');
             $(this).val('');
             $(this).focus();
+        }
+    });
+
+    // Funcion para mostrar las fotos
+    $("#dialog_form").dialog({
+        autoOpen: false,
+        resizable: false,
+        modal: true,
+        width: 600,
+        hide: "fadeOut",
+        open: function()
+        {
+            var id= $("#idLesion").val();
+            //alert(foo);
+            $(this).parent().css("overflow", "visible");
+
+            // Solo mostrar si se han registrado fotos
+            if($('#my-slideshow_'+id+' .bjqs li').length > 0) {
+                $('#my-slideshow_'+id).bjqs({
+                    'height' : 320,
+                    'width' : 620,
+                    'responsive' : true
+                });
+            }
+        },
+        close: function()
+        {
+            $("#dialog_form").empty();
         }
     });
     

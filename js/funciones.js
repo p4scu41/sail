@@ -399,7 +399,7 @@ function getSemanaEpidemiologica(campo_fecha,campo_semana){
 
 function setValidacion(formulario) {
 	$("#"+formulario).validationEngine( { validationEventTrigger: 'submit', onValidationComplete: function(form, status) {
-            
+        
         //console.log($("#"+formulario).validationEngine().InvalidFields);
 		if(status){
             //$("#"+formulario).validationEngine();
@@ -416,7 +416,9 @@ function setValidacion(formulario) {
                   '#'+formulario+' checkbox').each(function(){
                       $(this).removeAttr('disabled');
                 });
-                
+
+                $('body').prepend('<div id="div_loading"> &nbsp; </div>');
+                $('html, body').animate({scrollTop : 0},800);
 				document.getElementById(formulario).submit();
 			}
 		}

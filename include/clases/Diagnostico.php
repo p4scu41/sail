@@ -74,9 +74,16 @@ Class Diagnostico {
 	}
 
 	public function insertarBD() {		
-		$sqlA = "INSERT INTO [diagnostico] ([idPaciente], [idCatNumeroLesiones], [discOjoIzq], [discOjoDer], [discManoIzq], [discManoDer], [discPieIzq], [discPieDer], [idUsuario], [fechaCaptura]";
-		$sqlB =  "VALUES (" . $this->idPaciente . ", " . $this->idCatNumeroLesiones . ", " . $this->discOjoIzq . ", " . $this->discOjoDer . ", " . $this->discManoIzq . ", " . $this->discManoDer . ", " . $this->discPieIzq . ", " . $this->discPieDer .  ", " . $this->idUsuario . ", GETDATE()";
-		if($this->idCatEstadoPaciente != '' && !is_null($this->idCatEstadoPaciente)) { $sqlA .= ", [idCatEstadoPaciente]"; $sqlB .= ", " . $this->idCatEstadoPaciente; }
+		$sqlA = "INSERT INTO [diagnostico] ([idPaciente], [idCatNumeroLesiones], [idUsuario], [fechaCaptura]";
+		$sqlB =  "VALUES (" . $this->idPaciente . ", " . $this->idCatNumeroLesiones . ", " . $this->idUsuario . ", GETDATE()";
+        
+        if($this->discOjoIzq != '' && !is_null($this->discOjoIzq)) { $sqlA .= ", [discOjoIzq]"; $sqlB .= ", " . $this->discOjoIzq; }
+        if($this->discOjoDer != '' && !is_null($this->discOjoDer)) { $sqlA .= ", [discOjoDer]"; $sqlB .= ", " . $this->discOjoDer; }
+        if($this->discManoIzq != '' && !is_null($this->discManoIzq)) { $sqlA .= ", [discManoIzq]"; $sqlB .= ", " . $this->discManoIzq; }
+        if($this->discManoDer != '' && !is_null($this->discManoDer)) { $sqlA .= ", [discManoDer]"; $sqlB .= ", " . $this->discManoDer; }
+        if($this->discPieIzq != '' && !is_null($this->discPieIzq)) { $sqlA .= ", [discPieIzq]"; $sqlB .= ", " . $this->discPieIzq; }
+        if($this->discPieDer != '' && !is_null($this->discPieDer)) { $sqlA .= ", [discPieDer]"; $sqlB .= ", " . $this->discPieDer; }
+        if($this->idCatEstadoPaciente != '' && !is_null($this->idCatEstadoPaciente)) { $sqlA .= ", [idCatEstadoPaciente]"; $sqlB .= ", " . $this->idCatEstadoPaciente; }
 		if($this->idCatEstadoReaccionalAct != '' && !is_null($this->idCatEstadoReaccionalAct)) { $sqlA .= ", [idCatEstadoReaccionalAct]"; $sqlB .= ", " . $this->idCatEstadoReaccionalAct; }
 		if($this->idCatClasificacionLepra != '' && !is_null($this->idCatClasificacionLepra)) { $sqlA .= ", [idCatClasificacionLepra]"; $sqlB .= ", " . $this->idCatClasificacionLepra; }
 		if($this->otrosPadecimientos != '' && !is_null($this->otrosPadecimientos)) { $sqlA .= ", [otrosPadecimientos]"; $sqlB .= ", '" . $this->otrosPadecimientos. "'"; }
@@ -119,15 +126,16 @@ Class Diagnostico {
 	public function modificarBD() {
 		$sql = "UPDATE [diagnostico] SET ".
 			"[idPaciente] = " . $this->idPaciente . " " .
-			",[idCatNumeroLesiones] = " . $this->idCatNumeroLesiones . " " .
-			",[discOjoIzq] = " . $this->discOjoIzq . " " .
-			",[discOjoDer] = " . $this->discOjoDer . " " .
-			",[discManoIzq] = " . $this->discManoIzq . " " .
-			",[discManoDer] = " . $this->discManoDer . " " .
-			",[discPieIzq] = " . $this->discPieIzq . " " .
-			",[discPieDer] = " . $this->discPieDer . " " .			
-			",[idUsuario] = " . $this->idUsuario . " ";	
-		if($this->idCatClasificacionLepra != '' && !is_null($this->idCatClasificacionLepra)) { $sql .= ",[idCatClasificacionLepra] = " . $this->idCatClasificacionLepra . " "; }
+			",[idCatNumeroLesiones] = " . $this->idCatNumeroLesiones . " " .		
+			",[idUsuario] = " . $this->idUsuario . " ";
+        
+		if($this->discOjoIzq != '' && !is_null($this->discOjoIzq)) { $sql .= ",[discOjoIzq] = " . $this->discOjoIzq . " "; }
+		if($this->discOjoDer != '' && !is_null($this->discOjoDer)) { $sql .= ",[discOjoDer] = " . $this->discOjoDer . " "; }
+		if($this->discManoIzq != '' && !is_null($this->discManoIzq)) { $sql .= ",[discManoIzq] = " . $this->discManoIzq . " "; }
+		if($this->discManoDer != '' && !is_null($this->discManoDer)) { $sql .= ",[discManoDer] = " . $this->discManoDer . " "; }
+		if($this->discPieIzq != '' && !is_null($this->discPieIzq)) { $sql .= ",[discPieIzq] = " . $this->discPieIzq . " "; }
+		if($this->discPieDer != '' && !is_null($this->discPieDer)) { $sql .= ",[discPieDer] = " . $this->discPieDer . " "; }
+        if($this->idCatClasificacionLepra != '' && !is_null($this->idCatClasificacionLepra)) { $sql .= ",[idCatClasificacionLepra] = " . $this->idCatClasificacionLepra . " "; }
 		if($this->idCatEstadoReaccionalAct != '' && !is_null($this->idCatEstadoReaccionalAct)) { $sql .= ",[idCatEstadoReaccionalAct] = " . $this->idCatEstadoReaccionalAct . " "; }
 		if($this->idCatEstadoPaciente != '' && !is_null($this->idCatEstadoPaciente)) { $sql .= ",[idCatEstadoPaciente] = " . $this->idCatEstadoPaciente . " "; }
 		if($this->otrosPadecimientos != '' && !is_null($this->otrosPadecimientos)) { $sql .= ",[otrosPadecimientos] = '" . $this->otrosPadecimientos . "' "; }

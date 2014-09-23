@@ -431,10 +431,7 @@ if(!empty($_POST['clave_expediente'])){
 			
 			if($_FILES[$new_name2]["size"] > 0)
 			{
-                $agrega_diagonal = "";
-                /* Compatibilidad con Linux */
-                if(stripos($_SERVER['DOCUMENT_ROOT'],":/") === FALSE) $agrega_diagonal = "/";
-				$dir = $_SERVER['DOCUMENT_ROOT'].$agrega_diagonal.CARPETA_RAIZ."/pacienteImg/";
+				$dir = "pacienteImg/";
 				
 				$new_name .= ".".$extencion;
 				

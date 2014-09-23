@@ -224,7 +224,7 @@ $objHTML->startFieldset('Informe de Resultado de Baciloscopía');
 	echo $auxBR;
 	/*$objHTML->label('Calidad Muestra:');
 	$objHTML->inputRadio('calidad_muestra_ft1', $calidad_muestra, $estudio->bacCalidadAdecFrotis1, array('class'=>'validate[required]'));*/
-	$objHTML->inputSelect('Calidad Muestra:', 'calidad_muestra_ft1', $calidad_muestra, array('class'=>'validate[required]'));
+	$objHTML->inputSelect('Calidad Muestra:', 'calidad_muestra_ft1', $calidad_muestra, $estudio->bacCalidadAdecFrotis1);
 	
 	echo '<br /><br />';
 	$objHTML->label('Frotis 2 ( LC )', array('style'=>'text-decoration:underline'));
