@@ -63,8 +63,10 @@
             $objHTML->inputHidden('idLesion',$idLesion[1]);
             // El usuario NACIONAL no tiene permitido subir imagenes
             if($_SESSION[EDO_USR_SESSION] != 0) {
-                echo '<input type="file" name="nuevaFoto" id="nuevaFoto" />';
-                $objHTML->inputSubmit("cargaFoto","Cargar Foto");
+                if($_POST['allow'] != 'false') {
+                    echo '<input type="file" name="nuevaFoto" id="nuevaFoto" />';
+                    $objHTML->inputSubmit("cargaFoto","Cargar Foto");
+                }
             }
             $objHTML->endFormOnly();
 			echo "</td></tr></table>";

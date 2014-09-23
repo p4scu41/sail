@@ -1,3 +1,31 @@
+function verFotos(id)
+{
+	$.ajax({
+	  	type: "POST",
+	  	url: "ajax/verFotos.php",
+	  	data: "lesionId="+id+"&allow=false",
+	  	success: function(response) {
+			$("#dialog_form").html(response);
+			
+			$("#dialog_form").dialog("option", "title", "Fotos");				
+			$("#dialog_form").dialog("open");
+
+            $("#uploadPhoto").submit(function(){
+				$("#upload_target").load(function(e) {
+					$("#dialog_form").dialog("close");
+                    jAlert('<img src="images/ok.gif" > <strong>Imagen Registrada</strong>', 'Imagen registrada exitosamente');
+					//verFotos(id); // Revisar es recursivo??
+				});
+				//return false;
+			});
+			
+		},
+		error:function(){
+			  alert("Something went wrong...");
+		}
+    });
+}
+
 function deshabilitarCamposCaptura(formulario){
     camposCapturaFase1 = new Array(
                     'clave_expediente',
@@ -132,7 +160,7 @@ function deshabilitarCamposCaptura(formulario){
             $('*[name^='+camposCapturaFase2[campo]+']').each(function(){
                 $(this).attr('disabled',true);
             });
-    //    }
+        }
         
         $('#'+formulario).attr('action','#');
         $('input[type=submit]').parent().remove();
@@ -163,7 +191,7 @@ function deshabilitarCamposCaptura(formulario){
 		$('#reaccional_actual').attr('disabled',true);
 		$('#fecha_notificacion').attr('disabled',true);
 		$('#fecha_pqt').attr('disabled',true);
-    }
+    //}
 }
 
 
@@ -263,7 +291,7 @@ $(document).ready(function(){
     
     // en caso de ser una primera captura o el caso es sospechoso|descartado 
     // solo se debe mostrar la primera fase del proceso
-    if(!getQuerystring('id')) {
+    if(!getQuerystring('id') || getQuerystring('id')=='') {
         $('#fs_grado_discapacidad').hide();
         $('#fs_aquirio_enfermedad').hide();
         $('#fs_casos_relacionados').hide();
@@ -411,6 +439,34 @@ $(document).ready(function(){
             alert('ERROR: La fecha de inicio de la PQT debe ser mayor a la fecha de notificacion');
             $(this).val('');
             $(this).focus();
+        }
+    });
+    
+    // Funcion para mostrar las fotos
+    $("#dialog_form").dialog({
+        autoOpen: false,
+        resizable: false,
+        modal: true,
+        width: 600,
+        hide: "fadeOut",
+        open: function()
+        {
+            var id= $("#idLesion").val();
+            //alert(foo);
+            $(this).parent().css("overflow", "visible");
+
+            // Solo mostrar si se han registrado fotos
+            if($('#my-slideshow_'+id+' .bjqs li').length > 0) {
+                $('#my-slideshow_'+id).bjqs({
+                    'height' : 320,
+                    'width' : 620,
+                    'responsive' : true
+                });
+            }
+        },
+        close: function()
+        {
+            $("#dialog_form").empty();
         }
     });
     

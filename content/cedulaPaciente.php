@@ -93,6 +93,7 @@ require_once('content/procesaCapturar.php');
 			$objHTML->inputText('Tiempo de radicar en el domicilio actual', 'radica_anos', $paciente->anosRadicando, array('placeholder'=>'A&ntilde;os', 'size'=>'10', 'maxlength'=>'3', 'class'=>'validate[required,custom[integer]]'));
 			$objHTML->inputText('', 'radica_meses', $paciente->mesesRadicando, array('placeholder'=>'Meses', 'size'=>'10', 'maxlength'=>'3'));
 			$objHTML->inputText('Teléfono', 'telefono', $paciente->telefono, array('size'=>'11', 'maxlength'=>'13'));
+			$objHTML->inputText('Numero Celular', 'celularContacto', $paciente->celularContacto, array('placeholder'=>'Numero celular para contacto', 'size'=>'10', 'maxlength'=>'10'));
 			
 		$objHTML->endFieldset();
 		
