@@ -28,7 +28,6 @@ require_once('content/procesaCapturar.php');
 <script src="include/SlidesJS/js/bjqs-1.3.min.js"></script>
 
 <?PHP
-
     $objHTML = new HTML();
     
     // Deshabilitar todos los campos

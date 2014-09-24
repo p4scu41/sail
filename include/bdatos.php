@@ -3,7 +3,7 @@ function errorQuery($query)
 {
 	$array_error = sqlsrv_errors();
 	
-	if(count($array_error)!=0)
+	if(count($array_error)!=0 && (ini_get('display_errors') == "On" || ini_get('display_errors') == 1))
 		echo '<div class="error" align="center">';
 	
 	foreach($array_error as $error)
@@ -16,7 +16,7 @@ function errorQuery($query)
 			echo '<strong><u>SQLSTATE</u>: </strong> '.$error['SQLSTATE'].', <strong><u>CODE</u>: </strong> '.$error['code'].', <strong><u>MESSAGE</u>: </strong> '. str_replace('[Microsoft][SQL Server Native Client 10.0][SQL Server]','',$error['message']).', <br /><strong><u>QUERY</u>: </strong>'.$query.'<br /><br />';
 	}
 	
-	if(count($array_error)!=0)
+	if(count($array_error)!=0 && (ini_get('display_errors') == "On" || ini_get('display_errors') == 1))
 		echo '</div>';
 }
 
@@ -45,7 +45,7 @@ function ejecutaQueryClases($query)
 	$result = sqlsrv_query( $connectionBD, $query);
 	//Eliminar
 	//registra_log(str_replace('/'.CARPETA_RAIZ.'?','',$_SERVER['REQUEST_URI']), 'SQLSTATE: '.$error['SQLSTATE'].', code: , message: , Query: '.$query);
-	
+
 	if($result === FALSE)
 	{
 		errorQuery($query);

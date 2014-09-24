@@ -225,7 +225,7 @@ class Paciente {
                 if (!is_null($tabla["medicoElaboro"])) { $this->medicoElaboro = $tabla["medicoElaboro"]; }
                 if (!is_null($tabla["medicoValido"])) { $this->medicoValido = $tabla["medicoValido"]; }
 
-                if($this->idCatTipoPaciente != 5)
+                if($this->idCatTipoPaciente != 6)
                 {
                     $sql = "SELECT * FROM [estudiosBac] WHERE idPaciente = " . $this->idPaciente . " AND idCatTipoEstudio = 1 ORDER BY fechaResultado;";
                     $consulta = ejecutaQueryClases($sql);

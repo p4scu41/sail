@@ -1,6 +1,9 @@
 <?php
 //$objCalidad = new controlCalidad();
 
+$errorSql = false;
+beginTransaccion();
+
 if($_POST['guarda_resultado_bacilos'])
 {
 	$resultBacilos = new EstudioBac();
@@ -37,30 +40,38 @@ if($_POST['guarda_resultado_bacilos'])
 	$resultBacilos->modificarBD();
 	
 	if($resultBacilos->error){
-		echo msj_error('Ocurri&oacute; un error al guardar los datos');
-		echo $resultBacilos->msgError;
-		$resultadoGuardado = true;
+		//echo $resultBacilos->msgError;
+        $errorSql = true;
 	}
-	else 
-		echo msj_ok('Datos Guardados Exitosamente!!!');
 }
-if($_POST['guarda_resultado_histo'])
+else if($_POST['guarda_resultado_histo'])
 {
-	
 	$resultHisto = new EstudioHis();
     $resultHisto->obtenerBD($_GET['id']);
     //$objCalidad->obtenerByHisto($_GET['id']);
-	
+
 	if($resultHisto->idPaciente == "" && $resultHisto->idPaciente == NULL)
 	{
 		$newDiagnostico = new Diagnostico();
 		$newDiagnostico->obtenerBD($resultHisto->idDiagnostico);
+
+        if($newDiagnostico->error){
+            echo msj_error('Ocurri&oacute; un ERROR al recuperar los datos del diagnostico a partir del estudio');
+            //echo $newDiagnostico->msgError;
+            $errorSql = true;
+        }
 		$resultHisto->idPaciente = $newDiagnostico->idPaciente;
 	}
 
 	$pacienteLepra = new Paciente();
-	$pacienteLepra->obtenerBd($resultHisto->idPaciente);
-	
+	$pacienteLepra->obtenerBD($resultHisto->idPaciente);
+
+    if($pacienteLepra->error){
+        echo msj_error('Ocurri&oacute; un ERROR al recuperar los datos del paciente a partir del estudio');
+        echo $pacienteLepra->msgError;
+        $errorSql = true;
+    }
+
 	$resultHisto->idEstudioHis = $_GET['id'];
     //$resultHisto->idDiagnostico = 0;
 	$resultHisto->fechaRecepcion = $_POST['fecha_recepcion_histo'];
@@ -80,212 +91,247 @@ if($_POST['guarda_resultado_histo'])
 	$resultHisto->modificarBD();
 	
 	if($resultHisto->error){
-		echo msj_error('Ocurri&oacute; un error al guardar los datos');
-		echo $resultHisto->msgError;
-		$resultadoGuardado = true;
+		//echo $resultHisto->msgError;
+        $errorSql = true;
 	}
-	else
-	{
-        $help = new Helpers();
-        
-        // Obtenemos los datos del sospechoso para que este sea insertado como datos del diagnostico
-        $sospechoso = new Sospechoso();
 
-        if($pacienteLepra->idPaciente)
-            $sospechoso->obtenerBD($pacienteLepra->idPaciente);
+    if($errorSql == false)
+    {
+        // Si el resultado es positivo
+        if($_POST['tipo_resultado'] != 5 && $_POST['tipo_resultado'] != 6)
+        {
+            // y si es de diagnostico
+            if($resultHisto->idCatTipoEstudio == 1)
+            {
+                /*$help = new Helpers();
+                
+                // Obtenemos los datos del sospechoso para que este sea insertado como datos del diagnostico
+                $sospechoso = new Sospechoso();
 
-        if($sospechoso->idPaciente) {
-            $diagnostico = new Diagnostico();
+                if($pacienteLepra->idPaciente)
+                    $sospechoso->obtenerBD($pacienteLepra->idPaciente);
 
-            $diagnostico->idPaciente = $pacienteLepra->idPaciente;
-            $diagnostico->idUsuario = $_SESSION[ID_USR_SESSION];
-            $diagnostico->idCatTopografia = $sospechoso->idCatTopografia;
-            $diagnostico->descripcionTopografica = $sospechoso->descripcionTopografica;
-            $diagnostico->idCatNumeroLesiones = $sospechoso->idCatNumeroLesiones;
-            $diagnostico->segAfeCab = $sospechoso->segAfeCab;
-            $diagnostico->segAfeTro = $sospechoso->segAfeTro;
-            $diagnostico->segAfeMSD = $sospechoso->segAfeMSD;
-            $diagnostico->segAfeMSI = $sospechoso->segAfeMSI;
-            $diagnostico->segAfeMID = $sospechoso->segAfeMID;
-            $diagnostico->segAfeMII = $sospechoso->segAfeMII;
-
-            $diagnostico->insertarBD();
-
-            if($diagnostico->error){
-                $errorSql = true;
-                echo $diagnostico->msgError;
-            }
-
-            // Actualizamos todos los estudios para que pasen a ser de un diagnostico
-            $estudios = $help->getAllEstudiosBacFromPaciente($pacienteLepra->idPaciente);
-
-            foreach($estudios as $estudio){
-                if(!empty($estudio)) {
-                    $objEstudio = new EstudioBac();
-                    $objEstudio->idEstudioBac = $estudio;
-                    $objEstudio->setNullIdPacienteBD($diagnostico->idDiagnostico);
-
-                    if($objEstudio->error){
-                        $errorSql = true;
-                        echo $objEstudio->msgError;
-                    }
+                if($sospechoso->error){
+                    echo msj_error(__LINE__.' Ocurri&oacute; un error al recuperar los datos');
+                    echo $sospechoso->msgError;
+                    $errorSql = true;
                 }
-            }
 
-            $estudios = $help->getAllEstudiosHisFromPaciente($pacienteLepra->idPaciente);
+                if($sospechoso->idPaciente) {
+                    $diagnostico = new Diagnostico();
 
-            foreach($estudios as $estudio){
-                if(!empty($estudio)) {
-                    $objEstudio = new EstudioHis();
-                    $objEstudio->idEstudioHis = $estudio;
-                    $objEstudio->setNullIdPacienteBD($diagnostico->idDiagnostico);
+                    $diagnostico->idPaciente = $pacienteLepra->idPaciente;
+                    $diagnostico->idUsuario = $_SESSION[ID_USR_SESSION];
+                    $diagnostico->idCatTopografia = $sospechoso->idCatTopografia;
+                    $diagnostico->descripcionTopografica = $sospechoso->descripcionTopografica;
+                    $diagnostico->idCatNumeroLesiones = $sospechoso->idCatNumeroLesiones;
+                    $diagnostico->segAfeCab = $sospechoso->segAfeCab;
+                    $diagnostico->segAfeTro = $sospechoso->segAfeTro;
+                    $diagnostico->segAfeMSD = $sospechoso->segAfeMSD;
+                    $diagnostico->segAfeMSI = $sospechoso->segAfeMSI;
+                    $diagnostico->segAfeMID = $sospechoso->segAfeMID;
+                    $diagnostico->segAfeMII = $sospechoso->segAfeMII;
 
-                    if($objEstudio->error){
+                    $diagnostico->insertarBD();
+
+                    if($diagnostico->error){
                         $errorSql = true;
-                        echo $objEstudio->msgError;
+                        echo msj_error(__LINE__.' Ocurri&oacute; un error al recuperar los datos');
+                        echo $diagnostico->msgError;
                     }
-                }
+
+                    // Actualizamos todos los estudios para que pasen a ser de un diagnostico
+                    $estudios = $help->getAllEstudiosBacFromPaciente($pacienteLepra->idPaciente);
+
+                    if($help->error){
+                        $errorSql = true;
+                        echo msj_error(__LINE__.' Ocurri&oacute; un error al recuperar los datos');
+                        echo $help->msgError;
+                    }
+
+                    foreach($estudios as $estudio){
+                        if(!empty($estudio)) {
+                            $objEstudio = new EstudioBac();
+                            $objEstudio->idEstudioBac = $estudio;
+                            $objEstudio->setNullIdPacienteBD($diagnostico->idDiagnostico);
+
+                            if($objEstudio->error){
+                                $errorSql = true;
+                                echo msj_error(__LINE__.' Ocurri&oacute; un error al recuperar los datos');
+                                echo $objEstudio->msgError;
+                            }
+                        }
+                    }
+
+                    $estudios = $help->getAllEstudiosHisFromPaciente($pacienteLepra->idPaciente);
+
+                    if($help->error){
+                        $errorSql = true;
+                        echo msj_error(__LINE__.' Ocurri&oacute; un error al recuperar los datos');
+                        echo $help->msgError;
+                    }
+
+                    foreach($estudios as $estudio){
+                        if(!empty($estudio)) {
+                            $objEstudio = new EstudioHis();
+                            $objEstudio->idEstudioHis = $estudio;
+                            $objEstudio->setNullIdPacienteBD($diagnostico->idDiagnostico);
+
+                            if($objEstudio->error){
+                                $errorSql = true;
+                                echo msj_error(__LINE__.' Ocurri&oacute; un error al recuperar los datos');
+                                echo $objEstudio->msgError;
+                            }
+                        }
+                    }
+
+                    // Insertar el control inical
+                    $control = new Control();
+                    $control->idDiagnostico = $diagnostico->idDiagnostico;
+                    $control->fecha = $pacienteLepra->fechaDiagnostico;
+                    $control->reingreso = 0;
+                    //$control->idCatEstadoPaciente = 1; // Prevalente sin Tratamiento
+                    //$control->idCatTratamientoPreescrito = 5; // Sin Tratamiento
+                    $control->vigilanciaPostratamiento = 0;
+                    $control->observaciones = 'Registro del paciente';
+
+                    $control->insertarBD();
+
+                    if($control->error){
+                        $errorSql = true;
+                        echo msj_error(__LINE__.' Ocurri&oacute; un error al recuperar los datos');
+                        echo $control->msgError;
+                    }
+
+                    $sql = "DELETE FROM sospechoso WHERE idPaciente = ".$pacienteLepra->idPaciente;
+                    $resv = ejecutaQuery($sql);
+                }*/
+
+                registra_log('Mensaje enviado');
+
+                $infoVivienda = array();
+
+                $sql = 'SELECT juris.nombre FROM [catJurisdiccion] as juris, [catMunicipio] as muni where juris.idCatJurisdiccion = muni.idCatJurisdiccion and juris.idCatEstado=muni.idCatEstado and muni.idCatEstado='.$pacienteLepra->idCatEstado.' and muni.idCatMunicipio='.$pacienteLepra->idCatMunicipio.'';
+                //$sql = 'SELECT nombre FROM catLocalidad WHERE idCatLocalidad = '.$pacienteLepra->idCatLocalidad.' AND idCatMunicipio = '.$pacienteLepra->idCatMunicipio.' AND idCatEstado = '.$pacienteLepra->idCatEstado;
+                $resv = ejecutaQuery($sql);
+                $infov = devuelveRowAssoc($resv);
+                $infoVivienda['localidad'] = $infov['nombre'];
+
+                $sql = 'SELECT nombre FROM catMunicipio WHERE idCatMunicipio = '.$pacienteLepra->idCatMunicipio.' AND idCatEstado = '.$pacienteLepra->idCatEstado;
+                $resv = ejecutaQuery($sql);
+                $infov = devuelveRowAssoc($resv);
+                $infoVivienda['municipio'] = $infov['nombre'];
+
+                $sql = 'SELECT nombre FROM catEstado WHERE idCatEstado = '.$pacienteLepra->idCatEstado;
+                $resv = ejecutaQuery($sql);
+                $infov = devuelveRowAssoc($resv);
+                $infoVivienda['estado'] = $infov['nombre'];
+
+                //$sql = "UPDATE pacientes SET idCatTipoPaciente = 1 WHERE idPaciente = ".$pacienteLepra->idPaciente;
+                //$resv = ejecutaQuery($sql);
+
+                $infoUnidadNotificante = array();
+
+                $sql = "SELECT * FROM
+                            catJurisdiccion,
+                            catUnidad,
+                            catMunicipio,
+                            catEstado
+                        WHERE
+                            catMunicipio.idCatMunicipio = catUnidad.idCatMunicipio AND
+                            catUnidad.idCatEstado = catEstado.idCatEstado AND
+                            catMunicipio.idCatJurisdiccion = catJurisdiccion.idCatJurisdiccion AND
+                            catEstado.idCatEstado = catJurisdiccion.idCatEstado AND
+                            catMunicipio.idCatEstado = catEstado.idCatEstado AND
+                            catUnidad.idCatUnidad = '".$pacienteLepra->idCatUnidadNotificante."'";
+                $resv = ejecutaQuery($sql);
+                $infov = devuelveRowAssoc($resv);
+                $infoUnidadNotificante['jurisdiccion'] = $infov['nombre'];
+
+                $infoUnidadNotificante['municipio'] = $infov['nombreMunicipio'];
+                $infoUnidadNotificante['unidad'] = $infov['nombreUnidad'];
+
+                $sql = 'SELECT nombre FROM catEstado WHERE idCatEstado = '.$infov['idCatEstado'];
+                $resv = ejecutaQuery($sql);
+                $infov = devuelveRowAssoc($resv);
+                $infoUnidadNotificante['estado'] = $infov['nombre'];
+
+                if($pacienteLepra->sexo == 1)
+                    $sexoPaciente = 'Masculino';
+                if($pacienteLepra->sexo == 2)
+                    $sexoPaciente = 'Femenino';
+
+                $htmlBodyMail = '
+                <table>
+                    <tr>
+                        <th colspan="3" bgcolor="#666666"><font color="#FFFFFF">Se ha confirmado caso.</font></th>
+                        <td colspan="3" bgcolor="#666666"><font color="#FFFFFF">Fecha: '.$_POST['fecha_resultado_histo'].' .</font></td>
+                    </tr>
+                    <tr>
+                        <th>Clave del Paciente:</th>
+                        <td>'.$pacienteLepra->cveExpediente.'</td>
+                        <th>Nombre:</th>
+                        <td>'.$pacienteLepra->nombre.' '.$pacienteLepra->apellidoPaterno.' '.$pacienteLepra->apellidoMaterno.'</td>
+                        <th>Edad:</th>
+                        <td>'.CalculaEdad(formatFechaObj($pacienteLepra->fechaNacimiento)).'</td>
+                    </tr>
+                    <tr>
+                        <th>Sexo:</th>
+                        <td>'.$sexoPaciente.'</td>
+                        <th>Jurisdiccion:</th>
+                        <td>'.$infoVivienda['jurisdiccion'].'</td>
+                        <th>Municipio:</th>
+                        <td>'.$infoVivienda['municipio'].'</td>
+                    </tr>
+                </table>
+                ';
+
+                sendMail("cie.central@gmail.com", $htmlBodyMail);
+                sendMail("cie.provac@gmail.com", $htmlBodyMail);
+                sendMail("fzero_69@hotmail.com", $htmlBodyMail);
+                sendMail("lepra.chiapas@gmail.com", $htmlBodyMail);
+
+                //sendMail("irais.lizbeth@gmail.com", $htmlBodyMail);
+
+                $smsMessage = "CASO CONFIRMADO.\nClave del Paciente:\n".$pacienteLepra->cveExpediente."\nJurisdiccion: ".$infoVivienda['localidad']."\nMunicipio: ".$infoVivienda['municipio'];
+                sendSMS("9611078474", $smsMessage, date("Y-m-d"), date("H:i"), 'Notificacion Caso Confirmado');
+                sendSMS("9616576145", $smsMessage, date("Y-m-d"), date("H:i"), 'Notificacion Caso Confirmado');
+                sendSMS("9612337886", $smsMessage, date("Y-m-d"), date("H:i"), 'Notificacion Caso Confirmado');
+
+                //sendSMS("5541932463", $smsMessage, date("Y-m-d"), date("H:i"), 'Notificacion Caso Confirmado');
+                /*
+                sendSMS("5585301233", $smsMessage, date("Y-m-d"), date("H:i"), 'Notificacion Caso Confirmado');
+                sendSMS("5539214946", $smsMessage, date("Y-m-d"), date("H:i"), 'Notificacion Caso Confirmado');
+                sendSMS("5541932463", $smsMessage, date("Y-m-d"), date("H:i"), 'Notificacion Caso Confirmado');
+                */
             }
-
-            // Insertar el control inical
-            $control = new Control();
-            $control->idDiagnostico = $diagnostico->idDiagnostico;
-            $control->fecha = $pacienteLepra->fechaDiagnostico;
-            $control->reingreso = 0;
-            //$control->idCatEstadoPaciente = 1; // Prevalente sin Tratamiento
-            //$control->idCatTratamientoPreescrito = 5; // Sin Tratamiento
-            $control->vigilanciaPostratamiento = 0;
-            $control->observaciones = 'Registro del paciente';
-
-            $control->insertarBD();
-
-            if($control->error){
-                $errorSql = true;
-                echo $control->msgError;
-            }
-
-            $sql = "DELETE FROM sospechoso WHERE idPaciente = ".$pacienteLepra->idPaciente;
-            $resv = ejecutaQuery($sql);
         }
 
-		echo msj_ok('Datos Guardados Exitosamente!!!');
-		
-		if($_POST['tipo_resultado'] != 5 && $_POST['tipo_resultado'] != 6)
-		{
-			if($resultHisto->idCatTipoEstudio = 1)
-			{
-				$infoVivienda = array();
-				
-				$sql = 'SELECT juris.nombre FROM [catJurisdiccion] as juris, [catMunicipio] as muni where juris.idCatJurisdiccion = muni.idCatJurisdiccion and juris.idCatEstado=muni.idCatEstado and muni.idCatEstado='.$pacienteLepra->idCatEstado.' and muni.idCatMunicipio='.$pacienteLepra->idCatMunicipio.'';
-				//$sql = 'SELECT nombre FROM catLocalidad WHERE idCatLocalidad = '.$pacienteLepra->idCatLocalidad.' AND idCatMunicipio = '.$pacienteLepra->idCatMunicipio.' AND idCatEstado = '.$pacienteLepra->idCatEstado;
-				$resv = ejecutaQuery($sql);
-				$infov = devuelveRowAssoc($resv);
-				$infoVivienda['localidad'] = $infov['nombre'];
-				
-				$sql = 'SELECT nombre FROM catMunicipio WHERE idCatMunicipio = '.$pacienteLepra->idCatMunicipio.' AND idCatEstado = '.$pacienteLepra->idCatEstado;
-				$resv = ejecutaQuery($sql);
-				$infov = devuelveRowAssoc($resv);
-				$infoVivienda['municipio'] = $infov['nombre'];
-				
-				$sql = 'SELECT nombre FROM catEstado WHERE idCatEstado = '.$pacienteLepra->idCatEstado;
-				$resv = ejecutaQuery($sql);
-				$infov = devuelveRowAssoc($resv);
-				$infoVivienda['estado'] = $infov['nombre'];
-				
-				$sql = "UPDATE pacientes SET idCatTipoPaciente = 1 WHERE idPaciente = ".$pacienteLepra->idPaciente;
-				$resv = ejecutaQuery($sql);
-				
-				$infoUnidadNotificante = array();
-		
-				$sql = "SELECT * FROM 
-							catJurisdiccion, 
-							catUnidad, 
-							catMunicipio, 
-							catEstado 
-						WHERE 
-							catMunicipio.idCatMunicipio = catUnidad.idCatMunicipio AND
-							catUnidad.idCatEstado = catEstado.idCatEstado AND
-							catMunicipio.idCatJurisdiccion = catJurisdiccion.idCatJurisdiccion AND
-							catEstado.idCatEstado = catJurisdiccion.idCatEstado AND
-							catMunicipio.idCatEstado = catEstado.idCatEstado AND
-							catUnidad.idCatUnidad = '".$pacienteLepra->idCatUnidadNotificante."'";
-				$resv = ejecutaQuery($sql);
-				$infov = devuelveRowAssoc($resv);
-				$infoUnidadNotificante['jurisdiccion'] = $infov['nombre'];
-				
-				$infoUnidadNotificante['municipio'] = $infov['nombreMunicipio'];
-				$infoUnidadNotificante['unidad'] = $infov['nombreUnidad'];
-				
-				$sql = 'SELECT nombre FROM catEstado WHERE idCatEstado = '.$infov['idCatEstado'];
-				$resv = ejecutaQuery($sql);
-				$infov = devuelveRowAssoc($resv);
-				$infoUnidadNotificante['estado'] = $infov['nombre'];
-				
-				if($pacienteLepra->sexo == 1)
-					$sexoPaciente = 'Masculino';
-				if($pacienteLepra->sexo == 2)
-					$sexoPaciente = 'Femenino';
-				
-				$htmlBodyMail = '
-				<table>
-					<tr>
-						<th colspan="3" bgcolor="#666666"><font color="#FFFFFF">Se ha confirmado caso.</font></th>
-						<td colspan="3" bgcolor="#666666"><font color="#FFFFFF">Fecha: '.$_POST['fecha_resultado_histo'].' .</font></td>
-					</tr>
-					<tr>
-						<th>Clave del Paciente:</th>
-						<td>'.$pacienteLepra->cveExpediente.'</td>
-						<th>Nombre:</th>
-						<td>'.$pacienteLepra->nombre.' '.$pacienteLepra->apellidoPaterno.' '.$pacienteLepra->apellidoMaterno.'</td>
-						<th>Edad:</th>
-						<td>'.CalculaEdad(formatFechaObj($pacienteLepra->fechaNacimiento)).'</td>
-					</tr>
-					<tr>
-						<th>Sexo:</th>
-						<td>'.$sexoPaciente.'</td>
-						<th>Jurisdiccion:</th>
-						<td>'.$infoVivienda['jurisdiccion'].'</td>
-						<th>Municipio:</th>
-						<td>'.$infoVivienda['municipio'].'</td>
-					</tr>
-				</table>
-				';
-				
-				sendMail("cie.central@gmail.com", $htmlBodyMail);
-				sendMail("cie.provac@gmail.com", $htmlBodyMail);
-				sendMail("fzero_69@hotmail.com", $htmlBodyMail);
-				sendMail("lepra.chiapas@gmail.com", $htmlBodyMail);
-				
-				//sendMail("irais.lizbeth@gmail.com", $htmlBodyMail);
-				
-				$smsMessage = "CASO CONFIRMADO.\nClave del Paciente:\n".$pacienteLepra->cveExpediente."\nJurisdiccion: ".$infoVivienda['localidad']."\nMunicipio: ".$infoVivienda['municipio'];
-				sendSMS("9611078474", $smsMessage, date("Y-m-d"), date("H:i"), 'Notificacion Caso Confirmado');
-				sendSMS("9616576145", $smsMessage, date("Y-m-d"), date("H:i"), 'Notificacion Caso Confirmado');
-				sendSMS("9612337886", $smsMessage, date("Y-m-d"), date("H:i"), 'Notificacion Caso Confirmado');
-				
-				//sendSMS("5541932463", $smsMessage, date("Y-m-d"), date("H:i"), 'Notificacion Caso Confirmado');
-				/*
-				sendSMS("5585301233", $smsMessage, date("Y-m-d"), date("H:i"), 'Notificacion Caso Confirmado');
-				sendSMS("5539214946", $smsMessage, date("Y-m-d"), date("H:i"), 'Notificacion Caso Confirmado');
-				sendSMS("5541932463", $smsMessage, date("Y-m-d"), date("H:i"), 'Notificacion Caso Confirmado');
-				*/
-			}
-		}
-		
-		if($_POST['tipo_resultado'] == 6)
-		{
-			if($resultHisto->idCatTipoEstudio = 1)
-			{
-				$sql = "UPDATE pacientes SET idCatTipoPaciente = 6 WHERE idPaciente = ".$pacienteLepra->idPaciente;
-				$resv = ejecutaQuery($sql);
-				
-				/*$sql = "DELETE FROM sospechoso WHERE idPaciente = ".$pacienteLepra->idPaciente;
-				$resv = ejecutaQuery($sql);*/
-			}
-		}
-	}
+        // Si el resultado es Negativo
+        if($_POST['tipo_resultado'] == 6)
+        {
+            // y el tipo de estudio es Diagnóstico
+            if($resultHisto->idCatTipoEstudio == 1)
+            {
+                // Actualizamos el tipo de paciente a Descartado
+                $sql = "UPDATE pacientes SET idCatTipoPaciente = 6 WHERE idPaciente = ".$pacienteLepra->idPaciente;
+                $resv = ejecutaQuery($sql);
+            }
+        }
+    }
 }
 
+
+if ($errorSql == true) {
+    rollbackTransaccion();
+    $resultadoGuardado = false;
+    echo msj_error('Ocurri&oacute; un ERROR al guardar los datos');
+    echo '<br /><br />';
+} else {
+    commitTransaccion();
+    $resultadoGuardado = true;
+    echo msj_ok('Datos Guardados Exitosamente!!!');
+}
 /*$objCalidad->calidadMuestra = $_POST['calidadMuestra'];
 $objCalidad->sinMuestra = $_POST['sinMuestra'];
 $objCalidad->sinElemeCelu = $_POST['sinElemeCelu'];

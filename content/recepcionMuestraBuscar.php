@@ -23,6 +23,7 @@ $(document).ready(function() {
 	});
     
     setupCalendario("fecha_recepcion");
+    $('#formProcesarMuestra').submit(function() { remDisabled('formProcesarMuestra'); } );
 });
 
 function recibirMuestra(id, tipo, folio){
@@ -143,8 +144,8 @@ $objHTML->startFieldset();
 
     $objSelects->selectEstado('edoCaso', isset($_POST['edoCaso']) ? $_POST['edoCaso'] : $_SESSION[EDO_USR_SESSION], $_SESSION[EDO_USR_SESSION]==0 ? array() : array('disabled'=>'disabled') );
 
-	$objHTML->inputText('Folio Solicitud: ', 'folio_solicitud');
-	$objHTML->inputText('Folio Laboratorio: ', 'folio_laboratorio');
+    echo $objHTML->makeInput('number', 'Folio Solicitud: ', 'folio_solicitud', $_POST['folio_solicitud'], array('size'=>10) );
+	$objHTML->inputText('Folio Laboratorio: ', 'folio_laboratorio', $_POST['folio_laboratorio']);
 
 $objHTML->endFieldset();
 

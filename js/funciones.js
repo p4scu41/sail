@@ -211,27 +211,28 @@ function setupPaginador(idTable) {
 /*************************************************************/
 function setupCalendario(campo)
 {
-    $('#'+campo).parent().after('<a name="btnCal-'+campo+'" id="btnCal-'+campo+'" style="cursor:pointer;"><img align="absmiddle" src="images/icon_calendario.jpg"></a>');
-    
-    var myCalendar = Calendar.setup({
-		inputField : campo,
-		trigger    : 'btnCal-'+campo,
-		weekNumbers: true,
-		fdow       : 7,
-		showTime   : false,
-		onSelect   : function() { this.hide(); document.getElementById(campo).focus(); $('#'+campo).change();},
-		dateFormat : "%d-%m-%Y"
-	});
-	
-	if(!$('#'+campo).hasClass('fecha'))
-		$('#'+campo).addClass('fecha');
-    
-    $('#'+campo).attr('placeholder','DD-MM-AAAA');
-    
-    $('#'+campo).keyup(function(event){
-        tipo_fecha(this,event);
-    });
-    
+    if($('#'+campo).length != 0) {
+        $('#'+campo).parent().after('<a name="btnCal-'+campo+'" id="btnCal-'+campo+'" style="cursor:pointer;"><img align="absmiddle" src="images/icon_calendario.jpg"></a>');
+
+        var myCalendar = Calendar.setup({
+            inputField : campo,
+            trigger    : 'btnCal-'+campo,
+            weekNumbers: true,
+            fdow       : 7,
+            showTime   : false,
+            onSelect   : function() { this.hide(); document.getElementById(campo).focus(); $('#'+campo).change();},
+            dateFormat : "%d-%m-%Y"
+        });
+
+        if(!$('#'+campo).hasClass('fecha'))
+            $('#'+campo).addClass('fecha');
+
+        $('#'+campo).attr('placeholder','DD-MM-AAAA');
+
+        $('#'+campo).keyup(function(event){
+            tipo_fecha(this,event);
+        });
+    }
 }
 
 /*************************************************************/
@@ -578,4 +579,15 @@ function validateFecha(fechaX, operador, fechaY, diferencia){
 
 function exportToExcel(){
     
+}
+
+// eliminar el artibuto disabled de todos los campos del formulario
+function remDisabled(formulario) {
+    $('#'+formulario+' input, '+
+      '#'+formulario+' textarea, '+
+      '#'+formulario+' select, '+
+      '#'+formulario+' radio, '+
+      '#'+formulario+' checkbox').each(function(){
+          $(this).removeAttr('disabled');
+    });
 }

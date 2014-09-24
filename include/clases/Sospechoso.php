@@ -84,5 +84,15 @@ class Sospechoso {
 		}
 	}
 
+    public function eliminarBD($idPaciente) {
+		$sql = "DELETE FROM [sospechoso] WHERE idPaciente = " . $idPaciente . ";";
+
+		$consulta = ejecutaQueryClases($sql);
+		if (is_string($consulta)) {
+			$this->error = true;
+			$this->msgError = $consulta . " SQL:" . $sql;
+		}
+	}
+
 }
 ?>

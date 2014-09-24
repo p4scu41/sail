@@ -23,6 +23,8 @@
             modal: true,
             resizable: true
         });
+
+        $('#form_busca').submit(function() { remDisabled('form_busca'); } );
     });
     
     function showControlCalidad(tipo, id){

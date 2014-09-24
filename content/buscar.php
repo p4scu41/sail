@@ -15,6 +15,8 @@ $(document).ready(function(){
 	$('#muniCaso').change(function(){ 
 		actualiza_select( { destino:'uniTratado', edo:'edoCaso', juris:'jurisCaso', muni:'muniCaso', tipo:'uni'} );
 	});
+
+    $('#form_busca').submit(function() { remDisabled('form_busca'); } );
 });
 //-->
 </script>
@@ -72,7 +74,7 @@ echo '</tr><tr style="height:'.$heightTR.'px;">';
 	echo '<td align="right">';
     $objHTMl->label('Estado:', array('for'=>'edoCaso'));
 	echo '</td><td>';
-    $objSelects->selectEstado('edoCaso', isset($_POST['edoCaso']) ? $_POST['edoCaso'] : ($_SESSION['buscar']['edoCaso'] ? $_SESSION['buscar']['edoCaso'] : $_SESSION[EDO_USR_SESSION]), null, false);
+    $objSelects->selectEstado('edoCaso', isset($_POST['edoCaso']) ? $_POST['edoCaso'] : ($_SESSION['buscar']['edoCaso'] ? $_SESSION['buscar']['edoCaso'] : $_SESSION[EDO_USR_SESSION]), $_SESSION[EDO_USR_SESSION]==0 ? array() : array('disabled'=>'disabled'), false);
 	echo '</td><td align="right">';
     $objHTMl->label('Jurisdicción:', array('for'=>'jurisCaso'));
     echo '</td><td>';
@@ -213,8 +215,8 @@ if(!empty($busqueda->resultado))
 		
         // Un paciente Sospechoso(5) o Descartado(6) no tiene diagnostico asociado
         if(!empty($diagnostico)){
-            $diagnostico->cargarArreglosDiagnosticoCasosRelacionados();
-            $diagnostico->cargarArreglosDiagnosticoContactos();
+            //$diagnostico->cargarArreglosDiagnosticoCasosRelacionados();
+            //$diagnostico->cargarArreglosDiagnosticoContactos();
             //$diagnostico->cargarArreglosDiagnosticoDiagramaDermatologico();
 			$estadoP = $estadoPaciente[$diagnostico->idCatEstadoPaciente];
         } else {
@@ -225,43 +227,47 @@ if(!empty($busqueda->resultado))
 			else
 				$estadoP = "Caso Probable";
         }
+
 		/****************************************/
+        $colorCelda = "";
+        $colorLetra = "";
+        
 		if($diagnostico->idCatEstadoPaciente == 1 || $diagnostico->idCatEstadoPaciente == 2 || $diagnostico->idCatEstadoPaciente == 5 || $diagnostico->idCatEstadoPaciente == 9)
 		{
 			$colorCelda = "#FF0000";
 			$colorLetra = "#FFFFFF";
 		}
-		if($diagnostico->idCatEstadoPaciente == 6 || $diagnostico->idCatEstadoPaciente == 3)
+		else if($diagnostico->idCatEstadoPaciente == 6 || $diagnostico->idCatEstadoPaciente == 3)
 		{
 			$colorCelda = "#FFFF00";
 			$colorLetra = "";
 		}
-		if($diagnostico->idCatEstadoPaciente == 4)
+		else if($diagnostico->idCatEstadoPaciente == 4)
 		{
 			$colorCelda = "#00FF00";
 			$colorLetra = "";
 		}
-		if($diagnostico->idCatEstadoPaciente == 8)
+		else if($diagnostico->idCatEstadoPaciente == 8)
 		{
 			$colorCelda = "#000000";
 			$colorLetra = "#FFFFFF";
 		}
-		if($diagnostico->idCatEstadoPaciente == 12)
+		else if($diagnostico->idCatEstadoPaciente == 12)
 		{
 			$colorCelda = "#FF8000";
 			$colorLetra = "";
 		}
-		if($diagnostico->idCatEstadoPaciente == 7 || $diagnostico->idCatEstadoPaciente == 10 || $diagnostico->idCatEstadoPaciente == 11)
+		else if($diagnostico->idCatEstadoPaciente == 7 || $diagnostico->idCatEstadoPaciente == 10 || $diagnostico->idCatEstadoPaciente == 11)
 		{
 			$colorCelda = "";
 			$colorLetra = "";
 		}
-		if($paciente->idCatTipoPaciente == 6)
+		else if($paciente->idCatTipoPaciente == 6)
 		{
 			$colorCelda = "#00FF00";
 			$colorLetra = "";
 		}
-				
+		
 		if($diagnostico->idCatEstadoPaciente == $_POST['tipoPaciente'] || $_POST['tipoPaciente'] == "")
 		{
 			echo '<tr>

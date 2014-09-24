@@ -110,5 +110,21 @@ class Control {
 		}
 	}
 
+    public function countByDiagnostico($idDiagnostico) {
+		$sql = "SELECT COUNT(*) AS total FROM [control] WHERE idDiagnostico = " . $idDiagnostico . ";";
+
+		$consulta = ejecutaQueryClases($sql);
+		if (is_string($consulta)) {
+			$this->error = true;
+			$this->msgError = $consulta . " SQL:" . $sql;
+
+            return null;
+		} else {
+			$result = devuelveRowAssoc($consulta);
+
+            return $result['total'];
+		}
+	}
+
 }
 ?>

@@ -49,7 +49,25 @@ function agregaCasoRelacionado() {
 	$casoRelacionado.css('display','block');
 	$casoRelacionado.attr('id','caso_relacionado_'+no_caso_relacionado);
 	$casoRelacionado.find('#idCasoRelacionado_').attr('name','idCasoRelacionado_'+no_caso_relacionado).attr('id','idCasoRelacionado_'+no_caso_relacionado);
-	$casoRelacionado.find('#nombre_caso_relacionado_').attr('name','nombre_caso_relacionado_'+no_caso_relacionado).attr('id','nombre_caso_relacionado_'+no_caso_relacionado).
+	// Cuando el usuario escriba contenido en el caso relacionado
+    // hacemos obligatorio parentesco_caso_relacionado_ y situacion_caso_relacionado_
+    $casoRelacionado.find('#nombre_caso_relacionado_').keyup(function(event){
+        //nombre_caso_relacionado_1
+        input = $(this).attr('id').split('_');
+        id = input[input.length-1];
+
+        if($(this).val() != '') {
+            if( !$('#parentesco_caso_relacionado_'+id).hasClass('validate[required]') )
+                $('#parentesco_caso_relacionado_'+id).addClass('validate[required]');
+
+            if( !$('#situacion_caso_relacionado_'+id).hasClass('validate[required]') )
+                $('#situacion_caso_relacionado_'+id).addClass('validate[required]');
+        } else {
+            $('#parentesco_caso_relacionado_'+id).removeClass()('validate[required]');
+            $('#situacion_caso_relacionado_'+id).removeClass('validate[required]');
+        }
+    });
+    $casoRelacionado.find('#nombre_caso_relacionado_').attr('name','nombre_caso_relacionado_'+no_caso_relacionado).attr('id','nombre_caso_relacionado_'+no_caso_relacionado).
             change(function() { $(this).val( normalize($(this).val()).toUpperCase() ); });
 	$casoRelacionado.find('#parentesco_caso_relacionado_').
             attr('name','parentesco_caso_relacionado_'+no_caso_relacionado).
@@ -84,7 +102,25 @@ function agregaContacto() {
 	$contacto.css('display','block');
 	$contacto.attr('id','contacto_'+no_contactos);
 	$contacto.find('#idContacto_').attr('name','idContacto_'+no_contactos).attr('id','idContacto_'+no_contactos);
-	$contacto.find('#nombre_contacto_').attr('name','nombre_contacto_'+no_contactos).attr('id','nombre_contacto_'+no_contactos).
+	// Cuando el usuario escriba contenido en el caso relacionado
+    // hacemos obligatorio parentesco_caso_relacionado_ y situacion_caso_relacionado_
+    $contacto.find('#nombre_contacto_').keyup(function(event){
+        //nombre_caso_relacionado_1
+        input = $(this).attr('id').split('_');
+        id = input[input.length-1];
+
+        if($(this).val() != '') {
+            if( !$('#sexo_contacto_'+id).hasClass('validate[required]') )
+                $('#sexo_contacto_'+id).addClass('validate[required]');
+
+            if( !$('#parentesco_contacto_'+id).hasClass('validate[required]') )
+                $('#parentesco_contacto_'+id).addClass('validate[required]');
+        } else {
+            $('#sexo_contacto_'+id).removeClass()('validate[required]');
+            $('#parentesco_contacto_'+id).removeClass('validate[required]');
+        }
+    });
+    $contacto.find('#nombre_contacto_').attr('name','nombre_contacto_'+no_contactos).attr('id','nombre_contacto_'+no_contactos).
             change(function() { $(this).val( normalize($(this).val()).toUpperCase() ); });
 	$contacto.find('#sexo_contacto_').
             attr('name','sexo_contacto_'+no_contactos).
@@ -687,5 +723,5 @@ $(document).ready(function(){
             $("#dialog_form").empty();
         }
     });
-    
+
 });

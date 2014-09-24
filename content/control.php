@@ -349,7 +349,7 @@ $help = new Helpers();
 $diagnostico = NULL;
 $infUni = NULL;
 
-if(!isset($_GET['id']))
+if(!isset($_GET['id']) || empty($_GET['id']) )
 	echo msj_error('No se encontraron datos del paciente');
 else {
 	$paciente->obtenerBD($_GET['id']);
@@ -408,10 +408,24 @@ $objHTML->startFieldset('Datos de identificación');
 	
 $objHTML->endFieldset();
 
-if(count($paciente->arrDiagnosticos) == 0) {
-    echo msj_error('El paciente no tienen controles registrados, esto significa que el paciente es sospechoso o descartado.');
+if(count($paciente->arrDiagnosticos) == 0 && !empty($paciente->idPaciente)) {
+    // Descartado
+    if($paciente->idCatTipoPaciente == 6) {
+        echo msj_error('El paciente esta descartado por lo que no tiene controles registrados');
+    } 
+    // Caso Probable
+    else if ($paciente->idCatTipoPaciente == 5) {
+        echo msj_error('El paciente es un caso probable, tiene que esperar los resultados del laboratorio para confirmar el caso y posteriormente completar los datos de la c&eacute;dula de registro');
+    }
+    // Caso Confirmado
+    else if ($paciente->idCatTipoPaciente == 1) {
+        echo msj_error('El paciente es un caso confirmado, pero no ha completado los datos de la c&eacute;dula de registro');
+    }
+    /*2	Caso Conocido
+    3	Caso Referido
+    4	Recaida*/
 }
-else {
+else if(!empty($paciente->idPaciente)){
     $objHTML->startFieldset('Datos del diagnóstico');
 
         $objHTML->inputText('Fecha de diagnóstico', 'fecha_diagnostico',formatFechaObj($paciente->fechaDiagnostico));

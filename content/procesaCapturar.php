@@ -15,11 +15,7 @@ $infUni = NULL;
 $sospechoso = new Sospechoso();
 $help = new Helpers();
 
-/*echo '<pre>'.print_r($_FILES,true).'</pre>';
-echo '<pre>'.print_r($_POST,true).'</pre>';
-exit(0);*/
 if(!empty($_POST['clave_expediente'])){
-	//print_r($_POST); exit(0);
 	beginTransaccion();
 	
 	$paciente = new Paciente();
@@ -240,6 +236,33 @@ if(!empty($_POST['clave_expediente'])){
         }
         if(!empty($_POST['actualizar']) && empty($diagnostico->idDiagnostico)) {
             $diagnostico->insertarBD();
+
+            if($diagnostico->idDiagnostico) {
+                // Insertar el control inical
+                $control = new Control();
+                $control->idDiagnostico = $diagnostico->idDiagnostico;
+                $control->fecha = formatFecha($_POST['fecha_diagnostico']);
+                $control->reingreso = 0;
+                $control->idCatEstadoPaciente = $_POST['estado_paciente'];
+                $control->idCatTratamientoPreescrito = $_POST['tratamiento'];
+                $control->vigilanciaPostratamiento = 0;
+                $control->observaciones = 'Registro del paciente';
+
+                $control->insertarBD();
+
+                if($control->error){
+                    $errorSql = true;
+                    echo $control->msgError;
+                }
+
+                // Eliminamos el registro de sospechoso
+                $sospechoso->eliminarBD($paciente->idPaciente);
+
+                if($sospechoso->error){
+                    $errorSql = true;
+                    echo $sospechoso->msgError;
+                }
+            }
         }
         else if(!empty($_POST['actualizar'])) {
             $diagnostico->modificarBD();
@@ -281,26 +304,6 @@ if(!empty($_POST['clave_expediente'])){
             }
 		}
 		
-        // Insertar el control inical
-        if(!empty($_POST['actualizar']) && empty($diagnostico->idDiagnostico)) {
-            $control = new Control();
-            $control->idDiagnostico = $diagnostico->idDiagnostico;
-            $control->fecha = formatFecha($_POST['fecha_diagnostico']);
-            $control->reingreso = 0;
-            $control->idCatEstadoPaciente = $_POST['estado_paciente'];
-            $control->idCatTratamientoPreescrito = $_POST['tratamiento'];
-            $control->vigilanciaPostratamiento = 0;
-            $control->observaciones = 'Registro del paciente';
-
-            $control->insertarBD();
-
-            if($control->error){
-                $errorSql = true;
-                echo $control->msgError;
-            }
-        }
-
-
         $delCasosRelacionados = explode(',', $_POST['del_casos_relacionados']);
         $caso = new CasoRelacionado();
 
@@ -425,7 +428,6 @@ if(!empty($_POST['clave_expediente'])){
 		{
 			$new_name = "photo_1_".$lesionDiagrama->idLesion;
 			$new_name2 = "file_photoTag-tag_".$tempId;
-			//echo '<script type="text/javascript" language="javascript">alert("'.$new_name2.'")<script>';
 			$ext = explode("/",$_FILES[$new_name2]['type']);
 			$extencion = $ext[1];
 			
@@ -464,7 +466,6 @@ if(!empty($_POST['clave_expediente'])){
             //$diagnostico->cargarArreglosDiagnosticoDiagramaDermatologico();
         }*/
         redirect('?mod=cap&id='.$paciente->idPaciente.'&saved=true');
-		//echo msj_ok('Los datos se guardaron exitosamente');
 	}
 }
 
