@@ -9,7 +9,6 @@ require_once('include/clasesLepra.php');
 require_once('include/enviaCorreo.php');
 require_once('content/procesaCapturar.php');
 
-
 ?>
 
 <link rel="stylesheet" href="include/Jquery-Photo-Tag-master/libraries/jquery-ui-1.8.17.custom.css" type="text/css" media="screen" />
@@ -26,6 +25,7 @@ require_once('content/procesaCapturar.php');
 <script type="text/javascript" src="include/jQuery.validationEngine_v2.0/js/languages/jquery.validationEngine-es.js" charset="utf-8"></script>
 <script type="text/javascript" src="include/jQuery.validationEngine_v2.0/js/jquery.validationEngine.js" charset="utf-8"></script>
 <script src="include/SlidesJS/js/bjqs-1.3.min.js"></script>
+<script src="js/moment.js"></script>
 
 <?PHP
     $objHTML = new HTML();
@@ -41,8 +41,14 @@ require_once('content/procesaCapturar.php');
     } else {
         $objHTML->inputHidden("showAddNewLink", "true");
     }
-    
+
 	echo '<h2 align="center">C&Eacute;DULA DE REGISTRO - ESTUDIO EPIDEMIOL&Oacute;GICO</h2>';
+
+    if($alerta) {
+        echo '<div style="color: #F00; font-weight: bold;" align="center">El caso ha sido confirmado por histopatolog&iacute;a en el LESP como
+            caso nuevo. Favor de completar la c&eacute;dula de registro e iniciar el estudio de contactos.</div>';
+    }
+
 	echo '<div id="dialog_form" style="display:none;"></div>';
     $objHTML->startForm('capturaPaciente', '?mod=cap&id='.$_GET['id'], 'POST', array("enctype" => "multipart/form-data"));
 	
@@ -145,8 +151,8 @@ require_once('content/procesaCapturar.php');
 			$objSelects->SelectCatalogo('Forma de detección del caso: ', 'deteccion', 'catFormaDeteccion', $paciente->idCatFormaDeteccion, array('class'=>'validate[required]'));
 			echo '<br />';
 			$objHTML->inputText('Fecha de inicio del padecimiento', 'fecha_padecimiento', formatFechaObj($paciente->fechaInicioPadecimiento), array('placeholder'=>'Fecha de Padecimiento', 'class'=>'validate[required]'));
-			$objHTML->inputText('Fecha de notificación', 'fecha_notificacion', formatFechaObj($paciente->fechaNotificacion), array('placeholder'=>'Fecha de Notificacion'));
-			$objHTML->inputText('Semana de notificación', 'semana_notificacion', $paciente->semanaEpidemiologica, array('placeholder'=>'Semana', 'size'=>'3'));
+			$objHTML->inputText('Fecha de notificación', 'fecha_notificacion', ($paciente->fechaNotificacion ? formatFechaObj($paciente->fechaNotificacion) : date('d-m-Y')), array('placeholder'=>'Fecha de Notificacion', 'class'=>'validate[required]', 'disabled'=>'disabled'));
+			$objHTML->inputText('Semana de notificación', 'semana_notificacion', ($paciente->semanaEpidemiologica ? $paciente->semanaEpidemiologica : $semanaEpidemiologica), array('placeholder'=>'Semana', 'size'=>'3', 'disabled'=>'disabled'));
 			echo '<br />';
 			$objHTML->inputText('Fecha de Dx Clínico', 'fecha_diagnostico',formatFechaObj($paciente->fechaDiagnostico), array('placeholder'=>'Fecha de Diagnostico', 'class'=>'validate[required]'));
 			$objHTML->inputText('Fecha de Dx Bacteriológico', 'fecha_bacil', formatFechaObj($paciente->fechaDxBacil), array('placeholder'=>'Fecha Estudio Baciloscopico', 'disabled'=>'disabled'));

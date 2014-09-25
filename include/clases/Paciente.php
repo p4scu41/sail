@@ -251,16 +251,18 @@ class Paciente {
                             $idDiagnostico = $infoEstudio['idDiagnostico'];
                         }
 
+                        if($idDiagnostico != NULL && $idDiagnostico != "")
+                        {
+                            $sql = "SELECT * FROM [estudiosBac] WHERE idDiagnostico = " . $idDiagnostico . " AND idCatTipoEstudio = 1 ORDER BY fechaResultado;";
+                            $consulta = ejecutaQueryClases($sql);
 
-                        $sql = "SELECT * FROM [estudiosBac] WHERE idDiagnostico = " . $idDiagnostico . " AND idCatTipoEstudio = 1 ORDER BY fechaResultado;";
-                        $consulta = ejecutaQueryClases($sql);
-
-                        if (is_string($consulta)) {
-                            $this->error = true;
-                            $this->msgError = $consulta . " SQL:" . $sql;
-                        } else {
-                            $infoEstudio = devuelveRowAssoc($consulta);
-                            $this->fechaDxBacil = $infoEstudio['fechaResultado'];
+                            if (is_string($consulta)) {
+                                $this->error = true;
+                                $this->msgError = $consulta . " SQL:" . $sql;
+                            } else {
+                                $infoEstudio = devuelveRowAssoc($consulta);
+                                $this->fechaDxBacil = $infoEstudio['fechaResultado'];
+                            }
                         }
                     }
 

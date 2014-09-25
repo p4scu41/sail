@@ -239,13 +239,13 @@ function deshabilitarCamposCaptura(formulario){
                     'otra_institutcion_caso',
                     'edoReferido',
                     'medicoElaboro',
-                    'medicoValido'
+                    'medicoValido',
+                    'fecha_notificacion',
+                    'semana_notificacion'
                     );
                         
     camposCapturaFase2 = new Array(
                     'tipo_paciente',
-                    'fecha_notificacion',
-                    'semana_notificacion',
 					'fecha_histo',
 					'fecha_bacil',
                     'fecha_pqt',
@@ -338,10 +338,10 @@ function deshabilitarCamposCaptura(formulario){
         if( !$('#reaccional_actual').hasClass('validate[required]') )
             $('#reaccional_actual').addClass('validate[required]');
         
-        if( !$('#fecha_notificacion').hasClass('validate[required]') )
+        /*if( !$('#fecha_notificacion').hasClass('validate[required]') )
             $('#fecha_notificacion').addClass('validate[required]');
         
-        /*if( !$('#fecha_pqt').hasClass('validate[required]') )
+        if( !$('#fecha_pqt').hasClass('validate[required]') )
             $('#fecha_pqt').addClass('validate[required]');*/
     }
 }
@@ -512,7 +512,7 @@ $(document).ready(function(){
 	
 	setupCalendario("fecha_nacimiento");
 	setupCalendario("fecha_padecimiento");
-	setupCalendario("fecha_notificacion");
+	//setupCalendario("fecha_notificacion");
 	setupCalendario("fecha_diagnostico");
 	setupCalendario("fecha_pqt");
 	setupCalendario("tipo_uno");
@@ -540,14 +540,14 @@ $(document).ready(function(){
         $('#fs_contactos').hide();
         $('#fs_antecedentes').hide();
         $('#fs_observaciones').hide();
-        $('#fecha_notificacion').parent().hide();
-        $('#btnCal-fecha_notificacion').hide();
-        $('#semana_notificacion').parent().hide();
+        //$('#fecha_notificacion').parent().hide();
+        //$('#btnCal-fecha_notificacion').hide();
+        //$('#semana_notificacion').parent().hide();
         $('#fecha_pqt').parent().hide();
         $('#btnCal-fecha_pqt').hide();
         $('#reaccional_anterior').removeClass('validate[required]');
         $('#reaccional_actual').removeClass('validate[required]');
-        $('#fecha_notificacion').removeClass('validate[required]');
+        //$('#fecha_notificacion').removeClass('validate[required]');
         $('#fecha_pqt').removeClass('validate[required]');
     } else if($('#tipo_paciente').val()!=5 && $('#tipo_paciente').val()!=6) {
         $('#fs_grado_discapacidad').show();
@@ -556,9 +556,9 @@ $(document).ready(function(){
         $('#fs_contactos').show();
         $('#fs_antecedentes').show();
         $('#fs_observaciones').show();
-        $('#fecha_notificacion').parent().show();
-        $('#btnCal-fecha_notificacion').show();
-        $('#semana_notificacion').parent().show();
+        //$('#fecha_notificacion').parent().show();
+        //$('#btnCal-fecha_notificacion').show();
+        //$('#semana_notificacion').parent().show();
         $('#fecha_pqt').parent().show();
         $('#btnCal-fecha_pqt').show();
         
@@ -569,10 +569,10 @@ $(document).ready(function(){
         if( !$('#reaccional_actual').hasClass('validate[required]') )
             $('#reaccional_actual').addClass('validate[required]');
         
-        if( !$('#fecha_notificacion').hasClass('validate[required]') )
+        /*if( !$('#fecha_notificacion').hasClass('validate[required]') )
             $('#fecha_notificacion').addClass('validate[required]');
         
-        /*if( !$('#fecha_pqt').hasClass('validate[required]') )
+        if( !$('#fecha_pqt').hasClass('validate[required]') )
             $('#fecha_pqt').addClass('validate[required]');*/
     } else {
         $('#fs_grado_discapacidad').hide();
@@ -581,14 +581,14 @@ $(document).ready(function(){
         $('#fs_contactos').hide();
         $('#fs_antecedentes').hide();
         $('#fs_observaciones').hide();
-        $('#fecha_notificacion').parent().hide();
-        $('#btnCal-fecha_notificacion').hide();
-        $('#semana_notificacion').parent().hide();
+        //$('#fecha_notificacion').parent().hide();
+        //$('#btnCal-fecha_notificacion').hide();
+        //$('#semana_notificacion').parent().hide();
         $('#fecha_pqt').parent().hide();
         $('#btnCal-fecha_pqt').hide();
         $('#reaccional_anterior').removeClass('validate[required]');
         $('#reaccional_actual').removeClass('validate[required]');
-        $('#fecha_notificacion').removeClass('validate[required]');
+        //$('#fecha_notificacion').removeClass('validate[required]');
         $('#fecha_pqt').removeClass('validate[required]');
     }
     
@@ -601,14 +601,14 @@ $(document).ready(function(){
             $('#fs_contactos').hide();
             $('#fs_antecedentes').hide();
             $('#fs_observaciones').hide();
-            $('#fecha_notificacion').parent().hide();
-            $('#btnCal-fecha_notificacion').hide();
-            $('#semana_notificacion').parent().hide();
+            //$('#fecha_notificacion').parent().hide();
+            //$('#btnCal-fecha_notificacion').hide();
+            //$('#semana_notificacion').parent().hide();
             $('#fecha_pqt').parent().hide();
             $('#btnCal-fecha_pqt').hide();
             $('#reaccional_anterior').removeClass('validate[required]');
             $('#reaccional_actual').removeClass('validate[required]');
-            $('#fecha_notificacion').removeClass('validate[required]');
+            //$('#fecha_notificacion').removeClass('validate[required]');
             $('#fecha_pqt').removeClass('validate[required]');
         } else {
             $('#fs_grado_discapacidad').show();
@@ -617,16 +617,16 @@ $(document).ready(function(){
             $('#fs_contactos').show();
             $('#fs_antecedentes').show();
             $('#fs_observaciones').show();
-            $('#fecha_notificacion').parent().show();
-            $('#btnCal-fecha_notificacion').show();
-            $('#semana_notificacion').parent().show();
+            //$('#fecha_notificacion').parent().show();
+            //$('#btnCal-fecha_notificacion').show();
+            //$('#semana_notificacion').parent().show();
             $('#fecha_pqt').parent().show();
             $('#btnCal-fecha_pqt').show();
             
             // si ya esta capturado, al cambiar el estado del paciente a nuevo,
             // envia a la captura de fecha notificacion
             if($('#clave_expediente').val().length >= 17) {
-                $('#fecha_notificacion').focus();
+                //$('#fecha_notificacion').focus();
                 $('html, body').stop().animate({ scrollTop: $('#segundaFaseCaptura').offset().top }, 1000);  
             }
             
@@ -637,62 +637,82 @@ $(document).ready(function(){
             if( !$('#reaccional_actual').hasClass('validate[required]') )
                 $('#reaccional_actual').addClass('validate[required]');
             
-            if( !$('#fecha_notificacion').hasClass('validate[required]') )
+            /*if( !$('#fecha_notificacion').hasClass('validate[required]') )
                 $('#fecha_notificacion').addClass('validate[required]');
 
-            /*if( !$('#fecha_pqt').hasClass('validate[required]') )
+            if( !$('#fecha_pqt').hasClass('validate[required]') )
                 $('#fecha_pqt').addClass('validate[required]');*/
         }
         
     });
     
-    /*fecha_nacimiento
-    fecha_padecimiento
-    fecha_notificacion
-    fecha_diagnostico
-    fecha_pqt*/
+    var curDate = new Date();
+    var dd = curDate.getDate();
+    var mm = curDate.getMonth()+1; //January is 0!
+    var yyyy = curDate.getFullYear();
+    var fechaActual = yyyy+'-'+mm+'-'+dd;
+    var diasAnteriores = moment().subtract(2, 'days');
+    var diasPosteriores = moment().add(2, 'days');
     
     $('#fecha_padecimiento').change(function(){
-		var curDate = new Date();
-		var dd = curDate.getDate();
-		var mm = curDate.getMonth()+1; //January is 0!
-		var yyyy = curDate.getFullYear();
-		var todayDate = dd+'-'+mm+'-'+yyyy;
-		
-        if(!validateFecha('fecha_padecimiento', '>', 'fecha_nacimiento')) {
-            alert('ERROR: La fecha de inicio de padecimientos debe ser mayor a la fecha de nacimiento');
-            $(this).val('');
-            $(this).focus();
-        }
-        
-        if(!validateFecha('fecha_padecimiento', '<=', todayDate)) {
-            alert('ERROR: La fecha de inicio de padecimientos no debe ser posterior a la fecha actual');
-            $(this).val('');
-            $(this).focus();
+        if($(this).val() != ''){
+        var fecha_nacimiento = formatFecha($('#fecha_nacimiento').val());
+        var fecha_padecimiento = formatFecha($('#fecha_padecimiento').val());
+    
+            if(moment(fecha_padecimiento).subtract(1, 'd').isBefore(fecha_nacimiento)) {
+                jAlert('ERROR: La fecha de inicio de padecimientos debe ser mayor a la fecha de nacimiento', 'Error');
+                $(this).val('');
+                $(this).focus();
+                return false;
+            }
+
+            if(moment(fecha_padecimiento).add(1, 'd').isAfter(fechaActual)) {
+                jAlert('ERROR: La fecha de inicio de padecimientos debe ser menor a la fecha actual', 'Error');
+                $(this).val('');
+                $(this).focus();
+            }
         }
     });
     
     $('#fecha_diagnostico').change(function(){
-        if(!validateFecha('fecha_diagnostico', '>=', 'fecha_padecimiento')) {
-            alert('ERROR: La fecha de Dx clinico debe ser mayor a la fecha de inicio de padecimientos');
-            $(this).val('');
-            $(this).focus();
+        if($(this).val() != ''){
+            var fecha_diagnostico = formatFecha($('#fecha_diagnostico').val());
+
+            if(moment(fecha_diagnostico).isBefore(diasAnteriores) || moment(fecha_diagnostico).isAfter(diasPosteriores)) {
+                jAlert('ERROR: La fecha de Dx cl&iacute;nico no debe ser mayor a 2 d&iacute;as posteriores a la fecha actual. Debe notificar sus casos en un plazo de 24 hrs despu&eacute;s de su diagn&oacute;stico.', 'Error');
+                $(this).val('');
+                $(this).focus();
+            }
         }
     });
-    
-    $('#fecha_notificacion').change(function(){
+
+    // Automatico es la fecha de captura (fecha actual)
+    /*$('#fecha_notificacion').change(function(){
         if(!validateFecha('fecha_notificacion', '>=', 'fecha_diagnostico')) {
             alert('ERROR: La fecha de notificacion debe ser mayor o igual a la fecha de Dx clinico');
             $(this).val('');
             $(this).focus();
         }
-    });
+    });*/
     
     $('#fecha_pqt').change(function(){
-        if(!validateFecha('fecha_pqt', '>', 'fecha_notificacion')) {
-            alert('ERROR: La fecha de inicio de la PQT debe ser mayor a la fecha de notificacion');
-            $(this).val('');
-            $(this).focus();
+        if($(this).val() != ''){
+            var fecha_pqt = formatFecha($('#fecha_pqt').val());
+            var fecha_notificacion = formatFecha($('#fecha_notificacion').val());
+            var fecha_histo = formatFecha($('#fecha_histo').val());
+
+            if(moment(fecha_pqt).subtract(1, 'd').isBefore(fecha_notificacion)) {
+                jAlert('ERROR: La fecha de inicio de la PQT debe ser mayor a la fecha de notificaci&oacute;n', 'Error');
+                $(this).val('');
+                $(this).focus();
+                return false;
+            }
+            
+            if(moment(fecha_pqt).subtract(1, 'd').isBefore(fecha_histo)) {
+                jAlert('ERROR: La fecha de inicio de la PQT debe ser mayor a la fecha de resultado histopatol&oacutegico', 'Error');
+                $(this).val('');
+                $(this).focus();
+            }
         }
     });
 

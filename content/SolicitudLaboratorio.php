@@ -232,7 +232,6 @@ if($_SESSION[TIPO_USR_SESSION] != 5) {
     $(document).ready(function() {
 		deshabilitarCamposLaboratorio = new Array(";
         
-    
     switch ($_GET['tipo']) {
         case 'bacilos':
             echo "'cve_lesp_bacilos',
@@ -284,8 +283,18 @@ if($_SESSION[TIPO_USR_SESSION] != 5) {
 			$('*[name='+deshabilitarCamposLaboratorio[campo]+']').each(function(){
                 $(this).attr('disabled',true);
             });
-		}
-    });
+		}";
+
+    switch ($_GET['tipo']) {
+        case 'bacilos':
+            echo '$("#btnCal-fecha_resultado_bacilos").remove();';
+        break;
+        case 'histo':
+            echo '$("#btnCal-fecha_resultado_histo").remove();';
+        break;
+    }
+
+    echo "});
     </script>";
 }
 echo '</div><br />';

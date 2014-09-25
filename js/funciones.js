@@ -500,14 +500,14 @@ function validateFecha(fechaX, operador, fechaY, diferencia){
     else                           valFechaY = $('#'+fechaY).val();
     
     if(!isDate(valFechaX)) {
-        alert('La fecha "'+valFechaX+'" no es válida.');
-        $('#'+fechaX).focus();
+        console.error('La fecha "'+fechaX+': '+valFechaX+'" no es válida.');
+        //$('#'+fechaX).focus();
         return false;
     }
     
     if(!isDate(valFechaY)) {
-        alert('La fecha "'+valFechaY+'" no es válida.');
-        $('#'+fechaY).focus();
+        console.error('La fecha "'+fechaY+': '+valFechaY+'" no es válida.');
+        //$('#'+fechaY).focus();
         return false;
     }
     valFechaX = valFechaX.split("-");
@@ -590,4 +590,11 @@ function remDisabled(formulario) {
       '#'+formulario+' checkbox').each(function(){
           $(this).removeAttr('disabled');
     });
+}
+
+// Recibe una fecha con formato dd-mm-yy y la convierte a formato yy-mm-dd
+function formatFecha(fecha) {
+    valFecha = fecha.split("-");
+
+    return valFecha[2]+'-'+valFecha[1]+'-'+valFecha[0];
 }

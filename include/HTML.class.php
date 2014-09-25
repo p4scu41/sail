@@ -112,11 +112,12 @@ class HTML {
 		
 		foreach($elements as $key => $val) {
 			
-			if($default == $key && $default!==null)
+			if (trim($default) == trim($key) && $default!==null) {
 				$selected = 'selected="selected"';
-			else
+            } else {
 				$selected = '';
-			
+            }
+            
 			$strInput .= '<option value="'.trim($key).'" '.$selected.'>'.htmlentities(trim($val)).'</option> ';
 		}
 		

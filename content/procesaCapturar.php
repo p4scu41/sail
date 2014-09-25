@@ -14,6 +14,13 @@ $errorSql = false;
 $infUni = NULL;
 $sospechoso = new Sospechoso();
 $help = new Helpers();
+$alerta = false;
+$semanaEpidemiologica = 0;
+
+$resultSemana = ejecutaQuery('SELECT [no_semana] FROM [catSemanaEpidemiologica] WHERE \''.date('Y-m-d').'\'>=[fecha_inicio] AND \''.date('Y-m-d').'\'<=[fecha_fin]');
+$datoSemana = devuelveRowAssoc($resultSemana);
+if($datoSemana['no_semana'])
+    $semanaEpidemiologica = $datoSemana['no_semana'];
 
 if(!empty($_POST['clave_expediente'])){
 	beginTransaccion();
@@ -58,6 +65,8 @@ if(!empty($_POST['clave_expediente'])){
 	$paciente->folioRegistro = $_POST['folioRegistro'];
 	$paciente->medicoElaboro = $_POST['medicoElaboro'];
 	$paciente->medicoValido = $_POST['medicoValido'];
+    $paciente->fechaNotificacion = formatFecha($_POST['fecha_notificacion']);
+    $paciente->semanaEpidemiologica = $_POST['semana_notificacion'];
     
     // Notificar via correo al coordinador estatal del estado referico
     if(!empty($_POST['edoReferido'])) {
@@ -68,8 +77,6 @@ if(!empty($_POST['clave_expediente'])){
     // Si el paciente es distinto de Sospechoso(5) o Descartado(6)
     if($_POST['tipo_paciente']!=5 && $_POST['tipo_paciente']!=6) 
     {
-        $paciente->fechaNotificacion = formatFecha($_POST['fecha_notificacion']);
-        $paciente->semanaEpidemiologica = $_POST['semana_notificacion'];
         $paciente->fechaInicioPQT = formatFecha($_POST['fecha_pqt']);
     }
 	
@@ -490,6 +497,21 @@ if(!empty($_GET['id'])) {
         } else {
             $sospechoso->obtenerBD($paciente->idPaciente);
             $diagnostico = $sospechoso;
+        }
+
+        $queryHisto = ejecutaQuery('SELECT [idCatHisto] FROM [estudiosHis] WHERE [idPaciente] = '.$paciente->idPaciente.' AND [idCatTipoEstudio] = 1 ORDER BY fechaREsultado ASC');
+        $resultHisto = devuelveRowAssoc($queryHisto);
+
+        /* Si el Paciente es sospechoso y el resultado de histo es positivo
+         idCatHisto:
+            1	L. Lepromatosa
+            2	L. Tuberculoide
+            3	Caso Dimorfo
+            4	Caso Indeterminado
+            6	Negativo
+         */
+        if($paciente->idCatTipoPaciente == 5 && $resultHisto->idCatHisto != 4 && $resultHisto->idCatHisto != 6){
+            $alerta = true;
         }
     }
 }
