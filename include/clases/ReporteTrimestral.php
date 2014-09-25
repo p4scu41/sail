@@ -228,12 +228,17 @@ class ReporteTrimestral {
 		echo '</TABLE></div>';		
 	}
 
-	public function imprimirReporteUnitabla() {
+	public function imprimirReporteUnitabla($return = false) {
 
-		$longitud = count($this->arrPacientesReporteTrimestral);	
-		echo '<BR>';
-		echo '<div class="datagrid"><TABLE>';
-		echo '<thead><TR align="center"><TH>No</TH><TH>Nombre</TH><TH>Localidad</TH><TH>Municipio</TH><TH>Tipo de Paciente</TH><TH>Edad</TH>
+        $tabla = '';
+		$longitud = count($this->arrPacientesReporteTrimestral);
+        
+        if($return)
+            $tabla .= '<TABLE border="1">';
+        else
+            $tabla .= '<BR><div class="datagrid"><TABLE>';
+
+		$tabla .= '<thead><TR align="center"><TH>No</TH><TH>Nombre</TH><TH>Localidad</TH><TH>Municipio</TH><TH>Tipo de Paciente</TH><TH>Edad</TH>
             <TH>Sexo</TH><TH>Derechohabiencia</TH><TH>Diagnostico Bac Fecha</TH><TH>Diagnostico Bac IB</TH><TH>Diagnostico Bac IM</TH>
             <TH>Diagnostico His Fecha</TH><TH>Diagnostico His Resultado</TH><TH>Clasificacion Integral</TH><TH>Tipo de Lepra</TH>
             <TH>Fecha Inicio PQT</TH><TH>Calendario de Dosis</TH><TH>Calendario Controles Bac</TH><TH>Fecha Termino PQT</TH>
@@ -246,7 +251,7 @@ class ReporteTrimestral {
 		for ($i = 0; $i < $longitud; $i++) {
 			$objTemp = $this->arrPacientesReporteTrimestral[$i];
 			
-			echo '<TR><TD>' . ($i + 1) .
+			$tabla .= '<TR><TD>' . ($i + 1) .
 				'</TD><TD>' . $objTemp->nombre .
 				'</TD><TD>' . $objTemp->localidad .
 				'</TD><TD>' . $objTemp->municipio .
@@ -255,19 +260,23 @@ class ReporteTrimestral {
 				'</TD><TD>' . $objTemp->sexo .
 				'</TD><TD>' . $objTemp->derechohabiencia;			
 			$objAux1 = $objTemp->bacDiagnostico;
-			echo '</TD><TD>' . $objAux1->fecha  .
+			$tabla .= '</TD><TD>' . $objAux1->fecha  .
 				'</TD><TD>' . $objAux1->IB .
 				'</TD><TD>' . $objAux1->IM;
 
 			$objAux = $objTemp->hisDiagnostico;
-			echo '</TD><TD>' . $objAux->fecha .
+			$tabla .= '</TD><TD>' . $objAux->fecha .
 				'</TD><TD>' . $objAux->resultado .
 				'</TD><TD>' . $objTemp->clasificacionIntegral .
 				'</TD><TD>' . $objTemp->tipoLepra;
 
 			$longitudAux = count($objTemp->arrControlTx);
 			$primerMesDelAno = true;
-			$tabAux1 = '<div class="datagrid"><TABLE><TR><TH>A&ntilde;o</TH><TH>Ene</TH><TH>Feb</TH><TH>Mar</TH><TH>Abr</TH><TH>May</TH><TH>Jun</TH>
+            if($return)
+                $tabAux1 = '<TABLE border="1"><TR><TH>A&ntilde;o</TH><TH>Ene</TH><TH>Feb</TH><TH>Mar</TH><TH>Abr</TH><TH>May</TH><TH>Jun</TH>
+                <TH>Jul</TH><TH>Ago</TH><TH>Sep</TH><TH>Oct</TH><TH>Nov</TH><TH>Dic</TH></TR>';
+            else
+                $tabAux1 = '<div class="datagrid"><TABLE><TR><TH>A&ntilde;o</TH><TH>Ene</TH><TH>Feb</TH><TH>Mar</TH><TH>Abr</TH><TH>May</TH><TH>Jun</TH>
                 <TH>Jul</TH><TH>Ago</TH><TH>Sep</TH><TH>Oct</TH><TH>Nov</TH><TH>Dic</TH></TR>';
 			$mesAct = 1;
 			for ($j = 0; $j < $longitudAux; $j++) {
@@ -289,20 +298,29 @@ class ReporteTrimestral {
 					$primerMesDelAno = true;
 				}
 			}
-			$tabAux1 .= '</TABLE></div>';
+            if($return)
+                $tabAux1 .= '</TABLE>';
+            else
+                $tabAux1 .= '</TABLE></div>';
 			/////////////////////////////// IMPRIME LISTADO DE CONTROLES
 
 			/////////////////////////////// IMPRIME LISTADO BACILOSCOPIAS			
 			$longitudAux = count($objTemp->arrControlBacTx);
-			$tabAux2 = '<div class="datagrid"><TABLE><TR><TH>Fecha</TH><TH>IM</TH><TH>IB</TH></TR>';
+            if($return)
+                $tabAux2 = '<TABLE border="1"><TR><TH>Fecha</TH><TH>IM</TH><TH>IB</TH></TR>';
+            else
+                $tabAux2 = '<div class="datagrid"><TABLE><TR><TH>Fecha</TH><TH>IM</TH><TH>IB</TH></TR>';
 			for ($j = 0; $j < $longitudAux; $j++) {
 				$objAux = $objTemp->arrControlBacTx[$j];
 				$tabAux2 .= '<TR><TD>' . $objAux->fecha . '</TD><TD>' . $objAux->IM . ' %</TD><TD>' . $objAux->IB . '</TD></TR>';
 			}
-			$tabAux2 .= '</TABLE></div>';
+			if($return)
+                $tabAux2 .= '</TABLE>';
+            else
+                $tabAux2 .= '</TABLE></div>';
 			/////////////////////////////// IMPRIME LISTADO BACILOSCOPIAS
 
-			echo '</TD><TD>'. $objTemp->fechaInicioTx .
+			$tabla .= '</TD><TD>'. $objTemp->fechaInicioTx .
 				'</TD><TD>' . $tabAux1 .
 				'</TD><TD>' . $tabAux2;
 			
@@ -310,45 +328,69 @@ class ReporteTrimestral {
 			$tabAux2 = "";
 
 			$longitudAux = count($objTemp->arrControlBacFinTx);
-			$tabAux1 = '<div class="datagrid"><TABLE><TR><TH>Fecha</TH><TH>IM</TH><TH>IB</TH></TR>';
+			if($return)
+                $tabAux1 = '<TABLE border="1"><TR><TH>Fecha</TH><TH>IM</TH><TH>IB</TH></TR>';
+            else
+                $tabAux1 = '<div class="datagrid"><TABLE><TR><TH>Fecha</TH><TH>IM</TH><TH>IB</TH></TR>';
 			for ($j = 0; $j < $longitudAux; $j++) {
 				$objAux = $objTemp->arrControlBacFinTx[$j];
 				$tabAux1 .= '<TR><TD>' . $objAux->fecha . '</TD><TD>' . $objAux->IM . ' %</TD><TD>' . $objAux->IB . '</TD></TR>';
 			}
-			$tabAux1 .= '</TABLE></div>';
+			if($return)
+                $tabAux1 .= '</TABLE>';
+            else
+                $tabAux1 .= '</TABLE></div>';
 			/////////////////////////////// 
 
 			/////////////////////////////// IMPRIME LISTADO HISTOPATOLOGIAS
 			$longitudAux = count($objTemp->arrControlHisFinTx);
-			$tabAux2 = '<div class="datagrid"><TABLE><TR><TH>Fecha</TH><TH>Resultado</TH></TR>';
+			if($return)
+                $tabAux2 = '<TABLE border="1"><TR><TH>Fecha</TH><TH>Resultado</TH></TR>';
+            else
+                $tabAux2 = '<div class="datagrid"><TABLE><TR><TH>Fecha</TH><TH>Resultado</TH></TR>';
 			for ($j = 0; $j < $longitudAux; $j++) {
 				$objAux = $objTemp->arrControlHisFinTx[$j];
 				$tabAux2 .= '<TR><TD>' . $objAux->fecha . '</TD><TD>' . $objAux->resultado . '</TD></TR>';
 			}
-			$tabAux2 .= '</TABLE><div>';
+			if($return)
+                $tabAux2 .= '</TABLE>';
+            else
+                $tabAux2 .= '</TABLE><div>';
 			///////////////////////////////
 
 			/////////////////////////////// IMPRIME LISTADO CONTROLES
 			$longitudAux = count($objTemp->arrVigilanciaRevision);
-			$tabAux3 = '<div class="datagrid"><TABLE><TR><TH>Mes-A&ntilde;o</TH><TH>Estado</TH></TR>';
+			if($return)
+                $tabAux3 = '<TABLE border="1"><TR><TH>Mes-A&ntilde;o</TH><TH>Estado</TH></TR>';
+            else
+                $tabAux3 = '<div class="datagrid"><TABLE><TR><TH>Mes-A&ntilde;o</TH><TH>Estado</TH></TR>';
 			for ($j = 0; $j < $longitudAux; $j++) {
 				$objAux = $objTemp->arrVigilanciaRevision[$j];
 				$tabAux3 .= '<TR><TD>' . $objAux->mes . '-' . $objAux->ano . '</TD><TD>' . $objAux->valor . '</TD></TR>';
 			}
-			$tabAux3 .= '</TABLE></div>';
+			if($return)
+                $tabAux3 .= '</TABLE>';
+            else
+                $tabAux3 .= '</TABLE></div>';
 			///////////////////////////////
 
 			/////////////////////////////// IMPRIME LISTADO BACILOSCOPIAS
 			$longitudAux = count($objTemp->arrVigilanciaBac);
-			$tabAux4 = '<div class="datagrid"><TABLE><TR><TH>Fecha</TH><TH>IM</TH><TH>IB</TH></TR>';
+			if($return)
+                $tabAux4 = '<TABLE border="1"><TR><TH>Fecha</TH><TH>IM</TH><TH>IB</TH></TR>';
+            else
+                $tabAux4 = '<div class="datagrid"><TABLE><TR><TH>Fecha</TH><TH>IM</TH><TH>IB</TH></TR>';
 			for ($j = 0; $j < $longitudAux; $j++) {
 				$objAux = $objTemp->arrVigilanciaBac[$j];
 				$tabAux4 .= '<TR><TD>' . $objAux->fecha . '</TD><TD>' . $objAux->IM . ' %</TD><TD>' . $objAux->IB . '</TD></TR>';
 			}
-			$tabAux4 .= '</TABLE></div>';
+			if($return)
+                $tabAux4 .= '</TABLE>';
+            else
+                $tabAux4 .= '</TABLE></div>';
 			///////////////////////////////
 
-			echo '</TD><TD>' . $objTemp->fechaFinTx .
+			$tabla .= '</TD><TD>' . $objTemp->fechaFinTx .
 				'</TD><TD>' . $tabAux1 .
 				'</TD><TD>' . $tabAux2 .
 				'</TD><TD>' . $objTemp->situacionTerminoTx   .
@@ -368,15 +410,21 @@ class ReporteTrimestral {
 			//$revisados =
 			/////////////////////////////// IMPRIME LISTADO BACILOSCOPIAS
 			$longitudAux = count($arrContactos);
-			$tabAux1 = '<div class="datagrid"><TABLE>';
+			if($return)
+                $tabAux1 = '<TABLE border="1">';
+            else
+                $tabAux1 = '<div class="datagrid"><TABLE>';
 			$tabAux1 .= '<TR><TH>A&ntilde;o</TH><TH>Contactos</TH><TH>Examinados</TH></TR>';
 			foreach ($arrContactos as $clave => $valor) {
 				$tabAux1 .= '<TR><TD>' . $clave . '</TD><TD>' . $valor . '</TD><TD>' . $arrContactosExaminados[$clave] . '</TD></TR>';
 			}
-			$tabAux1 .= '</TABLE></div>';
+			if($return)
+                $tabAux1 .= '</TABLE>';
+            else
+                $tabAux1 .= '</TABLE></div>';
 			/////////////////////////////// 
 			
-			echo '</TD><TD>' . $objTemp->gradoDiscapacidadOjos .
+			$tabla .= '</TD><TD>' . $objTemp->gradoDiscapacidadOjos .
 				'</TD><TD>' . $objTemp->gradoDiscapacidadManos .
 				'</TD><TD>' . $objTemp->gradoDiscapacidadPies .
 				'</TD><TD>' . $objTemp->gradoDiscapacidadGeneral .
@@ -390,7 +438,14 @@ class ReporteTrimestral {
 				'</TD><TD>' . $objTemp->totalContactosRevisados . 
 				'</TD></TR>';
 		}
-		echo '</TABLE></div>';
+        if($return) {
+            $tabla .= '</TABLE>';
+            return $tabla;
+        }
+        else {
+            $tabla .= '</TABLE></div>';
+            echo $tabla;
+        }
 	}
 	
 	public function generarReporte() {

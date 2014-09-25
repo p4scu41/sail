@@ -38,7 +38,7 @@ if(isset($_POST['type']))
 			$reporteTrimestral->idCatEstado = $_SESSION[EDO_USR_SESSION];
 			$reporteTrimestral->generarReporte();
 			//$reporteTrimestral->imprimirReporte();
-			$reporteTrimestral->imprimirReporteUnitabla();
+			echo $reporteTrimestral->imprimirReporteUnitabla(true);
 		break;
 	}
 }
