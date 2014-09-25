@@ -18,8 +18,14 @@ if(empty($_POST))
 
 $query = 'SELECT [pacientes].[idPaciente]
     ,[pacientes].[cveExpediente]
-    ,DATEPART(year, [pacientes].[fechaNotificacion]) AS anio
-    ,DATEPART(quarter, [pacientes].[fechaNotificacion]) AS trimestre
+    ,(CASE WHEN [pacientes].[fechaNotificacion] IS NOT NULL
+			THEN DATEPART(year, [pacientes].[fechaNotificacion])
+			ELSE DATEPART(year, [pacientes].[fechaDiagnostico])
+		END) AS anio
+    ,(CASE WHEN [pacientes].[fechaNotificacion] IS NOT NULL
+			THEN DATEPART(quarter, [pacientes].[fechaNotificacion])
+			ELSE DATEPART(quarter, [pacientes].[fechaDiagnostico])
+		END) AS trimestre
     ,[catTipoPaciente].[descripcion] AS tipoPaciente
     ,[pacientes].[apellidoPaterno]
     ,[pacientes].[apellidoMaterno]
@@ -184,6 +190,8 @@ else {
         if($encabezado) {
             $numColumna = 0;
             $nombresEncabezado = array_keys($registro);
+            // Eliminamos la primera columna que representa el idPaciente
+            array_shift($nombresEncabezado);
 
             foreach ($nombresEncabezado as $nombreColumna) {
                 $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($numColumna, $numFila, $nombreColumna);
@@ -198,7 +206,7 @@ else {
         unset($registro['idPaciente']);
 
         foreach ($registro as $celda) {
-            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($numColumna, $numFila, $celda);
+            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($numColumna, $numFila, utf8_encode(mb_strtoupper($celda)));
             $numColumna++;
         }
 
@@ -254,7 +262,7 @@ else {
         $numColumna = 0;
 
         foreach ($registro as $celda) {
-            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($numColumna, $numFila, $celda);
+            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($numColumna, $numFila, utf8_encode(mb_strtoupper($celda)));
             $numColumna++;
         }
 
@@ -310,7 +318,7 @@ else {
         $numColumna = 0;
 
         foreach ($registro as $celda) {
-            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($numColumna, $numFila, $celda);
+            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($numColumna, $numFila, utf8_encode(mb_strtoupper($celda)));
             $numColumna++;
         }
 

@@ -28,7 +28,9 @@ switch ($_SESSION[TIPO_USR_SESSION]) {
         <?php } ?>
 		<li <?PHP if($_GET['mod']=='bus') echo 'class="active"';?> ><a href="?mod=bus">Buscar</a></li>
         <li <?PHP if($_GET['mod']=='ane') echo 'class="active"';?> ><a href="?mod=ane">Anexos</a></li>
+        <?PHP if($_SESSION[EDO_USR_SESSION]==7){ ?>
         <li <?PHP if($_GET['mod']=='her') echo 'class="active"';?> ><a href="?mod=her">Herramientas</a></li>
+        <?PHP } ?>
 		<li <?PHP if($_GET['mod']=='help') echo 'class="active"';?> ><a href="?mod=help">Ayuda</a></li>
 	</ul>
 	<?php
