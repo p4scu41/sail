@@ -5,6 +5,16 @@
 }
 </style>
 
+<script type="text/javascript">
+$(document).ready(function(){
+    $('#downloadBtn').click(function(){
+        $('#imprimeExcel #tipo_paciente').remove();
+        seleccionado = $('#tipo_paciente').val();
+        $('#imprimeExcel').append($('<input type="hidden">').attr('name','tipo_paciente').attr('id','tipo_paciente').val(seleccionado));
+        $('#imprimeExcel').submit();
+    });
+});
+</script>
 <?PHP 
 require_once('include/clases/ReporteTrimestral.php');
 require_once('include/Select.class.php');
@@ -36,7 +46,7 @@ $objHTML->endFormOnly();
 echo '<br><div align="left">';
 $objHTML->startForm('imprimeExcel', 'docs/creaExcel.php', 'post', array('target'=>'_blank'));
 $objHTML->inputHidden('type', 'repSeg');
-$objHTML->inputSubmit('downloadBtn', 'Descargar Excel');
+$objHTML->inputButton('downloadBtn', 'Descargar Excel');
 $objHTML->endFormOnly();
 echo '</div>';
 
@@ -59,7 +69,6 @@ $objHTML->startFieldset();
 		$reporteTrimestral->idCatEstado = $_SESSION[EDO_USR_SESSION];
     $reporteTrimestral->filtro = $_POST['tipo_paciente']; // REVISAR: Filtro que definira jaime
 	$reporteTrimestral->generarReporte();
-    //$reporteTrimestral->imprimirReporte();
     $reporteTrimestral->imprimirReporteUnitabla();
 
 $objHTML->endFieldset();

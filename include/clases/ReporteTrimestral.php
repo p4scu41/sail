@@ -53,145 +53,145 @@ class ReporteTrimestral {
 
 		$longitud = count($this->arrPacientesReporteTrimestral);	
 		echo '<BR>';
-		echo '<div class="datagrid"><TABLE>';		
-		echo '<thead><TR align="center"><TH>No</TH><TH>Nombre</TH><TH>Localidad</TH><TH>Municipio</TH><TH>Tipo de Paciente</TH><TH>Edad</TH><TH>Sexo</TH><TH>Derechohabiencia</TH><TH>Diagnostico Bac Fecha</TH><TH>Diagnostico Bac IB</TH><TH>Diagnostico Bac IM%</TH><TH>Diagnostico His Fecha</TH><TH>Diagnostico His Resultado</TH><TH>Clasificacion Integral</TH><TH>Tipo de Lepra</TH></TR></thead>';
+		echo '<div class="datagrid"><table>';
+		echo '<thead><tr align="center"><th>No</th><th>Nombre</th><th>Localidad</th><th>Municipio</th><th>Tipo de Paciente</th><th>Edad</th><th>Sexo</th><th>Derechohabiencia</th><th>Diagnostico Bac Fecha</th><th>Diagnostico Bac IB</th><th>Diagnostico Bac IM%</th><th>Diagnostico His Fecha</th><th>Diagnostico His Resultado</th><th>Clasificacion Integral</th><th>Tipo de Lepra</th></tr></thead>';
 		for ($i = 0; $i < $longitud; $i++) {
 			$objTemp = $this->arrPacientesReporteTrimestral[$i];
 			
-			echo '<TR><TD align="center">' . ($i + 1) .
-				'</TD><TD>' . $objTemp->nombre .
-				'</TD><TD>' . $objTemp->localidad .
-				'</TD><TD>' . $objTemp->municipio .
-				'</TD><TD>' . $objTemp->tipoPaciente .
-				'</TD><TD align="center">' . $objTemp->edad .
-				'</TD><TD>' . $objTemp->sexo .
-				'</TD><TD>' . $objTemp->derechohabiencia;			
+			echo '<tr><td align="center">' . ($i + 1) .
+				'</td><td>' . $objTemp->nombre .
+				'</td><td>' . $objTemp->localidad .
+				'</td><td>' . $objTemp->municipio .
+				'</td><td>' . $objTemp->tipoPaciente .
+				'</td><td align="center">' . $objTemp->edad .
+				'</td><td>' . $objTemp->sexo .
+				'</td><td>' . $objTemp->derechohabiencia;
 			$objAux1 = $objTemp->bacDiagnostico;
-			echo '</TD><TD>' . formatFechaObj($objAux1->fecha)  .
-				'</TD><TD align="center">' . $objAux1->IB .
-				'</TD><TD align="center">' . $objAux1->IM;
+			echo '</td><td>' . formatFechaObj($objAux1->fecha)  .
+				'</td><td align="center">' . $objAux1->IB .
+				'</td><td align="center">' . $objAux1->IM;
 
 			$objAux = $objTemp->hisDiagnostico;
-			echo '</TD><TD>' . formatFechaObj($objAux->fecha) .
-				'</TD><TD align="center">' . $objAux->resultado .
-				'</TD><TD align="center">' . $objTemp->clasificacionIntegral .
-				'</TD><TD align="center">' . $objTemp->tipoLepra .
-				'</TD></TR>';
+			echo '</td><td>' . formatFechaObj($objAux->fecha) .
+				'</td><td align="center">' . $objAux->resultado .
+				'</td><td align="center">' . $objTemp->clasificacionIntegral .
+				'</td><td align="center">' . $objTemp->tipoLepra .
+				'</td></tr>';
 		}
-		echo '</TABLE></div><br />';
+		echo '</table></div><br />';
 		
 		
-		echo '<div class="datagrid"><TABLE>';
-		echo '<thead><TR align="center"><TH>No</TH><TH>Fecha Inicio PQT</TH><TH>Calendario de Dosis</TH><TH>Calendario Controles Bac</TH></TR></thead>';
+		echo '<div class="datagrid"><table>';
+		echo '<thead><tr align="center"><th>No</th><th>Fecha Inicio PQT</th><th>Calendario de Dosis</th><th>Calendario Controles Bac</th></tr></thead>';
 		for ($i = 0; $i < $longitud; $i++) {
 			$objTemp = $this->arrPacientesReporteTrimestral[$i];
 			/////////////////////////////// IMPRIME LISTADO DE CONTROLES
 			$longitudAux = count($objTemp->arrControlTx);
 			$primerMesDelAno = true;
-			$tabAux1 = '<div class="datagrid"><TABLE><TR align="center"><TH>A&ntilde;o</TH><TH>Ene</TH><TH>Feb</TH><TH>Mar</TH><TH>Abr</TH><TH>May</TH><TH>Jun</TH><TH>Jul</TH><TH>Ago</TH><TH>Sep</TH><TH>Oct</TH><TH>Nov</TH><TH>Dic</TH></TR>';
+			$tabAux1 = '<div class="datagrid"><table><tr align="center"><th>A&ntilde;o</th><th>Ene</th><th>Feb</th><th>Mar</th><th>Abr</th><th>May</th><th>Jun</th><th>Jul</th><th>Ago</th><th>Sep</th><th>Oct</th><th>Nov</th><th>Dic</th></tr>';
 			$mesAct = 1;
 			for ($j = 0; $j < $longitudAux; $j++) {
 				$objAux = $objTemp->arrControlTx[$j];
 				if ($primerMesDelAno == true) {
-					$tabAux1 .= '<TR><TD>' . $objAux->ano .'</TD>';
+					$tabAux1 .= '<tr><td>' . $objAux->ano .'</td>';
 					$primerMesDelAno = false;
 				}
 
 				while ($mesAct < $objAux->mes) {
 					$mesAct++;
-					$tabAux1 .= '<TD></TD>';
+					$tabAux1 .= '<td></td>';
 				}
-				$tabAux1 .= '<TD>' . $objAux->valor . '</TD>';
+				$tabAux1 .= '<td>' . $objAux->valor . '</td>';
 				$mesAct++;
 				if ($mesAct == 13) {
 					$mesAct = 1;
-					$tabAux1 .= '</TR>';
+					$tabAux1 .= '</tr>';
 					$primerMesDelAno = true;
 				}
 			}
-			$tabAux1 .= '</TABLE></div>';
+			$tabAux1 .= '</table></div>';
 			/////////////////////////////// IMPRIME LISTADO DE CONTROLES
 
 			/////////////////////////////// IMPRIME LISTADO BACILOSCOPIAS
 			$longitudAux = count($objTemp->arrControlBacTx);
-			$tabAux2 = '<div class="datagrid"><TABLE><TR align="center"><TH>Fecha</TH><TH>IM</TH><TH>IB</TH></TR>';
+			$tabAux2 = '<div class="datagrid"><table><tr align="center"><th>Fecha</th><th>IM</th><th>IB</th></tr>';
 			for ($j = 0; $j < $longitudAux; $j++) {
 				$objAux = $objTemp->arrControlBacTx[$j];
-				$tabAux2 .= '<TR align="center"><TD>' . formatFechaObj($objAux->fecha) . '</TD><TD>' . $objAux->IM . ' %</TD><TD>' . $objAux->IB . '</TD></TR>';
+				$tabAux2 .= '<tr align="center"><td>' . formatFechaObj($objAux->fecha) . '</td><td>' . $objAux->IM . ' %</td><td>' . $objAux->IB . '</td></tr>';
 			}
-			$tabAux2 .= '</TABLE></div>';
+			$tabAux2 .= '</table></div>';
 			/////////////////////////////// IMPRIME LISTADO BACILOSCOPIAS
 
-			echo '<TR align="center"><TD>' . ($i + 1) ;
-			echo '</TD><TD>'. formatFechaObj($objTemp->fechaInicioTx);
-			echo '</TD><TD>';
+			echo '<tr align="center"><td>' . ($i + 1) ;
+			echo '</td><td>'. formatFechaObj($objTemp->fechaInicioTx);
+			echo '</td><td>';
 			echo $tabAux1; 
-			echo '</TD><TD>';
+			echo '</td><td>';
 			echo $tabAux2; 		
-			echo '</TD></TR>';			
+			echo '</td></tr>';
 		}
-		echo '</TABLE></div><br />';
+		echo '</table></div><br />';
 
 		
-		echo '<div class="datagrid"><TABLE>';
-		echo '<thead><TR align="center"><TH>No</TH><TH>Fecha Termino PQT</TH><TH>Calendario Bac TT</TH><TH>Calendario His TT</TH><TH>Estado del Paciente</TH><TH>Inicio Vigilancia posTX</TH><TH>Calendario Seguimiento Revision Clinica</TH><TH>Calendario Segimiento Bacteriologico</TH></TR></thead>';
+		echo '<div class="datagrid"><table>';
+		echo '<thead><tr align="center"><th>No</th><th>Fecha Termino PQT</th><th>Calendario Bac TT</th><th>Calendario His TT</th><th>Estado del Paciente</th><th>Inicio Vigilancia posTX</th><th>Calendario Seguimiento Revision Clinica</th><th>Calendario Segimiento Bacteriologico</th></tr></thead>';
 		for ($i = 0; $i < $longitud; $i++) {
 			$objTemp = $this->arrPacientesReporteTrimestral[$i];
 			/////////////////////////////// IMPRIME LISTADO BACILOSCOPIAS
 			$longitudAux = count($objTemp->arrControlBacFinTx);
-			$tabAux1 = '<div class="datagrid"><TABLE align="center"><TR><TH>Fecha</TH><TH>IM</TH><TH>IB</TH></TR>';
+			$tabAux1 = '<div class="datagrid"><table align="center"><tr><th>Fecha</th><th>IM</th><th>IB</th></tr>';
 			for ($j = 0; $j < $longitudAux; $j++) {
 				$objAux = $objTemp->arrControlBacFinTx[$j];
-				$tabAux1 .= '<TR align="center"><TD>' . formatFechaObj($objAux->fecha) . '</TD><TD>' . $objAux->IM . ' %</TD><TD>' . $objAux->IB . '</TD></TR>';
+				$tabAux1 .= '<tr align="center"><td>' . formatFechaObj($objAux->fecha) . '</td><td>' . $objAux->IM . ' %</td><td>' . $objAux->IB . '</td></tr>';
 			}
-			$tabAux1 .= '</TABLE></div>';
+			$tabAux1 .= '</table></div>';
 			/////////////////////////////// 
 
 			/////////////////////////////// IMPRIME LISTADO HISTOPATOLOGIAS
 			$longitudAux = count($objTemp->arrControlHisFinTx);
-			$tabAux2 = '<div class="datagrid"><TABLE><TR align="center"><TH>Fecha</TH><TH>Resultado</TH></TR>';
+			$tabAux2 = '<div class="datagrid"><table><tr align="center"><th>Fecha</th><th>Resultado</th></tr>';
 			for ($j = 0; $j < $longitudAux; $j++) {
 				$objAux = $objTemp->arrControlHisFinTx[$j];
-				$tabAux2 .= '<TR align="center"><TD>' . formatFechaObj($objAux->fecha) . '</TD><TD>' . $objAux->resultado . '</TD></TR>';
+				$tabAux2 .= '<tr align="center"><td>' . formatFechaObj($objAux->fecha) . '</td><td>' . $objAux->resultado . '</td></tr>';
 			}
-			$tabAux2 .= '</TABLE></div>';
+			$tabAux2 .= '</table></div>';
 			///////////////////////////////
 
 			/////////////////////////////// IMPRIME LISTADO CONTROLES
 			$longitudAux = count($objTemp->arrVigilanciaRevision);
-			$tabAux3 = '<div class="datagrid"><TABLE><TR align="center"><TH>Mes - A&ntilde;o</TH><TH>Estado</TH></TR>';
+			$tabAux3 = '<div class="datagrid"><table><tr align="center"><th>Mes - A&ntilde;o</th><th>Estado</th></tr>';
 			for ($j = 0; $j < $longitudAux; $j++) {
 				$objAux = $objTemp->arrVigilanciaRevision[$j];
-				$tabAux3 .= '<TR align="center"><TD>' . $objAux->mes . '-' . $objAux->ano . '</TD><TD>' . $objAux->valor . '</TD></TR>';
+				$tabAux3 .= '<tr align="center"><td>' . $objAux->mes . '-' . $objAux->ano . '</td><td>' . $objAux->valor . '</td></tr>';
 			}
-			$tabAux3 .= '</TABLE></div>';
+			$tabAux3 .= '</table></div>';
 			///////////////////////////////
 
 			/////////////////////////////// IMPRIME LISTADO BACILOSCOPIAS
 			$longitudAux = count($objTemp->arrVigilanciaBac);
-			$tabAux4 = '<div class="datagrid"><TABLE><TR align="center"><TH>Fecha</TH><TH>IM</TH><TH>IB</TH></TR>';
+			$tabAux4 = '<div class="datagrid"><table><tr align="center"><th>Fecha</th><th>IM</th><th>IB</th></tr>';
 			for ($j = 0; $j < $longitudAux; $j++) {
 				$objAux = $objTemp->arrVigilanciaBac[$j];
-				$tabAux4 .= '<TR align="center"><TD>' . $objAux->fecha . '</TD><TD>' . $objAux->IM . ' %</TD><TD>' . $objAux->IB . '</TD></TR>';
+				$tabAux4 .= '<tr align="center"><td>' . $objAux->fecha . '</td><td>' . $objAux->IM . ' %</td><td>' . $objAux->IB . '</td></tr>';
 			}
-			$tabAux4 .= '</TABLE></div>';
+			$tabAux4 .= '</table></div>';
 			///////////////////////////////
 
-			echo '<TR align="center"><TD>' . ($i + 1) .
-				'</TD><TD>' . formatFechaObj($objTemp->fechaFinTx) .
-				'</TD><TD>' . $tabAux1 .
-				'</TD><TD>' . $tabAux2 .
-				'</TD><TD>' . $objTemp->situacionTerminoTx   .
-				'</TD><TD>' . formatFechaObj($objTemp->fechaIVPT)  .
-				'</TD><TD>'  . $tabAux3 .
-				'</TD><TD>'  . $tabAux4 .
-				'</TD></TR>';
+			echo '<tr align="center"><td>' . ($i + 1) .
+				'</td><td>' . formatFechaObj($objTemp->fechaFinTx) .
+				'</td><td>' . $tabAux1 .
+				'</td><td>' . $tabAux2 .
+				'</td><td>' . $objTemp->situacionTerminoTx   .
+				'</td><td>' . formatFechaObj($objTemp->fechaIVPT)  .
+				'</td><td>'  . $tabAux3 .
+				'</td><td>'  . $tabAux4 .
+				'</td></tr>';
 		}
-		echo '</TABLE></div><br />';
+		echo '</table></div><br />';
 
 		
-		echo '<div class="datagrid"><TABLE>';
-		echo '<thead><TR align="center"><TH>No</TH><TH>Grado Discapacidad Ojos</TH><TH>Grado Discapacidad Manos</TH><TH>Grado Discapacidad Pies</TH><TH>Grado Discapacidad General</TH><TH>Estado Reaccional Anterior</TH><TH>Estado Reaccional Actual</TH><TH>Fecha Termino Vigilancia pos TX</TH><TH>Condicion</TH><TH>Estudio de Contactos</TH><TH>Observaciones</TH><TH>Registrados</TH><TH>Revisados</TH></TR></thead>';
+		echo '<div class="datagrid"><table>';
+		echo '<thead><tr align="center"><th>No</th><th>Grado Discapacidad Ojos</th><th>Grado Discapacidad Manos</th><th>Grado Discapacidad Pies</th><th>Grado Discapacidad General</th><th>Estado Reaccional Anterior</th><th>Estado Reaccional Actual</th><th>Fecha Termino Vigilancia pos TX</th><th>Condicion</th><th>Estudio de Contactos</th><th>Observaciones</th><th>Registrados</th><th>Revisados</th></tr></thead>';
 		for ($i = 0; $i < $longitud; $i++) {
 			$objTemp = $this->arrPacientesReporteTrimestral[$i];
 
@@ -202,201 +202,203 @@ class ReporteTrimestral {
 			//$revisados = 
 			/////////////////////////////// IMPRIME LISTADO BACILOSCOPIAS
 			$longitudAux = count($arrContactos);
-			$tabAux1 = '<div class="datagrid"><TABLE>';
-			$tabAux1 .= '<TR align="center"><TH>A&ntilde;o</TH><TH>Contactos</TH><TH>Examinados</TH></TR>';
+			$tabAux1 = '<div class="datagrid"><table>';
+			$tabAux1 .= '<tr align="center"><th>A&ntilde;o</th><th>Contactos</th><th>Examinados</th></tr>';
 			foreach ($arrContactos as $clave => $valor) {
-				$tabAux1 .= '<TR align="center"><TD>' . $clave . '</TD><TD>' . $valor . '</TD><TD>' . $arrContactosExaminados[$clave] . '</TD></TR>';
+				$tabAux1 .= '<tr align="center"><td>' . $clave . '</td><td>' . $valor . '</td><td>' . $arrContactosExaminados[$clave] . '</td></tr>';
 			}
-			$tabAux1 .= '</TABLE></div>';
+			$tabAux1 .= '</table></div>';
 			/////////////////////////////// 
 			
-			echo '<TR align="center"><TD>' . ($i + 1) .
-				'</TD><TD>' . $objTemp->gradoDiscapacidadOjos .
-				'</TD><TD>' . $objTemp->gradoDiscapacidadManos .
-				'</TD><TD>' . $objTemp->gradoDiscapacidadPies .
-				'</TD><TD>' . $objTemp->gradoDiscapacidadGeneral .
-				'</TD><TD>' . $objTemp->estadoReaccionalAnterior .
-				'</TD><TD>' . $objTemp->estadoReaccionalActual .
-				'</TD><TD>' . formatFechaObj($objTemp->fechaFVPT) .
-				'</TD><TD>' . $objTemp->condicion .
-				'</TD><TD>' . $tabAux1 . 
-				'</TD><TD>' . $objTemp->observaciones .
-				'</TD><TD>' . $objTemp->totalContactos .
-				'</TD><TD>' . //Revisados . 
-				'</TD></TR>';
+			echo '<tr align="center"><td>' . ($i + 1) .
+				'</td><td>' . $objTemp->gradoDiscapacidadOjos .
+				'</td><td>' . $objTemp->gradoDiscapacidadManos .
+				'</td><td>' . $objTemp->gradoDiscapacidadPies .
+				'</td><td>' . $objTemp->gradoDiscapacidadGeneral .
+				'</td><td>' . $objTemp->estadoReaccionalAnterior .
+				'</td><td>' . $objTemp->estadoReaccionalActual .
+				'</td><td>' . formatFechaObj($objTemp->fechaFVPT) .
+				'</td><td>' . $objTemp->condicion .
+				'</td><td>' . $tabAux1 .
+				'</td><td>' . $objTemp->observaciones .
+				'</td><td>' . $objTemp->totalContactos .
+				'</td><td>' . //Revisados .
+				'</td></tr>';
 		}
-		echo '</TABLE></div>';		
+		echo '</table></div>';
 	}
 
+    // $return indica si se devuelve la cadena o se imprime directamente
+    // Si $return es true se omiten las cabeceras de todas las tablas
 	public function imprimirReporteUnitabla($return = false) {
 
         $tabla = '';
 		$longitud = count($this->arrPacientesReporteTrimestral);
         
         if($return)
-            $tabla .= '<TABLE border="1">';
+            $tabla .= '<table border="1">';
         else
-            $tabla .= '<BR><div class="datagrid"><TABLE>';
+            $tabla .= '<BR><div class="datagrid"><table>';
 
-		$tabla .= '<thead><TR align="center"><TH>No</TH><TH>Nombre</TH><TH>Localidad</TH><TH>Municipio</TH><TH>Tipo de Paciente</TH><TH>Edad</TH>
-            <TH>Sexo</TH><TH>Derechohabiencia</TH><TH>Diagnostico Bac Fecha</TH><TH>Diagnostico Bac IB</TH><TH>Diagnostico Bac IM</TH>
-            <TH>Diagnostico His Fecha</TH><TH>Diagnostico His Resultado</TH><TH>Clasificacion Integral</TH><TH>Tipo de Lepra</TH>
-            <TH>Fecha Inicio PQT</TH><TH>Calendario de Dosis</TH><TH>Calendario Controles Bac</TH><TH>Fecha Termino PQT</TH>
-            <TH>Calendario Bac TT</TH><TH>Calendario His TT</TH><TH>Estado del Paciente al Termino de TX</TH><TH>Inicio Vigilancia posTX</TH>
-            <TH>Calendario Seguimiento Revision Clinica</TH><TH>Calendario Segimiento Bacteriologico</TH><TH>Grado Discapacidad Ojos</TH>
-            <TH>Grado Discapacidad Manos</TH><TH>Grado Discapacidad Pies</TH><TH>Grado Discapacidad General</TH><TH>Estado Reaccional Anterior
-            </TH><TH>Estado Reaccional Actual</TH><TH>Fecha Termino Vigilancia pos TX</TH><TH>Condicion</TH><TH>Estudio de Contactos</TH>
-            <TH>Observaciones</TH><TH>Registrados</TH><TH>Revisados</TH></TR></thead>';
+        if(!$return)
+            $tabla .= '<thead><tr align="center"><th>No</th><th>Nombre</th><th>Localidad</th><th>Municipio</th><th>Tipo de Paciente</th><th>Edad</th>
+                <th>Sexo</th><th>Derechohabiencia</th><th>Diagnostico Bac Fecha</th><th>Diagnostico Bac IB</th><th>Diagnostico Bac IM</th>
+                <th>Diagnostico His Fecha</th><th>Diagnostico His Resultado</th><th>Clasificacion Integral</th><th>Tipo de Lepra</th>
+                <th>Fecha Inicio PQT</th><th>Calendario de Dosis</th><th>Calendario Controles Bac</th><th>Fecha Termino PQT</th>
+                <th>Calendario Bac TT</th><th>Calendario His TT</th><th>Estado del Paciente al Termino de TX</th><th>Inicio Vigilancia posTX</th>
+                <th>Calendario Seguimiento Revision Clinica</th><th>Calendario Segimiento Bacteriologico</th><th>Grado Discapacidad Ojos</th>
+                <th>Grado Discapacidad Manos</th><th>Grado Discapacidad Pies</th><th>Grado Discapacidad General</th><th>Estado Reaccional Anterior
+                </th><th>Estado Reaccional Actual</th><th>Fecha Termino Vigilancia pos TX</th><th>Condicion</th><th>Estudio de Contactos</th>
+                <th>Observaciones</th><th>Registrados</th><th>Revisados</th></tr></thead>';
         
 		for ($i = 0; $i < $longitud; $i++) {
 			$objTemp = $this->arrPacientesReporteTrimestral[$i];
 			
-			$tabla .= '<TR><TD>' . ($i + 1) .
-				'</TD><TD>' . $objTemp->nombre .
-				'</TD><TD>' . $objTemp->localidad .
-				'</TD><TD>' . $objTemp->municipio .
-				'</TD><TD>' . $objTemp->tipoPaciente .
-				'</TD><TD>' . $objTemp->edad .
-				'</TD><TD>' . $objTemp->sexo .
-				'</TD><TD>' . $objTemp->derechohabiencia;			
+			$tabla .= '<tr><td>' . ($i + 1) .
+				'</td><td>' . $objTemp->nombre .
+				'</td><td>' . $objTemp->localidad .
+				'</td><td>' . $objTemp->municipio .
+				'</td><td>' . $objTemp->tipoPaciente .
+				'</td><td>' . $objTemp->edad .
+				'</td><td>' . $objTemp->sexo .
+				'</td><td>' . $objTemp->derechohabiencia;
 			$objAux1 = $objTemp->bacDiagnostico;
-			$tabla .= '</TD><TD>' . $objAux1->fecha  .
-				'</TD><TD>' . $objAux1->IB .
-				'</TD><TD>' . $objAux1->IM;
+			$tabla .= '</td><td>' . $objAux1->fecha  .
+				'</td><td>' . $objAux1->IB .
+				'</td><td>' . $objAux1->IM;
 
 			$objAux = $objTemp->hisDiagnostico;
-			$tabla .= '</TD><TD>' . $objAux->fecha .
-				'</TD><TD>' . $objAux->resultado .
-				'</TD><TD>' . $objTemp->clasificacionIntegral .
-				'</TD><TD>' . $objTemp->tipoLepra;
+			$tabla .= '</td><td>' . $objAux->fecha .
+				'</td><td>' . $objAux->resultado .
+				'</td><td>' . $objTemp->clasificacionIntegral .
+				'</td><td>' . $objTemp->tipoLepra;
 
 			$longitudAux = count($objTemp->arrControlTx);
 			$primerMesDelAno = true;
             if($return)
-                $tabAux1 = '<TABLE border="1"><TR><TH>A&ntilde;o</TH><TH>Ene</TH><TH>Feb</TH><TH>Mar</TH><TH>Abr</TH><TH>May</TH><TH>Jun</TH>
-                <TH>Jul</TH><TH>Ago</TH><TH>Sep</TH><TH>Oct</TH><TH>Nov</TH><TH>Dic</TH></TR>';
+                $tabAux1 = '<table border="1">';
             else
-                $tabAux1 = '<div class="datagrid"><TABLE><TR><TH>A&ntilde;o</TH><TH>Ene</TH><TH>Feb</TH><TH>Mar</TH><TH>Abr</TH><TH>May</TH><TH>Jun</TH>
-                <TH>Jul</TH><TH>Ago</TH><TH>Sep</TH><TH>Oct</TH><TH>Nov</TH><TH>Dic</TH></TR>';
+                $tabAux1 = '<div class="datagrid"><table><tr><th>A&ntilde;o</th><th>Ene</th><th>Feb</th><th>Mar</th><th>Abr</th><th>May</th><th>Jun</th>
+                <th>Jul</th><th>Ago</th><th>Sep</th><th>Oct</th><th>Nov</th><th>Dic</th></tr>';
 			$mesAct = 1;
 			for ($j = 0; $j < $longitudAux; $j++) {
 				$objAux = $objTemp->arrControlTx[$j];
 				if ($primerMesDelAno == true) {
-					$tabAux1 .= '<TR><TD>' . $objAux->ano .'</TD>';
+					$tabAux1 .= '<tr><td>' . $objAux->ano .'</td>';
 					$primerMesDelAno = false;
 				}
 
 				while ($mesAct < $objAux->mes) {
 					$mesAct++;
-					$tabAux1 .= '<TD></TD>';
+					$tabAux1 .= '<td></td>';
 				}
-				$tabAux1 .= '<TD>' . $objAux->valor . '</TD>';
+				$tabAux1 .= '<td>' . $objAux->valor . '</td>';
 				$mesAct++;
 				if ($mesAct == 13) {
 					$mesAct = 1;
-					$tabAux1 .= '</TR>';
+					$tabAux1 .= '</tr>';
 					$primerMesDelAno = true;
 				}
 			}
             if($return)
-                $tabAux1 .= '</TABLE>';
+                $tabAux1 .= '</table>';
             else
-                $tabAux1 .= '</TABLE></div>';
+                $tabAux1 .= '</table></div>';
 			/////////////////////////////// IMPRIME LISTADO DE CONTROLES
 
 			/////////////////////////////// IMPRIME LISTADO BACILOSCOPIAS			
 			$longitudAux = count($objTemp->arrControlBacTx);
             if($return)
-                $tabAux2 = '<TABLE border="1"><TR><TH>Fecha</TH><TH>IM</TH><TH>IB</TH></TR>';
+                $tabAux2 = '<table border="1">';
             else
-                $tabAux2 = '<div class="datagrid"><TABLE><TR><TH>Fecha</TH><TH>IM</TH><TH>IB</TH></TR>';
+                $tabAux2 = '<div class="datagrid"><table><tr><th>Fecha</th><th>IM</th><th>IB</th></tr>';
 			for ($j = 0; $j < $longitudAux; $j++) {
 				$objAux = $objTemp->arrControlBacTx[$j];
-				$tabAux2 .= '<TR><TD>' . $objAux->fecha . '</TD><TD>' . $objAux->IM . ' %</TD><TD>' . $objAux->IB . '</TD></TR>';
+				$tabAux2 .= '<tr><td>' . $objAux->fecha . '</td><td>' . $objAux->IM . ' %</td><td>' . $objAux->IB . '</td></tr>';
 			}
 			if($return)
-                $tabAux2 .= '</TABLE>';
+                $tabAux2 .= '</table>';
             else
-                $tabAux2 .= '</TABLE></div>';
+                $tabAux2 .= '</table></div>';
 			/////////////////////////////// IMPRIME LISTADO BACILOSCOPIAS
 
-			$tabla .= '</TD><TD>'. $objTemp->fechaInicioTx .
-				'</TD><TD>' . $tabAux1 .
-				'</TD><TD>' . $tabAux2;
+			$tabla .= '</td><td>'. $objTemp->fechaInicioTx .
+				'</td><td>' . $tabAux1 .
+				'</td><td>' . $tabAux2;
 			
 			$tabAux1 = "";
 			$tabAux2 = "";
 
 			$longitudAux = count($objTemp->arrControlBacFinTx);
 			if($return)
-                $tabAux1 = '<TABLE border="1"><TR><TH>Fecha</TH><TH>IM</TH><TH>IB</TH></TR>';
+                $tabAux1 = '<table border="1">';
             else
-                $tabAux1 = '<div class="datagrid"><TABLE><TR><TH>Fecha</TH><TH>IM</TH><TH>IB</TH></TR>';
+                $tabAux1 = '<div class="datagrid"><table><tr><th>Fecha</th><th>IM</th><th>IB</th></tr>';
 			for ($j = 0; $j < $longitudAux; $j++) {
 				$objAux = $objTemp->arrControlBacFinTx[$j];
-				$tabAux1 .= '<TR><TD>' . $objAux->fecha . '</TD><TD>' . $objAux->IM . ' %</TD><TD>' . $objAux->IB . '</TD></TR>';
+				$tabAux1 .= '<tr><td>' . $objAux->fecha . '</td><td>' . $objAux->IM . ' %</td><td>' . $objAux->IB . '</td></tr>';
 			}
 			if($return)
-                $tabAux1 .= '</TABLE>';
+                $tabAux1 .= '</table>';
             else
-                $tabAux1 .= '</TABLE></div>';
+                $tabAux1 .= '</table></div>';
 			/////////////////////////////// 
 
 			/////////////////////////////// IMPRIME LISTADO HISTOPATOLOGIAS
 			$longitudAux = count($objTemp->arrControlHisFinTx);
 			if($return)
-                $tabAux2 = '<TABLE border="1"><TR><TH>Fecha</TH><TH>Resultado</TH></TR>';
+                $tabAux2 = '<table border="1">';
             else
-                $tabAux2 = '<div class="datagrid"><TABLE><TR><TH>Fecha</TH><TH>Resultado</TH></TR>';
+                $tabAux2 = '<div class="datagrid"><table><tr><th>Fecha</th><th>Resultado</th></tr>';
 			for ($j = 0; $j < $longitudAux; $j++) {
 				$objAux = $objTemp->arrControlHisFinTx[$j];
-				$tabAux2 .= '<TR><TD>' . $objAux->fecha . '</TD><TD>' . $objAux->resultado . '</TD></TR>';
+				$tabAux2 .= '<tr><td>' . $objAux->fecha . '</td><td>' . $objAux->resultado . '</td></tr>';
 			}
 			if($return)
-                $tabAux2 .= '</TABLE>';
+                $tabAux2 .= '</table>';
             else
-                $tabAux2 .= '</TABLE><div>';
+                $tabAux2 .= '</table><div>';
 			///////////////////////////////
 
 			/////////////////////////////// IMPRIME LISTADO CONTROLES
 			$longitudAux = count($objTemp->arrVigilanciaRevision);
 			if($return)
-                $tabAux3 = '<TABLE border="1"><TR><TH>Mes-A&ntilde;o</TH><TH>Estado</TH></TR>';
+                $tabAux3 = '<table border="1">';
             else
-                $tabAux3 = '<div class="datagrid"><TABLE><TR><TH>Mes-A&ntilde;o</TH><TH>Estado</TH></TR>';
+                $tabAux3 = '<div class="datagrid"><table><tr><th>Mes-A&ntilde;o</th><th>Estado</th></tr>';
 			for ($j = 0; $j < $longitudAux; $j++) {
 				$objAux = $objTemp->arrVigilanciaRevision[$j];
-				$tabAux3 .= '<TR><TD>' . $objAux->mes . '-' . $objAux->ano . '</TD><TD>' . $objAux->valor . '</TD></TR>';
+				$tabAux3 .= '<tr><td>' . $objAux->mes . '-' . $objAux->ano . '</td><td>' . $objAux->valor . '</td></tr>';
 			}
 			if($return)
-                $tabAux3 .= '</TABLE>';
+                $tabAux3 .= '</table>';
             else
-                $tabAux3 .= '</TABLE></div>';
+                $tabAux3 .= '</table></div>';
 			///////////////////////////////
 
 			/////////////////////////////// IMPRIME LISTADO BACILOSCOPIAS
 			$longitudAux = count($objTemp->arrVigilanciaBac);
 			if($return)
-                $tabAux4 = '<TABLE border="1"><TR><TH>Fecha</TH><TH>IM</TH><TH>IB</TH></TR>';
+                $tabAux4 = '<table border="1">';
             else
-                $tabAux4 = '<div class="datagrid"><TABLE><TR><TH>Fecha</TH><TH>IM</TH><TH>IB</TH></TR>';
+                $tabAux4 = '<div class="datagrid"><table><tr><th>Fecha</th><th>IM</th><th>IB</th></tr>';
 			for ($j = 0; $j < $longitudAux; $j++) {
 				$objAux = $objTemp->arrVigilanciaBac[$j];
-				$tabAux4 .= '<TR><TD>' . $objAux->fecha . '</TD><TD>' . $objAux->IM . ' %</TD><TD>' . $objAux->IB . '</TD></TR>';
+				$tabAux4 .= '<tr><td>' . $objAux->fecha . '</td><td>' . $objAux->IM . ' %</td><td>' . $objAux->IB . '</td></tr>';
 			}
 			if($return)
-                $tabAux4 .= '</TABLE>';
+                $tabAux4 .= '</table>';
             else
-                $tabAux4 .= '</TABLE></div>';
+                $tabAux4 .= '</table></div>';
 			///////////////////////////////
 
-			$tabla .= '</TD><TD>' . $objTemp->fechaFinTx .
-				'</TD><TD>' . $tabAux1 .
-				'</TD><TD>' . $tabAux2 .
-				'</TD><TD>' . $objTemp->situacionTerminoTx   .
-				'</TD><TD>' . $objTemp->fechaIVPT  .
-				'</TD><TD>'  . $tabAux3 .
-				'</TD><TD>'  . $tabAux4 .
+			$tabla .= '</td><td>' . $objTemp->fechaFinTx .
+				'</td><td>' . $tabAux1 .
+				'</td><td>' . $tabAux2 .
+				'</td><td>' . $objTemp->situacionTerminoTx   .
+				'</td><td>' . $objTemp->fechaIVPT  .
+				'</td><td>'  . $tabAux3 .
+				'</td><td>'  . $tabAux4 .
 			
 			$tabAux1 = "";
 			$tabAux2 = "";
@@ -411,39 +413,44 @@ class ReporteTrimestral {
 			/////////////////////////////// IMPRIME LISTADO BACILOSCOPIAS
 			$longitudAux = count($arrContactos);
 			if($return)
-                $tabAux1 = '<TABLE border="1">';
+                $tabAux1 = '<table border="1">';
             else
-                $tabAux1 = '<div class="datagrid"><TABLE>';
-			$tabAux1 .= '<TR><TH>A&ntilde;o</TH><TH>Contactos</TH><TH>Examinados</TH></TR>';
+                $tabAux1 = '<div class="datagrid"><table><tr><th>A&ntilde;o</th><th>Contactos</th><th>Examinados</th></tr>';
+			
 			foreach ($arrContactos as $clave => $valor) {
-				$tabAux1 .= '<TR><TD>' . $clave . '</TD><TD>' . $valor . '</TD><TD>' . $arrContactosExaminados[$clave] . '</TD></TR>';
+				$tabAux1 .= '<tr><td>' . $clave . '</td><td>' . $valor . '</td><td>' . $arrContactosExaminados[$clave] . '</td></tr>';
 			}
 			if($return)
-                $tabAux1 .= '</TABLE>';
+                $tabAux1 .= '</table>';
             else
-                $tabAux1 .= '</TABLE></div>';
+                $tabAux1 .= '</table></div>';
 			/////////////////////////////// 
 			
-			$tabla .= '</TD><TD>' . $objTemp->gradoDiscapacidadOjos .
-				'</TD><TD>' . $objTemp->gradoDiscapacidadManos .
-				'</TD><TD>' . $objTemp->gradoDiscapacidadPies .
-				'</TD><TD>' . $objTemp->gradoDiscapacidadGeneral .
-				'</TD><TD>' . $objTemp->estadoReaccionalAnterior .
-				'</TD><TD>' . $objTemp->estadoReaccionalActual .
-				'</TD><TD>' . $objTemp->fechaFVPT .
-				'</TD><TD>' . $objTemp->condicion .
-				'</TD><TD>' . $tabAux1 . 
-				'</TD><TD>' . $objTemp->observaciones .
-				'</TD><TD>' . $objTemp->totalContactos .
-				'</TD><TD>' . $objTemp->totalContactosRevisados . 
-				'</TD></TR>';
+			$tabla .= '</td><td>' . $objTemp->gradoDiscapacidadOjos .
+				'</td><td>' . $objTemp->gradoDiscapacidadManos .
+				'</td><td>' . $objTemp->gradoDiscapacidadPies .
+				'</td><td>' . $objTemp->gradoDiscapacidadGeneral .
+				'</td><td>' . $objTemp->estadoReaccionalAnterior .
+				'</td><td>' . $objTemp->estadoReaccionalActual .
+				'</td><td>' . $objTemp->fechaFVPT .
+				'</td><td>' . $objTemp->condicion .
+				'</td><td>' . $tabAux1 .
+				'</td><td>' . $objTemp->observaciones .
+				'</td><td>' . $objTemp->totalContactos .
+				'</td><td>' . $objTemp->totalContactosRevisados .
+				'</td></tr>';
 		}
+        // Nos aseguramos que este cerrado todos los tr
+        $tabla = str_replace('</td></table>', '</td></tr></table>', $tabla);
+        // Eliminamos tablas vacias
+        $tabla = str_replace('<table border="1"></table>', '', $tabla);
+
         if($return) {
-            $tabla .= '</TABLE>';
+            $tabla .= '</table>';
             return $tabla;
         }
         else {
-            $tabla .= '</TABLE></div>';
+            $tabla .= '</table></div>';
             echo $tabla;
         }
 	}
@@ -475,7 +482,7 @@ class ReporteTrimestral {
 			}
 			
 			
-			$sql = "SELECT p.idPaciente, d.observaciones, d.idDiagnostico, p.nombre, p.apellidoPaterno, p.apellidoMaterno, l.nombre AS localidad,  m.nombre AS municipio, ctp.descripcion as tipoPaciente, p.fechaNacimiento, cs.sexo AS sexo, ins.descripcion AS derechohabiencia, ccl.descripcion AS clasificacionLepra, p.fechaInicioPQT, d.discOjoDer, d.discOjoIzq, d.discManoDer, d.discManoIzq, d.discPieDer, d.discPieIzq, cer.descripcion AS estReaAnt, cerr.descripcion AS estReaAct, cep.descipcion as condicion " .
+			$sql = "SELECT top 2 p.idPaciente, d.observaciones, d.idDiagnostico, p.nombre, p.apellidoPaterno, p.apellidoMaterno, l.nombre AS localidad,  m.nombre AS municipio, ctp.descripcion as tipoPaciente, p.fechaNacimiento, cs.sexo AS sexo, ins.descripcion AS derechohabiencia, ccl.descripcion AS clasificacionLepra, p.fechaInicioPQT, d.discOjoDer, d.discOjoIzq, d.discManoDer, d.discManoIzq, d.discPieDer, d.discPieIzq, cer.descripcion AS estReaAnt, cerr.descripcion AS estReaAct, cep.descipcion as condicion " .
 			"FROM pacientes p, catLocalidad l, diagnostico d, catMunicipio m, catInstituciones ins, catTipoPaciente ctp, catSexo cs, catClasificacionLepra ccl, catEstadoReaccional cer, catEstadoReaccional cerr, catEstadoPaciente cep  " .
 			"WHERE p.idCatEstado = " . $this->idCatEstado . " " .
 			"AND d.idPaciente = p.idPaciente " .
