@@ -9,8 +9,10 @@
 $(document).ready(function(){
     $('#downloadBtn').click(function(){
         $('#imprimeExcel #tipo_paciente').remove();
-        seleccionado = $('#tipo_paciente').val();
-        $('#imprimeExcel').append($('<input type="hidden">').attr('name','tipo_paciente').attr('id','tipo_paciente').val(seleccionado));
+        tipo_paciente = $('#tipo_paciente').val();
+        edoNac = $('#edoNac').val();
+        $('#imprimeExcel').append($('<input type="hidden">').attr('name','tipo_paciente').attr('id','tipo_paciente').val(tipo_paciente));
+        $('#imprimeExcel').append($('<input type="hidden">').attr('name','edoNac').attr('id','edoNac').val(edoNac));
         $('#imprimeExcel').submit();
     });
 });
@@ -34,7 +36,7 @@ $objHTML->startForm('formReporte', '?mod=repSeg', 'POST');
     echo '<div align="left">';
         
         if($_SESSION[EDO_USR_SESSION] == 0)
-			$objSelects->selectEstado('edoNac', $_SESSION[EDO_USR_SESSION] );
+			$objSelects->selectEstado('edoNac', $_POST['edoNac'] ? $_POST['edoNac'] : $_SESSION[EDO_USR_SESSION] );
         
         $objHTML->inputSelect('Tipo Paciente: ', 'tipo_paciente', $catTipoPaciente, $_POST['tipo_paciente']);
         $objHTML->inputSubmit('generarReporte', ' Generar Reporte');

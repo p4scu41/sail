@@ -29,14 +29,24 @@ if(isset($_POST['type']))
 		case 'repDGEpi':
 			require_once('../include/clases/ReporteListadoGeneral.php');
 			$reporteListadoGeneral = new ReporteListadoGeneral();
-			$reporteListadoGeneral->idCatEstado = $_SESSION[EDO_USR_SESSION];
+			if($_POST['edoNac']) {
+                $reporteListadoGeneral->idCatEstado = $_POST['edoNac'];
+            } else if ($_SESSION[EDO_USR_SESSION] != 0) {
+                $reporteListadoGeneral->idCatEstado = $_SESSION[EDO_USR_SESSION];
+            }
 			$reporteListadoGeneral->generarReporte();
 			$reporteListadoGeneral->imprimirReporte(true);
 		break;
 		case 'repSeg':
 			require_once('../include/clases/ReporteTrimestral.php');
 			$reporteTrimestral = new ReporteTrimestral();
-			$reporteTrimestral->idCatEstado = $_SESSION[EDO_USR_SESSION];
+            
+            if($_POST['edoNac']) {
+                $reporteTrimestral->idCatEstado = $_POST['edoNac'];
+            } else if ($_SESSION[EDO_USR_SESSION] != 0) {
+                $reporteTrimestral->idCatEstado = $_SESSION[EDO_USR_SESSION];
+            }
+            
             $reporteTrimestral->filtro = $_POST['tipo_paciente'];
 			$reporteTrimestral->generarReporte();
 			$reporte = $reporteTrimestral->imprimirReporteUnitabla(true);

@@ -281,7 +281,9 @@ class ReporteTrimestral {
                 $tabAux1 = '<div class="datagrid"><table><tr><th>A&ntilde;o</th><th>Ene</th><th>Feb</th><th>Mar</th><th>Abr</th><th>May</th><th>Jun</th>
                 <th>Jul</th><th>Ago</th><th>Sep</th><th>Oct</th><th>Nov</th><th>Dic</th></tr>';
 			$mesAct = 1;
+            $ejecutaFor = false; // Determinamos si entra o no al for
 			for ($j = 0; $j < $longitudAux; $j++) {
+                $ejecutaFor = true;
 				$objAux = $objTemp->arrControlTx[$j];
 				if ($primerMesDelAno == true) {
 					$tabAux1 .= '<tr><td>' . $objAux->ano .'</td>';
@@ -300,6 +302,9 @@ class ReporteTrimestral {
 					$primerMesDelAno = true;
 				}
 			}
+            if(!$ejecutaFor) // Si no entra al for, dibujamos una fila vacia
+                $tabAux1 .= '<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>';
+            
             if($return)
                 $tabAux1 .= '</table>';
             else
@@ -312,10 +317,14 @@ class ReporteTrimestral {
                 $tabAux2 = '<table border="1">';
             else
                 $tabAux2 = '<div class="datagrid"><table><tr><th>Fecha</th><th>IM</th><th>IB</th></tr>';
+            $ejecutaFor = false; // Determinamos si entra o no al for
 			for ($j = 0; $j < $longitudAux; $j++) {
+                $ejecutaFor = true;
 				$objAux = $objTemp->arrControlBacTx[$j];
 				$tabAux2 .= '<tr><td>' . $objAux->fecha . '</td><td>' . $objAux->IM . ' %</td><td>' . $objAux->IB . '</td></tr>';
 			}
+            if(!$ejecutaFor) // Si no entra al for, dibujamos una fila vacia
+                $tabAux2 .= '<tr><td></td><td></td><td></td></tr>';
 			if($return)
                 $tabAux2 .= '</table>';
             else
@@ -334,10 +343,14 @@ class ReporteTrimestral {
                 $tabAux1 = '<table border="1">';
             else
                 $tabAux1 = '<div class="datagrid"><table><tr><th>Fecha</th><th>IM</th><th>IB</th></tr>';
+            $ejecutaFor = false; // Determinamos si entra o no al for
 			for ($j = 0; $j < $longitudAux; $j++) {
+                $ejecutaFor = true;
 				$objAux = $objTemp->arrControlBacFinTx[$j];
 				$tabAux1 .= '<tr><td>' . $objAux->fecha . '</td><td>' . $objAux->IM . ' %</td><td>' . $objAux->IB . '</td></tr>';
 			}
+            if(!$ejecutaFor) // Si no entra al for, dibujamos una fila vacia
+                $tabAux1 .= '<tr><td></td><td></td><td></td></tr>';
 			if($return)
                 $tabAux1 .= '</table>';
             else
@@ -350,10 +363,14 @@ class ReporteTrimestral {
                 $tabAux2 = '<table border="1">';
             else
                 $tabAux2 = '<div class="datagrid"><table><tr><th>Fecha</th><th>Resultado</th></tr>';
+            $ejecutaFor = false; // Determinamos si entra o no al for
 			for ($j = 0; $j < $longitudAux; $j++) {
+                $ejecutaFor = true;
 				$objAux = $objTemp->arrControlHisFinTx[$j];
 				$tabAux2 .= '<tr><td>' . $objAux->fecha . '</td><td>' . $objAux->resultado . '</td></tr>';
 			}
+            if(!$ejecutaFor) // Si no entra al for, dibujamos una fila vacia
+                $tabAux2 .= '<tr><td></td><td></td></tr>';
 			if($return)
                 $tabAux2 .= '</table>';
             else
@@ -366,10 +383,14 @@ class ReporteTrimestral {
                 $tabAux3 = '<table border="1">';
             else
                 $tabAux3 = '<div class="datagrid"><table><tr><th>Mes-A&ntilde;o</th><th>Estado</th></tr>';
+            $ejecutaFor = false; // Determinamos si entra o no al for
 			for ($j = 0; $j < $longitudAux; $j++) {
+                $ejecutaFor = true;
 				$objAux = $objTemp->arrVigilanciaRevision[$j];
 				$tabAux3 .= '<tr><td>' . $objAux->mes . '-' . $objAux->ano . '</td><td>' . $objAux->valor . '</td></tr>';
 			}
+            if(!$ejecutaFor) // Si no entra al for, dibujamos una fila vacia
+                $tabAux3 .= '<tr><td></td><td></td></tr>';
 			if($return)
                 $tabAux3 .= '</table>';
             else
@@ -382,10 +403,14 @@ class ReporteTrimestral {
                 $tabAux4 = '<table border="1">';
             else
                 $tabAux4 = '<div class="datagrid"><table><tr><th>Fecha</th><th>IM</th><th>IB</th></tr>';
+            $ejecutaFor = false; // Determinamos si entra o no al for
 			for ($j = 0; $j < $longitudAux; $j++) {
+                $ejecutaFor = true;
 				$objAux = $objTemp->arrVigilanciaBac[$j];
 				$tabAux4 .= '<tr><td>' . $objAux->fecha . '</td><td>' . $objAux->IM . ' %</td><td>' . $objAux->IB . '</td></tr>';
 			}
+            if(!$ejecutaFor) // Si no entra al for, dibujamos una fila vacia
+                $tabAux4 .= '<tr><td></td><td></td><td></td></tr>';
 			if($return)
                 $tabAux4 .= '</table>';
             else
@@ -416,10 +441,13 @@ class ReporteTrimestral {
                 $tabAux1 = '<table border="1">';
             else
                 $tabAux1 = '<div class="datagrid"><table><tr><th>A&ntilde;o</th><th>Contactos</th><th>Examinados</th></tr>';
-			
+			$ejecutaFor = false; // Determinamos si entra o no al for
 			foreach ($arrContactos as $clave => $valor) {
+                $ejecutaFor = true;
 				$tabAux1 .= '<tr><td>' . $clave . '</td><td>' . $valor . '</td><td>' . $arrContactosExaminados[$clave] . '</td></tr>';
 			}
+            if(!$ejecutaFor) // Si no entra al for, dibujamos una fila vacia
+                $tabAux1 .= '<tr><td></td><td></td><td></td></tr>';
 			if($return)
                 $tabAux1 .= '</table>';
             else
@@ -443,7 +471,7 @@ class ReporteTrimestral {
         // Nos aseguramos que este cerrado todos los tr
         $tabla = str_replace('</td></table>', '</td></tr></table>', $tabla);
         // Eliminamos tablas vacias
-        $tabla = str_replace('<table border="1"></table>', '', $tabla);
+        //$tabla = str_replace('<table border="1"></table>', '', $tabla);
 
         if($return) {
             $tabla .= '</table>';
