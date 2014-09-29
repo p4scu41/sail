@@ -26,15 +26,22 @@ $objHTML = new HTML();
 $objSelects = new Select();
 
 echo '<h2 align="center">GEOPOSICIONAMIENTO DE CASOS</h2>';
+echo '<div align="center">';
 
 $objHTML->startForm('formMapa', '?mod=map', 'POST');
 
     $objHTML->startFieldset();
+    
+    if($_SESSION[EDO_USR_SESSION] == 0)
+        $objSelects->selectEstado('estado', $_POST['estado'] ? $_POST['estado'] : $_SESSION[EDO_USR_SESSION] );
 
     $objSelects->SelectCatalogo('Tipo de Paciente', 'tipo_paciente', 'catTipoPaciente', $_POST['tipo_paciente']);
     $objHTML->inputText('', 'fecha_inicio', $_POST['fecha_inicio'], array('placeholder'=>'Inicio'));
     $objHTML->inputText('', 'fecha_fin', $_POST['fecha_fin'], array('placeholder'=>'Fin'));
-    echo ' &nbsp; &nbsp; &nbsp; ';
+    if($_SESSION[EDO_USR_SESSION] == 0) 
+        echo '<br /><br />';
+    else 
+        echo ' &nbsp; &nbsp; &nbsp; ';
     $objHTML->inputButton('localizar_mapa', 'Localizar en el mapa', array('onClick'=>'localizarMapa()'));
     echo ' &nbsp; &nbsp; &nbsp; ';
     $objHTML->inputButton('exportar_kml', 'Exportar a KML', array('onClick'=>'exportarKML()'));
@@ -42,6 +49,7 @@ $objHTML->startForm('formMapa', '?mod=map', 'POST');
     $objHTML->endFieldset();
 
 $objHTML->endFormOnly();
+echo '</div>';
 ?>
 
 <div id="googleMap" style="width:750px;height:600px; margin:auto;"></div>
@@ -92,7 +100,7 @@ $objHTML->endFormOnly();
             
             $archivoKML = new KML();
     
-            $archivoKML->queryKML($_POST['tipo_paciente'], $_POST['fecha_inicio'], $_POST['fecha_fin']);
+            $archivoKML->queryKML($_POST['tipo_paciente'], $_POST['fecha_inicio'], $_POST['fecha_fin'], $_POST['estado']);
             $matriz = $archivoKML->getMatriz();
             
             if($matriz == null){

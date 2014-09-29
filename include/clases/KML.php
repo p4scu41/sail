@@ -66,10 +66,34 @@ $this->contenido .= '
         return $this->matriz;
     }
     
-    public function queryKML($tipoPaciente, $fechaInicio, $fechaFin) {
+    public function queryKML($tipoPaciente, $fechaInicio, $fechaFin, $estado = 0) {
         $this->matriz = null;
 
-		if ($_SESSION[EDO_USR_SESSION] == 0) {
+        if ($estado!=0) {
+			$query = 'SELECT [pacientes].[cveExpediente]
+                ,([pacientes].[nombre]+\' \'+[pacientes].[apellidoPaterno]+\' \'+[pacientes].[apellidoMaterno]) as nombre
+                ,[pacientes].[idCatTipoPaciente]
+                ,[pacientes].[sexo]
+                ,[pacientes].[fechaNacimiento]
+                ,([pacientes].[calle]+\' \'+[pacientes].[noExterior]) AS direccion
+                ,[pacientes].[colonia]
+                ,[pacientes].[idCatLocalidad]
+                ,[pacientes].[idCatMunicipio]
+                ,[pacientes].[fechaDiagnostico] 
+                ,[pacientes].[fechaNotificacion]
+                ,[pacientes].[idCatUnidadReferido]
+                ,[pacientes].[idCatUnidadTratante]
+                ,[diagnostico].[idCatClasificacionLepra]
+                ,[catLocalidad].[lat_dec]
+                ,[catLocalidad].[lon_dec]
+			FROM [pacientes], [catLocalidad], [diagnostico]
+			WHERE [catLocalidad].[idCatEstado]=[pacientes].[idCatEstado] AND
+                [catLocalidad].[idCatMunicipio]=[pacientes].[idCatMunicipio] AND
+                [catLocalidad].[idCatLocalidad]=[pacientes].[idCatLocalidad] AND
+                [diagnostico].[idPaciente] = [pacientes].[idPaciente] AND
+                [catLocalidad].[idCatEstado] = '.$estado;
+        }
+		else if ($_SESSION[EDO_USR_SESSION] == 0) {
 			$query = 'SELECT [pacientes].[cveExpediente]
                 ,([pacientes].[nombre]+\' \'+[pacientes].[apellidoPaterno]+\' \'+[pacientes].[apellidoMaterno]) as nombre
                 ,[pacientes].[idCatTipoPaciente]

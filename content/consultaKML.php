@@ -13,7 +13,7 @@
     
     $archivoMKL = new KML();
     
-    $archivoMKL->queryKML($_POST['tipo_paciente'], $_POST['fecha_inicio'], $_POST['fecha_fin']);
+    $archivoMKL->queryKML($_POST['tipo_paciente'], $_POST['fecha_inicio'], $_POST['fecha_fin'], $_POST['estado']);
     $archivoMKL->doKML();
     $archivoMKL->getKML();
     
