@@ -16,6 +16,7 @@ $objHTML = new HTML();
 echo '<div style="float:left;">';
 $objHTML->startForm('imprimeExcel', 'docs/creaExcel.php', 'post', array('target'=>'_blank'));
 $objHTML->inputHidden('type', 'repDGEpi');
+$objHTML->inputHidden('export', 'xls');
 $objHTML->inputSubmit('downloadBtn', 'Descargar Excel');
 $objHTML->endFormOnly();
 echo '</div>';

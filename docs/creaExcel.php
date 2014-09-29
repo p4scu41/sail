@@ -31,7 +31,7 @@ if(isset($_POST['type']))
 			$reporteListadoGeneral = new ReporteListadoGeneral();
 			$reporteListadoGeneral->idCatEstado = $_SESSION[EDO_USR_SESSION];
 			$reporteListadoGeneral->generarReporte();
-			$reporteListadoGeneral->imprimirReporte();
+			$reporteListadoGeneral->imprimirReporte(true);
 		break;
 		case 'repSeg':
 			require_once('../include/clases/ReporteTrimestral.php');

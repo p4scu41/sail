@@ -56,12 +56,16 @@ class ReporteListadoGeneral {
 		}			
 	}
 
-	public function imprimirReporte() {
+	public function imprimirReporte($borde = false) {
 
 		$longitud = count($this->arrPacientesReporteListadoGeneral);
 		$JurisAct = -1;
         $band = true;
-		
+		$borderTable = '';
+        
+        if($borde)
+            $borderTable = 'border="1"';
+        
 		//echo '<TABLE>';
 		for ($i = 0; $i < $longitud; $i++) {			
 			$objTemp = $this->arrPacientesReporteListadoGeneral[$i];
@@ -69,7 +73,7 @@ class ReporteListadoGeneral {
 			if ($JurisAct != $objTemp->jurisdiccion) {
 				$JurisAct = $objTemp->jurisdiccion;
 				echo '<BR><BR><strong>Jurisdiccion Sanitaria ' . $objTemp->jurisdiccion . ' : ' . $this->arrJurisdicciones[$objTemp->jurisdiccion] . '</strong>';
-				echo '<div class="datagrid"><TABLE><thead><TR align="center"><TH>Folio</TH><TH>Fecha Notificaci&oacute;n</TH><TH>Fecha de Captura</TH><TH>Tipo Paciente</TH>
+				echo '<div class="datagrid"><TABLE '.$borderTable.'><thead><TR align="center"><TH>Folio</TH><TH>Fecha Notificaci&oacute;n</TH><TH>Fecha de Captura</TH><TH>Tipo Paciente</TH>
                     <TH>Forma de Detecci&oacute;n</TH><TH>Nombre</TH><TH>Fecha de Nacimiento</TH><TH>Edad</TH><TH>Sexo</TH><TH>Estado</TH><TH>Municipio</TH>
                     <TH>Domicilio y Localidad</TH><TH>Tiempo de radicar</TH><TH>Fecha Inicio Sintomas</TH><TH>Fecha Diagnostico</TH><TH>Manchas Hipocrom.</TH>
                     <TH>Manchas Rojizas</TH><TH>Placas Infilt.</TH><TH>N&oacute;dulos</TH><TH>Otras</TH><TH>Zonas de Anestesia</TH><TH>Fecha de BK</TH><TH>IB</TH>
