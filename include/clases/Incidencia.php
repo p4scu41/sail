@@ -17,7 +17,7 @@ class Incidencia {
 	public function insertarBD() {
 		
 		// OJO, ponendo estado como NUEVA (dada la inicializacion)
-		$sql = "INSERT INTO [incidencia] ([idUsuario], [idCatEstadoIncidencia], [contenido]) VALUES (" . $this->idUsuario. ", " . $this->idCatEstadoIncidencia . " , '" . $this->contenido . "'); SELECT @@identity AS nuevoId;";		
+		$sql = "INSERT INTO [incidencia] ([idUsuario], [idCatEstadoIncidencia], [contenido]) VALUES (" . $_SESSION[ID_USR_SESSION]. ", " . (int)$_SESSION[EDO_USR_SESSION] . " , '" . $this->contenido . "'); SELECT @@identity AS nuevoId;";		
 		$consulta = ejecutaQueryClases($sql);
 		if (is_string($consulta)) {
 			$this->error = true;
