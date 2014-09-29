@@ -47,13 +47,25 @@ $objHTML->endFormOnly();
 <div id="googleMap" style="width:750px;height:600px; margin:auto;"></div>
 
 <script type="text/javascript">
-    var myCenter = new google.maps.LatLng(16.646718050971934, -92.6806640625);
+    <?php // Si es de Chiapas
+    if($_SESSION[EDO_USR_SESSION] == 7) {?>
+        latitud  = 16.646718050971934;
+        longitud = -92.6806640625;
+        zoom = 8;
+    <?php } // Si es otro estado
+    else { ?>
+        latitud  = 23.200961;
+        longitud = -101.953125;
+        zoom = 5;
+    <?php }?>
+    
+    var myCenter = new google.maps.LatLng(latitud, longitud);
 
     function initialize()
     {
         var mapProp = {
           center: myCenter,
-          zoom: 8,
+          zoom: zoom,
           mapTypeId: google.maps.MapTypeId.ROADMAP
           };
 

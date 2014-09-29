@@ -119,7 +119,7 @@ $this->contenido .= '
         if($tipoPaciente != 0)
             $query .= ' AND [pacientes].[idCatTipoPaciente] = '.$tipoPaciente.' ';
         
-        if(!empty($fechaInicio) || !empty($fechaFin))
+        if(!empty($fechaInicio) && !empty($fechaFin))
             $query .= ' AND [pacientes].[fechaDiagnostico] BETWEEN \''.formatFechaObj($fechaInicio,'Y-m-d').'\' AND \''.formatFechaObj($fechaFin,'Y-m-d').'\' ';
         
         $result = ejecutaQuery($query);
