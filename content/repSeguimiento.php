@@ -10,9 +10,9 @@ $(document).ready(function(){
     $('#downloadBtn').click(function(){
         $('#imprimeExcel #tipo_paciente').remove();
         tipo_paciente = $('#tipo_paciente').val();
-        edoNac = $('#edoNac').val();
+        estado = $('#estado').val();
         $('#imprimeExcel').append($('<input type="hidden">').attr('name','tipo_paciente').attr('id','tipo_paciente').val(tipo_paciente));
-        $('#imprimeExcel').append($('<input type="hidden">').attr('name','edoNac').attr('id','edoNac').val(edoNac));
+        $('#imprimeExcel').append($('<input type="hidden">').attr('name','estado').attr('id','estado').val(estado));
         $('#imprimeExcel').submit();
     });
 });
@@ -36,7 +36,7 @@ $objHTML->startForm('formReporte', '?mod=repSeg', 'POST');
     echo '<div align="left">';
         
         if($_SESSION[EDO_USR_SESSION] == 0)
-			$objSelects->selectEstado('edoNac', $_POST['edoNac'] ? $_POST['edoNac'] : $_SESSION[EDO_USR_SESSION] );
+			$objSelects->selectEstado('estado', $_POST['estado'] ? $_POST['estado'] : $_SESSION[EDO_USR_SESSION] );
         
         $objHTML->inputSelect('Tipo Paciente: ', 'tipo_paciente', $catTipoPaciente, $_POST['tipo_paciente']);
         $objHTML->inputSubmit('generarReporte', ' Generar Reporte');
@@ -66,7 +66,7 @@ $objHTML->startFieldset();
 		</table>';*/
     $reporteTrimestral = new ReporteTrimestral();
     if($_SESSION[EDO_USR_SESSION] == 0)
-		$reporteTrimestral->idCatEstado = $_POST['edoNac'];
+		$reporteTrimestral->idCatEstado = $_POST['estado'];
     else
 		$reporteTrimestral->idCatEstado = $_SESSION[EDO_USR_SESSION];
     $reporteTrimestral->filtro = $_POST['tipo_paciente']; // REVISAR: Filtro que definira jaime

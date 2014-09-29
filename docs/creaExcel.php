@@ -29,8 +29,8 @@ if(isset($_POST['type']))
 		case 'repDGEpi':
 			require_once('../include/clases/ReporteListadoGeneral.php');
 			$reporteListadoGeneral = new ReporteListadoGeneral();
-			if($_POST['edoNac']) {
-                $reporteListadoGeneral->idCatEstado = $_POST['edoNac'];
+			if($_POST['estado']) {
+                $reporteListadoGeneral->idCatEstado = $_POST['estado'];
             } else if ($_SESSION[EDO_USR_SESSION] != 0) {
                 $reporteListadoGeneral->idCatEstado = $_SESSION[EDO_USR_SESSION];
             }
@@ -41,8 +41,8 @@ if(isset($_POST['type']))
 			require_once('../include/clases/ReporteTrimestral.php');
 			$reporteTrimestral = new ReporteTrimestral();
             
-            if($_POST['edoNac']) {
-                $reporteTrimestral->idCatEstado = $_POST['edoNac'];
+            if($_POST['estado']) {
+                $reporteTrimestral->idCatEstado = $_POST['estado'];
             } else if ($_SESSION[EDO_USR_SESSION] != 0) {
                 $reporteTrimestral->idCatEstado = $_SESSION[EDO_USR_SESSION];
             }

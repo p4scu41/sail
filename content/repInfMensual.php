@@ -1,13 +1,13 @@
 <script type="text/javascript">
-    $(document).ready(function() {
-        setupCalendario('fecha_inicio');
-        setupCalendario('fecha_fin');
-        
-        $('#jurisdiccion option:first').text('Nivel Estatal');
-        $('#jurisdiccion option:first').val('0');
-        
-        $('#estado [value=0]').remove();
-    });
+$(document).ready(function() {
+    setupCalendario('fecha_inicio');
+    setupCalendario('fecha_fin');
+
+    $('#jurisdiccion option:first').text('Nivel Estatal');
+    $('#jurisdiccion option:first').val('0');
+
+    $('#estado [value=0]').remove();
+});
 </script>
 <?PHP 
 require_once('include/clases/ReporteActividadesMensual.php');
