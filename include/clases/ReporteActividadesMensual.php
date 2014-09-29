@@ -80,9 +80,9 @@ class ReporteActividadesMensual {
 	}
 	
 	public function generarReporte() {
-		if (is_null($this->idCatEstado) || is_null($this->idCatJurisdiccionLaboratorio) || is_null($this->fechaFin) || is_null($this->fechaInicio)) {
+		if (is_null($this->fechaFin) || is_null($this->fechaInicio)) {
 			$this->error = true;
-			$this->msgError = "El reporte requiere del identificador de estado, de jurisdiccion y la fecha de inicio y fin del reporte.";
+			$this->msgError = "El reporte requiere del la fecha de inicio y fin.";
 		} else {
 			$fIni = formatFechaObj($this->fechaInicio, 'Y-m-d');
 			$fFin = formatFechaObj($this->fechaFin, 'Y-m-d');
@@ -127,8 +127,8 @@ class ReporteActividadesMensual {
 				"(SELECT COUNT(idDiagnostico) FROM estudiosHis h WHERE fechaSolicitud BETWEEN '" . $fIni . "' AND '" . $fFin . "' AND idCatEstadoTratante = " . $this->idCatEstado . " AND idCatJurisdiccionTratante = " . $this->idCatJurisdiccionLaboratorio . " AND fechaResultado IS NOT NULL AND idCatHisto = " . self::$idCatHistoNeg . " AND idCatTipoEstudio = " . self::$idCatTipoEstudioDia . " ) AS esthisDiaNeg, " .
 				"(SELECT COUNT(idDiagnostico) FROM estudiosHis h WHERE fechaSolicitud BETWEEN '" . $fIni . "' AND '" . $fFin . "' AND idCatEstadoTratante = " . $this->idCatEstado . " AND idCatJurisdiccionTratante = " . $this->idCatJurisdiccionLaboratorio . " AND fechaResultado IS NOT NULL AND idCatHisto != " . self::$idCatHistoNeg . " AND idCatTipoEstudio = " . self::$idCatTipoEstudioCon . " ) AS esthisConPos, " .
 				"(SELECT COUNT(idDiagnostico) FROM estudiosHis h WHERE fechaSolicitud BETWEEN '" . $fIni . "' AND '" . $fFin . "' AND idCatEstadoTratante = " . $this->idCatEstado . " AND idCatJurisdiccionTratante = " . $this->idCatJurisdiccionLaboratorio . " AND fechaResultado IS NOT NULL AND idCatHisto = " . self::$idCatHistoNeg . " AND idCatTipoEstudio = " . self::$idCatTipoEstudioCon . " ) AS esthisConNeg";				
-			}			
-
+			}
+            
 			$consulta = ejecutaQueryClases($sql);
 			//echo $sql.'<br><br>';
 			if (is_string($consulta)) {
@@ -181,7 +181,6 @@ class ReporteActividadesMensual {
 					"AND p.fechaNotificacion BETWEEN '" . $fIni . "' AND '" . $fFin . "' " .
 					"AND b.idCatTipoEstudio = " . self::$idCatTipoEstudioDia . ";";
 				}
-				
 					
 				$consulta = ejecutaQueryClases($sql);
 				//echo $sql.'<br><br>';
@@ -194,7 +193,8 @@ class ReporteActividadesMensual {
 						//$idEstTemp = $tabla["idEstudioBac"];
 						$objTemp = new NuevosPacientes();
 						$objTemp->obtenerBD($idPacTemp, $fIni, $fFin, self::$idCatTipoEstudioDia, $this->idCatEstado, $this->idCatJurisdiccionLaboratorio);
-						array_push($this->arrNuevosPacientes, $objTemp);
+                        if(!empty($objTemp->idPaciente))
+                            array_push($this->arrNuevosPacientes, $objTemp);
 					}
 				}
 			}
@@ -244,7 +244,6 @@ class NuevosPacientes {
 			"AND p.idPaciente = " . $idPaciente . " ";
 			//"AND b.idCatJurisdiccionLaboratorio = " . $idCatJurisdiccionLaboratorio . ";";
 		
-		
 		$consulta = ejecutaQueryClases($sql);
 		//echo $sql.'<br><br>';
 		if (is_string($consulta)) {
@@ -252,31 +251,34 @@ class NuevosPacientes {
 			$this->msgError = $consulta . " SQL:" . $sql.'<br><br>';
 		} else {		
 			$tabla = devuelveRowAssoc($consulta);
-			$this->idPaciente = $tabla["idPaciente"];
-			$this->idDiagnostico = $tabla["idDiagnostico"];
-			
-			$this->folioLaboratorio = $tabla["folioLaboratorio"];
-			$this->nombreCompleto = $tabla["nombre"] . " " . $tabla["apellidoPaterno"] . " " . $tabla["apellidoMaterno"];
-			$this->edad = calEdad(formatFechaObj($tabla["fechaNacimiento"], 'Y-m-d'));
-			$this->sexo = $tabla["sexo"];
-			$this->domicilio = $tabla["calle"] . " " . $tabla["noExterior"] . " " . $tabla["noInterior"] . " " . $tabla["colonia"] . " " . $tabla["localidad"];
-			$this->fechaDiagnostico = formatFechaObj($tabla["fechaDiagnostico"]);
-            $this->Baciloscopia = 'IB: ' . $tabla["bac"] . ' <br>IM: ' . $tabla['bacIM'] . '%' ;
             
-            
-			$this->localizacionUnidadMedica = $tabla["LocalidadUnidad"];
-						
-			$sql = "SELECT TOP 1 h.idCatHisto, ch.descripcion FROM estudiosHis h, catHistopatologia ch, diagnostico d WHERE h.idCatHisto = ch.idCatHisto " .
-				"AND d.idPaciente = " . $idPaciente . " AND h.idCatTipoEstudio = " . $idCatTipoEstudioDia . " AND d.idDiagnostico = h.idDiagnostico ORDER BY h.fechaSolicitud desc;";
-			$consulta = ejecutaQueryClases($sql);
-			//echo $sql.'<br><br>';
-			if (is_string($consulta)) {
-				$this->error = true;
-				$this->msgError = $consulta . " SQL:" . $sql.'<br><br>';
-			} else {
-				$tabla = devuelveRowAssoc($consulta);
-				$this->histopatologia = $tabla["descripcion"];
-			}
+            if(!empty($tabla["idPaciente"])) {
+                $this->idPaciente = $tabla["idPaciente"];
+                $this->idDiagnostico = $tabla["idDiagnostico"];
+
+                $this->folioLaboratorio = $tabla["folioLaboratorio"];
+                $this->nombreCompleto = $tabla["nombre"] . " " . $tabla["apellidoPaterno"] . " " . $tabla["apellidoMaterno"];
+                $this->edad = calEdad(formatFechaObj($tabla["fechaNacimiento"], 'Y-m-d'));
+                $this->sexo = $tabla["sexo"];
+                $this->domicilio = $tabla["calle"] . " " . $tabla["noExterior"] . " " . $tabla["noInterior"] . " " . $tabla["colonia"] . " " . $tabla["localidad"];
+                $this->fechaDiagnostico = formatFechaObj($tabla["fechaDiagnostico"]);
+                $this->Baciloscopia = 'IB: ' . $tabla["bac"] . ' <br>IM: ' . $tabla['bacIM'] . '%' ;
+
+
+                $this->localizacionUnidadMedica = $tabla["LocalidadUnidad"];
+
+                $sql = "SELECT TOP 1 h.idCatHisto, ch.descripcion FROM estudiosHis h, catHistopatologia ch, diagnostico d WHERE h.idCatHisto = ch.idCatHisto " .
+                    "AND d.idPaciente = " . $idPaciente . " AND h.idCatTipoEstudio = " . $idCatTipoEstudioDia . " AND d.idDiagnostico = h.idDiagnostico ORDER BY h.fechaSolicitud desc;";
+                $consulta = ejecutaQueryClases($sql);
+                //echo $sql.'<br><br>';
+                if (is_string($consulta)) {
+                    $this->error = true;
+                    $this->msgError = $consulta . " SQL:" . $sql.'<br><br>';
+                } else {
+                    $tabla = devuelveRowAssoc($consulta);
+                    $this->histopatologia = $tabla["descripcion"];
+                }
+            }
 		}
 	}
 }
