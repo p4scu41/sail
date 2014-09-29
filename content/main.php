@@ -56,6 +56,26 @@
                 case 'her': include('content/herramientas.php'); break;
                 case 'help': include('content/ayuda.php'); break;
 				case 'logout': cerrar_sesion(); break;
+            
+                // Nuevos permisos para soportar usuario nacional
+                case 'rep': include('content/reportes.php'); break;
+                case 'repSeg': include('content/repSeguimiento.php'); break;
+                case 'repMen': include('content/repInfMensual.php'); break;
+                case 'repDGEpi': include('content/repDGEpi.php'); break;
+                case 'indIndx': include('content/indicadores_index.php'); break;
+                case 'ind': include('content/indicadores.php'); break;
+                case 'val': include('content/validacion.php'); break;
+                case 'valSIS': include('content/valSIS.php'); break;
+                case 'valSUAVE': include('content/valSUAVE.php'); break;
+                case 'map': include('content/mapa.php'); break;
+                case 'edadGen':include('content/graphEdades.php'); break;
+                case 'locGr': include('content/graphLocalidades.php'); break;
+                case 'lesionGr': include('content/graphLesiones.php'); break;
+                case 'camEx': include('content/caminandoExcelencia.php'); break;
+                case 'usrs': include('content/usuarios.php'); break;
+                case 'formUsr': include('content/formUsuario.php'); break;
+                case 'exportBD': include('content/exportBDtoExcel.php'); break;
+            
 				default: include('content/inicio.php');
 			}
 		break;
