@@ -72,10 +72,8 @@ $currentYear = $_POST['anio'];
 $pastYear = $currentYear-1;
 
 $agrega_diagonal = "";
-/* Compatibilidad con Linux */
-if(stripos($_SERVER['DOCUMENT_ROOT'],":/") === FALSE) $agrega_diagonal = "/";
 
-$rootPath = $_SERVER['DOCUMENT_ROOT'].$agrega_diagonal.CARPETA_RAIZ."/docs/";
+$rootPath = str_replace('/','\\',$_SERVER['DOCUMENT_ROOT'].CARPETA_RAIZ)."\\docs\\";
 
 $xlsFile = $rootPath.'LEPRA_MACRO.xlsm';  
          
@@ -319,12 +317,12 @@ while($jurisdiccion = devuelveRowAssoc($consulta))
 }
 
 $xlsObj->Run("LEPRA");
-$book->saveAs($rootPath."caminando_excelencia.xlsm");
+$book->saveAs($rootPath."caminando_excelencia_".$_SESSION[EDO_USR_SESSION].".xlsm");
 $book->Close(false); 
 unset($sheets); 
 $xlsObj->Workbooks->Close(); 
 unset($book); 
 $xlsObj->Quit; 
 unset($xlsObj);
-echo "<a href='caminando_excelencia.xlsm'>Descargar Boletin Caminando a la Excelencia</a>";
+echo "<a href='docs/caminando_excelencia_".$_SESSION[EDO_USR_SESSION].".xlsm'>Descargar Boletin Caminando a la Excelencia</a>";
 ?>
