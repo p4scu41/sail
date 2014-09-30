@@ -3,4 +3,6 @@
 /.settings
 /nbproject
 /_notes
+!/pacienteImg/.htaccess
+!/pacienteImg/index.php
 /pacienteImg/*

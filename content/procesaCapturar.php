@@ -510,8 +510,10 @@ if(!empty($_GET['id'])) {
             4	Caso Indeterminado
             6	Negativo
          */
-        if($paciente->idCatTipoPaciente == 5 && $resultHisto->idCatHisto != 4 && $resultHisto->idCatHisto != 6){
-            $alerta = true;
+        if(!empty($resultHisto['idCatHisto'])){
+            if($paciente->idCatTipoPaciente == 5 && $resultHisto['idCatHisto'] != 4 && $resultHisto['idCatHisto'] != 6){
+                $alerta = true;
+            }
         }
     }
 }

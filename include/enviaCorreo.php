@@ -33,10 +33,12 @@
             // Send the message
             if (!$mailer->send($message))
             {
-                echo "ERROR al enviar el mensaje: ";
+                registra_log(str_replace('/'.CARPETA_RAIZ.'?','',$_SERVER['REQUEST_URI']), 'ERROR al enviar el correo.');
+                //echo "ERROR al enviar el mensaje: ";
             }
         } catch (Exception $e) {
-            echo 'ERROR al enviar el correo: '.$e->getMessage();
+            registra_log(str_replace('/'.CARPETA_RAIZ.'?','',$_SERVER['REQUEST_URI']), 'ERROR al enviar el correo: '.$e->getMessage());
+            //echo 'ERROR al enviar el correo: '.$e->getMessage();
         }
     }
 ?>
