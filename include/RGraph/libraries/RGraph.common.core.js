@@ -1432,9 +1432,14 @@
         context.stroke();
 
         // Reset the line dash
-        if (typeof co.setLineDash == 'function') {
+		//--------------------------------------------------------------------------------problemaaaaaaaa ---------
+     
+	 /*   if (typeof co.setLineDash == 'function') {
             co.setLineDash(null);
         }
+	*/
+	
+	//-------------------------------------------------------------------------------- fin    problemaaaaaaaa ---------
 
         // If it's a bar and 3D variant, translate
         if (variant == '3d') {
