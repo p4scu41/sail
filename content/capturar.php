@@ -109,10 +109,11 @@ require_once('content/procesaCapturar.php');
 			$objHTML->inputText('', 'calle', $paciente->calle, array('placeholder'=>'Calle', 'size'=>'40', 'maxlength'=>'40', 'class'=>'validate[required]'));
 			$objHTML->inputText('', 'num_externo', $paciente->noExterior, array('placeholder'=>'No. Externo', 'size'=>'10', 'maxlength'=>'6', 'class'=>'validate[required]'));
 			$objHTML->inputText('', 'num_interno', $paciente->noInterior, array('placeholder'=>'No. Interno', 'maxlength'=>'6', 'size'=>'10'));
+			echo '<br />';
 			$objHTML->inputText('Colonia:', 'colonia', $paciente->colonia, array('placeholder'=>'Colonia', 'size'=>'30', 'maxlength'=>'30', 'class'=>'validate[required]'));
 			echo '<br />';
 			
-			$objSelects->selectEstado('edoDomicilio', $paciente->idCatEstado ? $paciente->idCatEstado : $_SESSION[EDO_USR_SESSION]);
+			$objSelects->selectEstado('edoDomicilio', $paciente->idCatEstado ? $paciente->idCatEstado : $_SESSION[EDO_USR_SESSION], array('disabled'=>'disabled'));
 			$objSelects->selectMunicipio('muniDomicilio', $paciente->idCatEstado ? $paciente->idCatEstado : $_SESSION[EDO_USR_SESSION], NULL, $paciente->idCatMunicipio);
 			$objSelects->selectLocalidad('localiDomicilio', $paciente->idCatEstado, $paciente->idCatMunicipio, $paciente->idCatLocalidad, array('class'=>'validate[required]'));
 			echo '<br />';
@@ -131,7 +132,7 @@ require_once('content/procesaCapturar.php');
 		
 		$objHTML->startFieldset();
 			$objHTML->label('Unidad Notificante: ');
-			$objSelects->selectEstado('edoUnidad', $infUni['idCatEstado'] ? $infUni['idCatEstado'] : $_SESSION[EDO_USR_SESSION]);			
+			$objSelects->selectEstado('edoUnidad', $infUni['idCatEstado'] ? $infUni['idCatEstado'] : $_SESSION[EDO_USR_SESSION], array('disabled'=>'disabled'));			
 			$objSelects->selectJurisdiccion('jurisUnidad', $infUni['idCatEstado'] ? $infUni['idCatEstado'] : $_SESSION[EDO_USR_SESSION], $infUni['idCatJurisdiccion']);
 			$objSelects->selectMunicipio('muniUnidad', $infUni['idCatEstado'], $infUni['idCatJurisdiccion'], $infUni['idCatMunicipio']);
 			echo '<br />';
@@ -385,7 +386,7 @@ require_once('content/procesaCapturar.php');
 			
             $objHTML->label('Unidad Tratante: ');
             echo '<br />';
-			$objSelects->selectEstado('edoCaso', $infUni['idCatEstado'] ? $infUni['idCatEstado'] : $_SESSION[EDO_USR_SESSION]);			
+			$objSelects->selectEstado('edoCaso', $infUni['idCatEstado'] ? $infUni['idCatEstado'] : $_SESSION[EDO_USR_SESSION], array('disabled'=>'disabled'));			
 			$objSelects->selectJurisdiccion('jurisCaso', $infUni['idCatEstado'] ? $infUni['idCatEstado'] : $_SESSION[EDO_USR_SESSION], $infUni['idCatJurisdiccion']);
 			$objSelects->selectMunicipio('muniCaso', $infUni['idCatEstado'], $infUni['idCatJurisdiccion'], $infUni['idCatMunicipio']);
 			echo '<br />';
