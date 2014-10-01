@@ -17,7 +17,7 @@
         setupCalendario('fecha_fin');
         
         $('#jurisdiccion option:first').text('Estatal');
-		
+		setValidacion('formReporte');
 		$('#edoReporteEdad').change(function(){ 
 			//alert("cambiar");
 			actualiza_select( { destino:'jurisdiccion', edo:'edoReporteEdad', tipo:'juris'} );
@@ -47,9 +47,9 @@ $objHTML->startForm('formReporte', '?mod=edadGen', 'POST');
 
     $objHTML->startFieldset();
     echo '<div align="center">';
-			$objSelects->selectEstado('edoReporteEdad', $paciente->idCatEstado ? $paciente->idCatEstado : $_SESSION[EDO_USR_SESSION]);
+			$objSelects->selectEstado('edoReporteEdad', $paciente->idCatEstado ? $paciente->idCatEstado : $_SESSION[EDO_USR_SESSION], $_SESSION[EDO_USR_SESSION] == 0 ? array() : array('disabled'=>'disabled'));
             $objSelects->selectJurisdiccion('jurisdiccion', $_SESSION[EDO_USR_SESSION], $_POST['jurisdiccion']);
-			$objHTML->inputSelect('Rango de Edad', 'select_rangoEdad', $cat_edades, $_POST['select_rangoEdad'] , array('class'=>'validate[required]'));
+			$objHTML->inputSelect('Rango de Edad', 'select_rangoEdad', $cat_edades, $_POST['select_rangoEdad']);
             $objHTML->label('Fecha: ');
             $objHTML->inputText('', 'fecha_inicio', $_POST['fecha_inicio'] ? $_POST['fecha_inicio'] : '01-'.date('m-Y'), array('placeholder'=>'Inicio'));
             $objHTML->inputText('', 'fecha_fin', $_POST['fecha_fin'] ? $_POST['fecha_fin'] : date("d",(mktime(0,0,0,date('m')+1,1,date('Y'))-1)).'-'.date('m-Y'), array('placeholder'=>'Fin'));

@@ -8,7 +8,7 @@
     $(document).ready(function() {
         setupCalendario('fecha_inicio');
         setupCalendario('fecha_fin');
-        
+        setValidacion('formReporte');
         $('#jurisdiccion option:first').text('Estatal');
     });
 </script>
@@ -32,9 +32,9 @@ $objHTML->startForm('formReporte', '?mod=ind', 'POST');
     $objHTML->startFieldset();
     echo '<div align="center">';
             if(isset($_POST['edoNac']))
-                $objSelects->selectEstado('edoNac', $_POST['edoNac']);
+                $objSelects->selectEstado('edoNac', $_POST['edoNac'], $_SESSION[EDO_USR_SESSION] == 0 ? array() : array('disabled'=>'disabled'));
             else
-                $objSelects->selectEstado('edoNac', $_SESSION[EDO_USR_SESSION] );
+                $objSelects->selectEstado('edoNac', $_SESSION[EDO_USR_SESSION], $_SESSION[EDO_USR_SESSION] == 0 ? array() : array('disabled'=>'disabled'));
             
 			if(isset($_POST['edoNac']))
 				$objSelects->selectJurisdiccion('jurisdiccion', $_POST['edoNac'], $_POST['jurisdiccion']);

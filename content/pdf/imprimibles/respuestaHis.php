@@ -148,12 +148,12 @@ $html = '
 
 <table width="100%" border="0">
   <tr>
-    <td width="19%" align="right"><img src="images/LogoInstitucional.png" width="100" height="50" alt="test alt attribute" /></td>
+    <td width="19%" align="right"></td>
     <td width="64%"><p class="centrado">LABORATORIO ESTATAL DE SALUD PÚBLICA <br />
   PROGRAMA DE PREVENCION Y CONTROL DE TURBECULOSIS Y LEPRA<br />
   LABORATORIO DE MICOBACTERIAS<br />
   INFORMES DE RESULTADO HISTOPATOLÓGICO DE LEPRA</p></td>
-    <td width="17%"><img src="images/logo_lesp_chis.png" width="65" height="55" alt="test alt attribute" /></td>
+    <td width="17%"></td>
   </tr>
 </table>
 
