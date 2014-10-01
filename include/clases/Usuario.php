@@ -19,7 +19,7 @@ class Usuario {
 	public function insertarBD() {
 		$sqlA = 'INSERT INTO [usuarios] ([nombreUsuario], [password], [nombre], [apellidoPaterno], 
                 [apellidoMaterno], [correo], [idCatTipoUsuario]';
-		$sqlB = 'VALUES (\''.$this->nombreUsuario.'\', \''.md5($this->password).'\', \''.$this->nombre.'\', \''.$this->apellidoPaterno
+		$sqlB = 'VALUES (\''.trim($this->nombreUsuario).'\', \''.md5(trim($this->password)).'\', \''.$this->nombre.'\', \''.$this->apellidoPaterno
                 .'\', \''.$this->apellidoMaterno.'\', \''.$this->correo.'\', \''.$this->idCatTipoUsuario.'\' ';
 		
 		if($this->idCatEstado != '' && !is_null($this->idCatEstado)) { $sqlA .= ', [idCatEstado]'; $sqlB .= ', \'' . $this->idCatEstado.'\''; }
