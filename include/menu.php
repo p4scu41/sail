@@ -11,7 +11,9 @@ switch ($_SESSION[TIPO_USR_SESSION]) {
 		<li <?PHP if($_GET['mod']=='rep') echo 'class="active"';?> ><a href="?mod=rep">Reportes</a></li>
         <li <?PHP if($_GET['mod']=='indIndx') echo 'class="active"';?> ><a href="?mod=indIndx">Indicadores</a></li>
         <li <?PHP if($_GET['mod']=='val') echo 'class="active"';?> ><a href="?mod=val">Validaci&oacute;n</a></li>
-        <li <?PHP if($_GET['mod']=='usrs') echo 'class="active"';?> ><a href="?mod=usrs">Usuarios</a></li>
+        <?PHP if($_SESSION[EDO_USR_SESSION]==7){ ?>
+            <li <?PHP if($_GET['mod']=='usrs') echo 'class="active"';?> ><a href="?mod=usrs">Usuarios</a></li>
+        <?php }  ?>
         <li <?PHP if($_GET['mod']=='ane') echo 'class="active"';?> ><a href="?mod=ane">Anexos</a></li>
         <?PHP if($_SESSION[EDO_USR_SESSION]==7){ ?>
             <li <?PHP if($_GET['mod']=='her') echo 'class="active"';?> ><a href="?mod=her">Herramientas</a></li>

@@ -22,7 +22,7 @@
 			//alert("cambiar");
 			actualiza_select( { destino:'jurisdiccion', edo:'edoReporteEdad', tipo:'juris'} );
 		});
-		
+		$('#edoReporteEdad option[value=0]').remove();
     });
 </script>
 
@@ -47,7 +47,7 @@ $objHTML->startForm('formReporte', '?mod=edadGen', 'POST');
 
     $objHTML->startFieldset();
     echo '<div align="center">';
-			$objSelects->selectEstado('edoReporteEdad', $paciente->idCatEstado ? $paciente->idCatEstado : $_SESSION[EDO_USR_SESSION], $_SESSION[EDO_USR_SESSION] == 0 ? array() : array('disabled'=>'disabled'));
+			$objSelects->selectEstado('edoReporteEdad', $paciente->idCatEstado ? $paciente->idCatEstado : $_SESSION[EDO_USR_SESSION], $_SESSION[EDO_USR_SESSION] == 0 ? array('required'=>'required') : array('required'=>'required', 'disabled'=>'disabled'));
             $objSelects->selectJurisdiccion('jurisdiccion', $_SESSION[EDO_USR_SESSION], $_POST['jurisdiccion']);
 			$objHTML->inputSelect('Rango de Edad', 'select_rangoEdad', $cat_edades, $_POST['select_rangoEdad']);
             $objHTML->label('Fecha: ');
