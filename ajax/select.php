@@ -79,7 +79,7 @@
 				$rs_uni = ejecutaQuery($qr_uni);
 				
 				while($uni = devuelveRowAssoc($rs_uni))
-					$resultado .= $uni['idCatUnidad'].'='.htmlentities(ucwords(mb_strtolower(str_replace(array('“','”'),'',$uni['nombreUnidad']))).' ['.$uni['idCatUnidad'].']@';
+					$resultado .= $uni['idCatUnidad'].'='.htmlentities(ucwords(mb_strtolower(str_replace(array('“','”'),'',$uni['nombreUnidad'])))).' ['.$uni['idCatUnidad'].']@';
 				
 				echo $resultado;
 			break;
