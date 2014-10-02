@@ -108,7 +108,9 @@ $objHTML->endFormOnly();
 							{
 								case '0':{
 									
+									$por_anio2 = "Por Grupo de Edad";
 									$por_anio = "Por Año";
+									
 									if($numero_registros_primero == 0 && $numero_registros_segundo == 0)
 										echo '<br><br><h3 align="center">No se encontraron resultados en la busqueda</h3>';
 			
@@ -439,6 +441,8 @@ $objHTML->endFormOnly();
 														echo  $eliminar_2 = substr($cadena_2, 0, -1);
 													
 													echo'])
+														.Set("text.angle", 35)
+														.Set("text.size", 8)
 														.Set("gutter.bottom", 40)
 														.Set("labels", [';
 
@@ -479,8 +483,13 @@ $objHTML->endFormOnly();
 												.Set('curvy.tickmarks.stroke.linewidth', 2)
 												.Set('curvy.tickmarks.size', 5)
 												.Set('linewidth', 3)
-												.Set('hmargin', 5)
-												.Set('ymax', '0.5')
+												.Set('ymax', '1')
+												.Set('hmargin', 0)
+												.Set('labels.above', true) //etiquetas sobre los puntos
+												.Set('ylabels.count', 5)
+												.Set('scale.decimals', 2)
+												.Set('text.angle', 35)
+												.Set('text.size', 8)
 												.Set('labels', [";
 												echo $tasa_coordenadas_anios = substr($mostrar_anio, 0, -1);
 												echo "])
@@ -638,6 +647,8 @@ $objHTML->endFormOnly();
 											
 										echo '											  
 												  ])
+												.Set("text.angle", 35)
+												.Set("text.size", 8)
 												.Set("labels", [';
 												if(isset($arreglo_fecha))
 															echo $arreglo_fecha;
@@ -803,7 +814,7 @@ $objHTML->endFormOnly();
 									echo '<table>
 									<tr>
 										<td align="center"><h3>Global</h3></td>
-										<td align="center"><h3>'.utf8_decode($por_anio).'</h3></td>
+										<td align="center"><h3>'.utf8_decode($por_anio2).'</h3></td>
 									</tr>
 									<tr>	
 										<td>
@@ -885,6 +896,8 @@ $objHTML->endFormOnly();
 													
 													echo'])
 														.Set("ymax", 5)
+														.Set("text.angle", 35)
+														.Set("text.size", 8)
 														.Set("gutter.bottom", 40)
 														.Set("labels", ["< 15","15-19","20-24","25-29","30-34","35-39","40-44","50-54","55-59","60-64","65-69","70-75",">76"])
 														.Draw();
@@ -1154,7 +1167,8 @@ $objHTML->endFormOnly();
 								break;
 								
 								case '1': {
-																	$por_anio = "Por Año";
+									$por_anio2 = "Por Grupo de Edad";
+									$por_anio = "Por Año";
 									if($numero_registros_primero == 0 && $numero_registros_segundo == 0)
 										echo '<br><br><h3 align="center">No se encontraron resultados en la busqueda</h3>';
 			
@@ -1487,6 +1501,7 @@ $objHTML->endFormOnly();
 													
 													echo'])
 														.Set("gutter.bottom", 40)
+														.Set("text.size", 8)
 														.Set("labels", [';
 
 															foreach($arreglo_fecha_2 as $valor){
@@ -1850,7 +1865,7 @@ $objHTML->endFormOnly();
 									echo '<table>
 									<tr>
 										<td align="center"><h3>Global</h3></td>
-										<td align="center"><h3>'.utf8_decode($por_anio).'</h3></td>
+										<td align="center"><h3>'.utf8_decode($por_anio2).'</h3></td>
 									</tr>
 									<tr>	
 										<td>
@@ -2202,7 +2217,8 @@ $objHTML->endFormOnly();
 									break;
 								case '2': {
 									
-																	$por_anio = "Por Año";
+									$por_anio2 = "Por Grupo de Edad";
+									$por_anio = "Por Año";
 									if($numero_registros_primero == 0 && $numero_registros_segundo == 0)
 										echo '<br><br><h3 align="center">No se encontraron resultados en la busqueda</h3>';
 			
@@ -2898,7 +2914,7 @@ $objHTML->endFormOnly();
 									echo '<table>
 									<tr>
 										<td align="center"><h3>Global</h3></td>
-										<td align="center"><h3>'.utf8_decode($por_anio).'</h3></td>
+										<td align="center"><h3>'.utf8_decode($por_anio2).'</h3></td>
 									</tr>
 									<tr>	
 										<td>
@@ -3249,7 +3265,8 @@ $objHTML->endFormOnly();
 									break;
 								case '3': {
 										
-																	$por_anio = "Por Año";
+									$por_anio2 = "Por Grupo de Edad";
+									$por_anio = "Por Año";
 									if($numero_registros_primero == 0 && $numero_registros_segundo == 0)
 										echo '<br><br><h3 align="center">No se encontraron resultados en la busqueda</h3>';
 			
@@ -3945,7 +3962,7 @@ $objHTML->endFormOnly();
 									echo '<table>
 									<tr>
 										<td align="center"><h3>Global</h3></td>
-										<td align="center"><h3>'.utf8_decode($por_anio).'</h3></td>
+										<td align="center"><h3>'.utf8_decode($por_anio2).'</h3></td>
 									</tr>
 									<tr>	
 										<td>
@@ -4296,7 +4313,9 @@ $objHTML->endFormOnly();
 									break;
 							
 								case '4': {								
-																		$por_anio = "Por Año";
+									
+									$por_anio2 = "Por Grupo de Edad";
+									$por_anio = "Por Año";
 									if($numero_registros_primero == 0 && $numero_registros_segundo == 0)
 										echo '<br><br><h3 align="center">No se encontraron resultados en la busqueda</h3>';
 			
@@ -4992,7 +5011,7 @@ $objHTML->endFormOnly();
 									echo '<table>
 									<tr>
 										<td align="center"><h3>Global</h3></td>
-										<td align="center"><h3>'.utf8_decode($por_anio).'</h3></td>
+										<td align="center"><h3>'.utf8_decode($por_anio2).'</h3></td>
 									</tr>
 									<tr>	
 										<td>
@@ -5343,7 +5362,8 @@ $objHTML->endFormOnly();
 									break;
 									case '5': {
 																			
-									 									$por_anio = "Por Año";
+									 $por_anio2 = "Por Grupo de Edad";
+									 $por_anio = "Por Año";
 									if($numero_registros_primero == 0 && $numero_registros_segundo == 0)
 										echo '<br><br><h3 align="center">No se encontraron resultados en la busqueda</h3>';
 			
@@ -6039,7 +6059,7 @@ $objHTML->endFormOnly();
 									echo '<table>
 									<tr>
 										<td align="center"><h3>Global</h3></td>
-										<td align="center"><h3>'.utf8_decode($por_anio).'</h3></td>
+										<td align="center"><h3>'.utf8_decode($por_anio2).'</h3></td>
 									</tr>
 									<tr>	
 										<td>
@@ -6390,7 +6410,8 @@ $objHTML->endFormOnly();
 									break;
 								case '6': {
 											
-																		$por_anio = "Por Año";
+									$por_anio2 = "Por Grupo de Edad";
+									$por_anio = "Por Año";
 									if($numero_registros_primero == 0 && $numero_registros_segundo == 0)
 										echo '<br><br><h3 align="center">No se encontraron resultados en la busqueda</h3>';
 			
@@ -7086,7 +7107,7 @@ $objHTML->endFormOnly();
 									echo '<table>
 									<tr>
 										<td align="center"><h3>Global</h3></td>
-										<td align="center"><h3>'.utf8_decode($por_anio).'</h3></td>
+										<td align="center"><h3>'.utf8_decode($por_anio2).'</h3></td>
 									</tr>
 									<tr>	
 										<td>
