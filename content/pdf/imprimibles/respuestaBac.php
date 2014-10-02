@@ -100,14 +100,14 @@
 
 		<table width="100%" border="0">
 		  <tr>
-			<td width="15%"><img src="images/LogoInstitucional.png" width="100" height="50" alt="test alt attribute" /></td>
+			<td width="15%"></td>
 			<td width="65%" class="centrado"><p>SECRETARIA DE SALUD <br />
 			  LABORATORIO ESTATAL DE SALUD PUBLICA<br />
 			  PROGRAMA DE PREVENCION Y CONTROL DE TUBERCULOSIS Y LEPRA <br />
 			  LABORATORIO DE MICOBACTERIAS<br />
 			  INFORME DEL RESULTADO BACILOSCÓPICO DE LEPRA 
 			</p></td>
-			<td width="20%"><img src="images/logo_lesp_chis.png" width="65" height="55" alt="test alt attribute"/> </td>
+			<td width="20%"></td>
 		  </tr>
 		</table>
 		<p>&nbsp;</p>

@@ -104,7 +104,7 @@ class BusquedaEstudios {
 			"FROM estudiosHis LEFT JOIN diagnostico ON diagnostico.idDiagnostico = estudiosHis.idDiagnostico " .
 			"WHERE idCatSolicitante IN (SELECT idCatUnidad FROM catUnidad WHERE fechaResultado is NOT NULL ";
         
-            if($_SESSION[EDO_USR_SESSION] != 0)
+            if($this->idCatEstado != 0)
                 $sql .= " AND idCatEstado = " . $this->idCatEstado;
             $sql .= " ) ";
             
@@ -118,7 +118,7 @@ class BusquedaEstudios {
 			"FROM estudiosBac LEFT JOIN diagnostico ON diagnostico.idDiagnostico = estudiosBac.idDiagnostico " .
 			"WHERE idCatSolicitante IN (SELECT idCatUnidad FROM catUnidad WHERE fechaResultado is NOT NULL ";
             
-            if($_SESSION[EDO_USR_SESSION] != 0)
+            if($this->idCatEstado != 0)
                 $sql .= " AND idCatEstado = " . $this->idCatEstado;
             $sql .= " ) ";
             

@@ -335,6 +335,11 @@
                         'capture una nueva c&eacute;dula de registro para notificar este nuevo caso.', 'Caso Probable');
             }
         });
+        <?php if ($_SESSION[EDO_USR_SECCION] == 0) {?>
+        $('#tarjeta_control input, #tarjeta_control select').each(function(){
+            $(this).attr('disabled',true);
+        });
+        <?php } ?>
     });
 </script>
 
@@ -518,17 +523,22 @@ else if(!empty($paciente->idPaciente)){
                     <input type="button" name="buscarSEED" id="buscarSEED" value="Buscar">';
             }
                 echo '</td><td align="center">'.$objHTML->inputText('', 'observaciones_'.$control->idControl, $control->observaciones, array('size'=>40), true).'</td>';
-                echo '<td align="center">'.$objHTML->inputButton('btnActualizaControl_'.$control->idControl, 'Actualizar', null, true).'</td>';
+                echo '<td align="center">';
+                if($_SESSION[EDO_USR_SECCION] != 0)
+                    echo $objHTML->inputButton('btnActualizaControl_'.$control->idControl, 'Actualizar', null, true);
+                echo '</td>';
                 //<td align="center"><img src="images/ok.gif" border="0"></td>
             echo '</tr>';
         }
 
         echo '</tbody></table></div>';
 
-        echo '<br /><div align="center">';
-        $objHTML->inputButton('agregar', 'Agregar Nuevo Registro', array('onClick'=>'agregaRegistroControl()'));
-        echo '</div><br />';
-
+        if($_SESSION[EDO_USR_SECCION] != 0) {
+            echo '<br /><div align="center">';
+            $objHTML->inputButton('agregar', 'Agregar Nuevo Registro', array('onClick'=>'agregaRegistroControl()'));
+            echo '</div><br />';
+        }
+        
         $objHTML->endFieldset();
 
 
@@ -553,7 +563,11 @@ else if(!empty($paciente->idPaciente)){
                     <td>'.$contacto->nombre.'</td>
                     <td align="center">'.$contacto->edad.' a&ntilde;os</td>
                     <td align="center">'.$help->getDescripcionSexo($contacto->sexo).'</td>
-                    <td align="center"><a href="javascript:revisionContacto('.$contacto->idContacto.',\''.$contacto->nombre.'\')"><img src="images/revision_contacto.png" border="0"/></a></td>
+                    <td align="center">';
+                    if($_SESSION[EDO_USR_SECCION] != 0) {
+                        echo '<a href="javascript:revisionContacto('.$contacto->idContacto.',\''.$contacto->nombre.'\')"><img src="images/revision_contacto.png" border="0"/></a>';
+                    }
+                    echo '</td>
                 </tr>';
             }
         echo '</tbody></table></div><br /><br />';

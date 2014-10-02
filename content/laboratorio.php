@@ -433,7 +433,7 @@ echo '</tbdy></table></div>';
 $objHTML->endFieldset();
 
 // El usuario NACIONAL no debe registrar solicitudes de estudio de laboratorio
-if($_SESSION[EDO_USR_SESSION] != 0) {
+if($_SESSION[EDO_USR_SESSION] != 0 && !empty($paciente->idPaciente)) {
     echo '<br /><div align="center">';
     $objHTML->inputButton('agregaHisto', 'Agregar solicitud de estudio Histopatol&oacute;gico', array('onClick'=>'agregarEstudio(\'histo\')'));
     $objHTML->inputButton('agregaBacilos', 'Agregar solicitud de estudio Bacilosc&oacute;pico', array('onClick'=>'agregarEstudio(\'bacilos\')'));

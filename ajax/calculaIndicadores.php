@@ -16,6 +16,11 @@ require_once('../include/funciones.php');
 
 session_start();
 
+if($_SESSION[EDO_USR_SESSION] != 7) { //hack truco borrar
+    echo '<div class="msj_error" align="center"><img src="images/error.gif" align="absmiddle" /><h3 style="display:inline">No hay suficientes datos para generar el reporte</h3></div>';
+    die();
+}
+
 $connectionBD = conectaBD();
 
 /*

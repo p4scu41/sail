@@ -120,7 +120,7 @@ echo '<div id="winRecepcionMuestra" title="Recepci&oacute;n de Muestra">';
         
         $objHTML->inputHidden('id_estudio');
         $objHTML->inputHidden('tipo_estudio');
-        echo '<label><strong>Folio Solicitud: <u> &nbsp; <span id="folio_solicitud"></span> &nbsp; </u><strong></label><br>';
+        echo '<label><strong>Folio Solicitud: <u> &nbsp; <span id="folio_solicitud"></span> &nbsp; </u></strong></label><br>';
         $objHTML->inputText('Folio Laboratorio: ', 'folio_laboratorio', '', array('placeholder'=>'Clave LESP', 'maxlength'=>'10'));
         echo '<br>';
         $objHTML->inputText('Fecha Recepción: ', 'fecha_recepcion');

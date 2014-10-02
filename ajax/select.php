@@ -65,7 +65,7 @@
 			
 			/*********************************************************************************************/
 			case 'uni':
-				$qr_uni = 'SELECT idCatUnidad, nombreUnidad, institucion FROM catUnidad WHERE idCatEstado='.$_POST['edo'];
+				$qr_uni = "SELECT idCatUnidad, replace(replace(nombreUnidad,'“',''),'”','') AS nombreUnidad, institucion FROM catUnidad WHERE idCatEstado=".$_POST['edo'];
 		
 				if($_POST['juris']!='')
 					$qr_uni .= ' AND idCatMunicipio IN (SELECT idCatMunicipio FROM catMunicipio WHERE idCatEstado='.$_POST['edo'].' AND idCatJurisdiccion = '.$_POST['juris'].')';
@@ -79,7 +79,7 @@
 				$rs_uni = ejecutaQuery($qr_uni);
 				
 				while($uni = devuelveRowAssoc($rs_uni))
-					$resultado .= $uni['idCatUnidad'].'='.htmlentities(ucwords(mb_strtolower($uni['nombreUnidad']))).' ['.$uni['idCatUnidad'].']@';
+					$resultado .= $uni['idCatUnidad'].'='.htmlentities(ucwords(mb_strtolower(str_replace(array('“','”'),'',$uni['nombreUnidad'])))).' ['.$uni['idCatUnidad'].']@';
 				
 				echo $resultado;
 			break;
